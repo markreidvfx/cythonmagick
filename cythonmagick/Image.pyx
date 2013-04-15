@@ -2,25 +2,27 @@
 from libcpp.string cimport string
 from cython.operator cimport dereference as deref
 
-cimport Image as _Image
-cimport Geometry as _Geometry
-cimport Colorspace as _Colorspace
+from magick.Image cimport Image as magickImage
+from magick.Image cimport InitializeMagick
+from magick.Geometry cimport Geometry as magickGeometry
+
+from magick cimport Colorspace
 
 def initialize():
-    _Image.InitializeMagick("")
+    InitializeMagick("")
     
-LogColorspace = _Colorspace.LogColorspace
-GRAYColorspace = _Colorspace.GRAYColorspace
+LogColorspace = Colorspace.LogColorspace
+GRAYColorspace = Colorspace.GRAYColorspace
 
 cdef class Image:
-    cdef _Image.Image *thisptr
+    cdef magickImage *thisptr
 
     def __cinit__(self, string path):
-        self.thisptr = new _Image.Image(path)
+        self.thisptr = new magickImage(path)
     def write(self, string path):
         self.thisptr.write(path)
     def resize(self, string size):
-        cdef _Geometry.Geometry *geo = new _Geometry.Geometry(size)
+        cdef magickGeometry *geo = new magickGeometry(size)
 
         try:
             self.thisptr.resize(deref(geo))
@@ -32,7 +34,7 @@ cdef class Image:
     def display(self):
         self.thisptr.display()
 
-    def colorspace(self,_Colorspace.ColorspaceType c_space):
+    def colorspace(self,Colorspace.ColorspaceType c_space):
 
         #c_space = _Colorspace.LogColorspace
         print "c_space", c_space
