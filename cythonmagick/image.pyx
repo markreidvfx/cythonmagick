@@ -2,17 +2,16 @@
 from libcpp.string cimport string
 from cython.operator cimport dereference as deref
 
-from magick.Image cimport Image as magickImage
-from magick.Image cimport InitializeMagick
-from magick.Geometry cimport Geometry as magickGeometry
+from magick.image cimport Image as magickImage
+from magick.image cimport InitializeMagick
+from magick.geometry cimport Geometry as magickGeometry
 
-from magick cimport Colorspace
+cimport magick.Colorspace
+
 
 def initialize():
     InitializeMagick("")
-    
-LogColorspace = Colorspace.LogColorspace
-GRAYColorspace = Colorspace.GRAYColorspace
+
 
 cdef class Image:
     cdef magickImage *thisptr
@@ -34,7 +33,7 @@ cdef class Image:
     def display(self):
         self.thisptr.display()
 
-    def colorspace(self,Colorspace.ColorspaceType c_space):
+    def colorspace(self,magick.Colorspace.ColorspaceType c_space):
 
         #c_space = _Colorspace.LogColorspace
         print "c_space", c_space

@@ -20,6 +20,8 @@ else:
 
 setup(
     cmdclass = {'build_ext': build_ext},
-    ext_modules = [Extension('cythonmagick',["cythonmagick/Image.pyx"],language="c++",**extension_kwargs)]
+    ext_modules = [Extension('cythonmagick',["cythonmagick/core.pyx"],
+                                             language="c++",
+                                             **extension_kwargs)]
 )
 

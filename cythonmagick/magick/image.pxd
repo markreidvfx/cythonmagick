@@ -1,7 +1,7 @@
 
 from libcpp.string cimport string
-from Geometry cimport Geometry
-from Colorspace cimport ColorspaceType
+from geometry cimport Geometry
+from colorspace cimport ColorspaceType
 
 cdef extern from "Magick++/Blob.h" namespace "Magick":
     cdef cppclass Blob:
