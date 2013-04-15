@@ -8,6 +8,9 @@ cimport Colorspace as _Colorspace
 
 def initialize():
     _Image.InitializeMagick("")
+    
+LogColorspace = _Colorspace.LogColorspace
+GRAYColorspace = _Colorspace.GRAYColorspace
 
 cdef class Image:
     cdef _Image.Image *thisptr
@@ -29,8 +32,11 @@ cdef class Image:
     def display(self):
         self.thisptr.display()
 
-    def colorspace(self):
-        cdef _Colorspace.ColorspaceType c_space = _Colorspace.LogColorspace
+    def colorspace(self,_Colorspace.ColorspaceType c_space):
+
+        #c_space = _Colorspace.LogColorspace
+        print "c_space", c_space
+        
         self.thisptr.colorSpace(c_space)
 
     def test(self):
