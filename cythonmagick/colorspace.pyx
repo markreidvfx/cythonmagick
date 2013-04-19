@@ -1,20 +1,22 @@
 from magick cimport colorspace
 
-CMYKColorspace = colorspace.CMYKColorspace
-GRAYColorspace = colorspace.GRAYColorspace
-HSLColorspace = colorspace.HSLColorspace
-HSLColorspace = colorspace.HWBColorspace
-LogColorspace = colorspace.LogColorspace
-OHTAColorspace = colorspace.OHTAColorspace
-Rec601LumaColorspace = colorspace.Rec601LumaColorspace
-Rec709LumaColorspace = colorspace.Rec709LumaColorspace
-RGBColorspace = colorspace.RGBColorspace
-sRGBColorspace = colorspace.sRGBColorspace
-TransparentColorspace = colorspace.TransparentColorspace
-UndefinedColorspace = colorspace.UndefinedColorspace
-XYZColorspace = colorspace.XYZColorspace
-YCbCrColorspace = colorspace.YCbCrColorspace
-YCCColorspace = colorspace.YCCColorspace
-YIQColorspace = colorspace.YIQColorspace
-YPbPrColorspace = colorspace.YPbPrColorspace
-YUVColorspace = colorspace.YUVColorspace
+colorspaceTypes = dict(
+CMYK = colorspace.CMYKColorspace,
+GRAY = colorspace.GRAYColorspace,
+HSL = colorspace.HSLColorspace,
+HWB = colorspace.HWBColorspace,
+Log = colorspace.LogColorspace,
+OHTA = colorspace.OHTAColorspace,
+Rec601Luma = colorspace.Rec601LumaColorspace,
+Rec709Luma = colorspace.Rec709LumaColorspace,
+RGB = colorspace.RGBColorspace,
+sRGB = colorspace.sRGBColorspace,
+Transparent = colorspace.TransparentColorspace,
+Undefined = colorspace.UndefinedColorspace,
+XYZ = colorspace.XYZColorspace,
+YCbCr = colorspace.YCbCrColorspace,
+YCC = colorspace.YCCColorspace,
+YIQ = colorspace.YIQColorspace,
+YPbPr = colorspace.YPbPrColorspace,
+YUV = colorspace.YUVColorspace,
+)

@@ -2,6 +2,7 @@
 from libcpp.string cimport string
 from geometry cimport Geometry
 from colorspace cimport ColorspaceType
+from compress cimport CompressionType
 
 cdef extern from "Magick++/Blob.h" namespace "Magick":
     cdef cppclass Blob:
@@ -20,3 +21,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick":
         ColorspaceType colorSpace()
         void quantizeColorSpace(ColorspaceType)
         void quantize()
+        void compressType(CompressionType)
+        CompressionType compressType()
+        void magick(const string&)
+        string magick()

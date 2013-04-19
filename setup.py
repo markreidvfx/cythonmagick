@@ -15,7 +15,7 @@ else:
     cppflags,stderr = p.communicate()
     p = subprocess.Popen(['Magick++-config', '--libs'],stdout=subprocess.PIPE)
     libs,stderr = p.communicate()
-    extension_kwargs['extra_compile_args'] = shlex.split(cppflags)
+    extension_kwargs['extra_compile_args'] = shlex.split(cppflags) + ['-I./cythonmagick/magick']
     extension_kwargs['extra_link_args'] = shlex.split(libs)
 
 setup(

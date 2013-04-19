@@ -6,11 +6,11 @@ from magick.image cimport Image as magickImage
 from magick.image cimport InitializeMagick
 from magick.geometry cimport Geometry as magickGeometry
 
-cimport magick.Colorspace
-
+from magick.colorspace cimport ColorspaceType
+from magick.compress cimport CompressionType
 
 def initialize():
-    InitializeMagick("")
+    InitializeMagick(NULL)
 
 
 cdef class Image:
@@ -33,16 +33,44 @@ cdef class Image:
     def display(self):
         self.thisptr.display()
 
-    def colorspace(self,magick.Colorspace.ColorspaceType c_space):
-
-        #c_space = _Colorspace.LogColorspace
-        print "c_space", c_space
+    def compressType(self):
+        return self.thisptr.compressType()
         
-        self.thisptr.colorSpace(c_space)
+    def setCompressType(self,CompressionType compress):
+        self.thisptr.compressType(compress)
 
     def test(self):
         print self.thisptr.colorSpace()
 
     def __dealloc__(self):
         del self.thisptr
+        
+    property magick:
+        
+        def __get__(self):
+            return self.thisptr.magick()
+            
+        def __set__(self,string magick_):
+            self.thisptr.magick(magick_)
+    property colorspace:
+        
+        def __get__(self):
+        
+            colorspace_ = self.thisptr.colorSpace()
+            
+            for key,value in colorspaceTypes.items():
+                if value == colorspace_:
+                    return key
+            
+            return colorspace_
+            
+        def __set__(self,string colorspace_):
+        
+            c_space = self.thisptr.colorSpace()
+            
+            for key,value in colorspaceTypes.items():
+                if key.lower() == colorspace_.lower():
+                    c_space = value
+            
+            self.thisptr.colorSpace(c_space)
 
