@@ -5,6 +5,7 @@ from cython.operator cimport dereference as deref
 from magick.image cimport Image as magickImage
 from magick.image cimport InitializeMagick
 from magick.geometry cimport Geometry as magickGeometry
+from magick.blob cimport Blob as magickBlob
 
 from magick.colorspace cimport ColorspaceType
 from magick.compress cimport CompressionType
@@ -38,9 +39,32 @@ cdef class Image:
         
     def setCompressType(self,CompressionType compress):
         self.thisptr.compressType(compress)
+        
+    def data(self):
+        """
+        matched from PythonMagick helpers_src, seems to work...
+        const char* data = static_cast<const char*>(blob.data());
+        size_t length = blob.length();
+        return std::string(data,data+length);
+        """
+        
+        cdef magickBlob *blob = new magickBlob()
 
-    def test(self):
-        print self.thisptr.colorSpace()
+        self.thisptr.write(blob)
+        
+        cdef size_t length = blob.length()
+        
+        #don't know how to static_cast in cython but this works
+        cdef const char *data =  <char*> blob.data()
+
+        #don't understand std::string(data,data+length) data+length? why?
+        #this might not be correct but it seems to work
+        s = string(data, length)
+
+        try:
+            return s
+        finally:
+            del blob #not sure if this is necessary 
 
     def __dealloc__(self):
         del self.thisptr
