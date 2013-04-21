@@ -40,7 +40,7 @@ cdef class Image:
     def setCompressType(self,CompressionType compress):
         self.thisptr.compressType(compress)
         
-    def data(self):
+    def tostring(self):
         """
         matched from PythonMagick helpers_src, seems to work...
         const char* data = static_cast<const char*>(blob.data());
@@ -57,14 +57,12 @@ cdef class Image:
         #don't know how to static_cast in cython but this works
         cdef const char *data =  <char*> blob.data()
 
-        #don't understand std::string(data,data+length) data+length? why?
-        #this might not be correct but it seems to work
-        s = string(data, length)
-
-        try:
-            return s
-        finally:
-            del blob #not sure if this is necessary 
+        s = string(data, length) #this seems to work
+        
+        del blob #not sure if this is necessary 
+       
+        return s
+            
 
     def __dealloc__(self):
         del self.thisptr
