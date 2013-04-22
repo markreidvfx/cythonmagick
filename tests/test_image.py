@@ -11,6 +11,22 @@ class TestStringConvert(unittest.TestCase):
     def setUp(self):
         cythonmagick.initialize()
         
+    def test_size(self):
+        i = cythonmagick.Image(get_test_image("eyeball.jpg"))
+        
+        width,height = i.size()
+        
+        self.assertEqual(600,width)
+        self.assertEqual(593,height)
+        
+        i.resize("1920x1080!")
+        
+        
+        width,height = i.size()
+        
+        self.assertEqual(1920,width)
+        self.assertEqual(1080,height)
+        
     def test_depth(self):
         
         i = cythonmagick.Image(get_test_image("eyeball.jpg"))

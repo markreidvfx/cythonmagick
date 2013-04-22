@@ -83,6 +83,13 @@ cdef class Image:
     def __dealloc__(self):
         del self.thisptr
         
+    def size(self):
+        geo = self.thisptr.size()
+        
+        width = geo.width()
+        height = geo.height()
+        return (width,height)
+        
     property magick:
         
         def __get__(self):

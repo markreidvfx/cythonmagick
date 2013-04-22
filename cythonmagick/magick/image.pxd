@@ -29,3 +29,5 @@ cdef extern from "Magick++/Image.h" namespace "Magick":
         string magick()
         void depth(const size_t)
         size_t depth()
+        void size(const Geometry&)
+        const Geometry size()
