@@ -27,3 +27,5 @@ cdef extern from "Magick++/Image.h" namespace "Magick":
         CompressionType compressType()
         void magick(const string&)
         string magick()
+        void depth(const size_t)
+        size_t depth()

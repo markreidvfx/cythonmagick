@@ -90,6 +90,13 @@ cdef class Image:
             
         def __set__(self,string magick_):
             self.thisptr.magick(magick_)
+            
+    property depth:
+        def __get__(self):
+            return self.thisptr.depth()
+        def __set__(self,int depth):
+            self.thisptr.depth(depth)
+            
     property colorspace:
         
         def __get__(self):

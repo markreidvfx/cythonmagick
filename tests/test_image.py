@@ -11,7 +11,20 @@ class TestStringConvert(unittest.TestCase):
     def setUp(self):
         cythonmagick.initialize()
         
-    
+    def test_depth(self):
+        
+        i = cythonmagick.Image(get_test_image("eyeball.jpg"))
+        out = output_test_image("depth_test.%s" % "miff")
+        
+        for d in (8,16):
+            i.depth = d
+            
+            i.write(out)
+            
+            test_image = cythonmagick.Image(out)
+            
+            self.assertEqual(d, test_image.depth)
+            
     
     def test_tostring_size_match(self):
         
@@ -30,7 +43,7 @@ class TestStringConvert(unittest.TestCase):
             s2 = f.read()
             f.close()
             
-            self.assertEqual(s, s2)
+            self.assertEqual(s, s2,"output image data does not match")
     def test_fromstring(self):
         
         test_image = get_test_image("eyeball.jpg")
@@ -59,7 +72,7 @@ class TestStringConvert(unittest.TestCase):
         f.close()
         
         self.assertEqual(len(s1),len(s2))
-        self.assertEqual(s1,s2)
+        self.assertEqual(s1,s2,msg="output image data does not match")
         
         
         
