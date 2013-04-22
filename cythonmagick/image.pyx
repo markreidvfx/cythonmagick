@@ -8,9 +8,6 @@ from magick.geometry cimport Geometry as magickGeometry
 from magick.color cimport Color as magickColor
 from magick.blob cimport Blob as magickBlob
 
-from magick.colorspace cimport ColorspaceType
-from magick.compress cimport CompressionType
-
 def initialize():
     InitializeMagick(NULL)
 
@@ -44,12 +41,6 @@ cdef class Image:
         self.thisptr.rotate(degrees)
     def display(self):
         self.thisptr.display()
-
-    def compressType(self):
-        return self.thisptr.compressType()
-        
-    def setCompressType(self,CompressionType compress):
-        self.thisptr.compressType(compress)
         
     def tostring(self):
         """
