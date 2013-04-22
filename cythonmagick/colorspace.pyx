@@ -1,6 +1,6 @@
 from magick cimport colorspace
 
-colorspaceTypes = dict(
+ColorspaceTypes = dict(
 CMYK = colorspace.CMYKColorspace,
 GRAY = colorspace.GRAYColorspace,
 HSL = colorspace.HSLColorspace,

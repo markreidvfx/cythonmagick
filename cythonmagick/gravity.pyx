@@ -1,6 +1,6 @@
 from magick cimport gravity
 
-gravityTypes = dict(
+GravityTypes = dict(
 Forget = gravity.ForgetGravity,
 NorthWest = gravity.NorthWestGravity,
 North = gravity.NorthGravity,

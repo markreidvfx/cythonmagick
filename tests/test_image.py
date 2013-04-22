@@ -11,6 +11,53 @@ class TestStringConvert(unittest.TestCase):
     def setUp(self):
         cythonmagick.initialize()
         
+    def test_value_lookup(self):
+        
+        d = {"One":1,"Two":2,"Three":3}
+        
+        self.assertEqual(cythonmagick._value_lookup(d,3),"Three")
+        self.assertEqual(cythonmagick._value_lookup(d,1),"One")
+        self.assertEqual(cythonmagick._value_lookup(d,5),None)
+        
+    
+    def test_nocase_lookup(self):
+        
+        d = {"One":1,"Two":2,"Three":3}
+        
+        self.assertEqual(cythonmagick._nocase_lookup(d,"tHrEe"),3)
+        self.assertEqual(cythonmagick._nocase_lookup(d,"THreE"),3)
+        self.assertEqual(cythonmagick._nocase_lookup(d,"TwO"),2)
+        self.assertEqual(cythonmagick._nocase_lookup(d,"One"),1)
+        self.assertEqual(cythonmagick._nocase_lookup(d,"wee"),None)
+        
+    def test_colorspace(self):
+        i = cythonmagick.Image(get_test_image("eyeball.jpg"))
+        
+        #s = i.tostring()
+        
+        #print cythonmagick.ColorspaceTypes
+        ColorspaceTypes = dict(cythonmagick.ColorspaceTypes)
+        
+        del ColorspaceTypes['Transparent']
+        
+        for c in ColorspaceTypes.keys():
+            
+            #i.fromstring(s)
+            i.colorspace = c
+            #print i.colorspace,c
+            self.assertEqual(i.colorspace,c)
+            
+        for c in ("YUV","yUv","yuv"):
+            #i.fromstring(s)
+            i.colorspace = c
+            self.assertEqual(i.colorspace,"YUV")
+        
+        for c in ("Cow","Pig"):
+            with self.assertRaises(ValueError):
+                i.colorspace = c
+                
+        
+        
     def test_size(self):
         i = cythonmagick.Image(get_test_image("eyeball.jpg"))
         

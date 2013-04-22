@@ -1,7 +1,7 @@
 
 from magick cimport compress
 
-compressTypes = dict(
+CompressTypes = dict(
 Undefined = compress.UndefinedCompression,
 BZip = compress.BZipCompression,
 DXT1 = compress.DXT1Compression,
@@ -25,4 +25,4 @@ JBIG1 = compress.JBIG1Compression,
 JBIG2 = compress.JBIG2Compression,
 )
 
-compressTypes["None"] = compress.NoCompression
+CompressTypes["None"] = compress.NoCompression

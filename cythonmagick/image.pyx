@@ -11,6 +11,17 @@ from magick.blob cimport Blob as magickBlob
 def initialize():
     InitializeMagick(NULL)
 
+def _value_lookup(d,v):
+    for key,value in d.items():
+        if value == v:
+            return key
+        
+def _nocase_lookup(d,k):
+    for key,value in d.items():
+        if key.lower() == k.lower():
+            return value
+    
+
 
 cdef class Image:
     cdef magickImage *thisptr
@@ -98,22 +109,15 @@ cdef class Image:
     property colorspace:
         
         def __get__(self):
-        
-            colorspace_ = self.thisptr.colorSpace()
             
-            for key,value in colorspaceTypes.items():
-                if value == colorspace_:
-                    return key
-            
-            return colorspace_
-            
+            return _value_lookup(ColorspaceTypes,self.thisptr.colorSpace())
+
         def __set__(self,string colorspace_):
         
-            c_space = self.thisptr.colorSpace()
-            
-            for key,value in colorspaceTypes.items():
-                if key.lower() == colorspace_.lower():
-                    c_space = value
+            c_space = _nocase_lookup(ColorspaceTypes,colorspace_)
+ 
+            if c_space is None:
+                raise ValueError("%s not valid colorspace" % str(colorspace_))
             
             self.thisptr.colorSpace(c_space)
 
