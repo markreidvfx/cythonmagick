@@ -5,6 +5,7 @@ from cython.operator cimport dereference as deref
 from magick.image cimport Image as magickImage
 from magick.image cimport InitializeMagick
 from magick.geometry cimport Geometry as magickGeometry
+from magick.color cimport Color as magickColor
 from magick.blob cimport Blob as magickBlob
 
 from magick.colorspace cimport ColorspaceType
@@ -16,9 +17,19 @@ def initialize():
 
 cdef class Image:
     cdef magickImage *thisptr
-
-    def __cinit__(self, string path):
-        self.thisptr = new magickImage(path)
+    def __cinit__(self, path = None):
+        cdef string s
+        cdef magickGeometry *geo = new magickGeometry("0x0")
+        cdef magickColor *color = new magickColor("black")
+        if path:
+            s = path
+            self.thisptr = new magickImage(s)
+        else:
+            self.thisptr = new magickImage(deref(geo),deref(color))
+            
+        del geo
+        del color
+        
     def write(self, string path):
         self.thisptr.write(path)
     def resize(self, string size):
@@ -52,17 +63,22 @@ cdef class Image:
 
         self.thisptr.write(blob)
         
-        cdef size_t length = blob.length()
-        
-        #don't know how to static_cast in cython but this works
-        cdef const char *data =  <char*> blob.data()
-
-        s = string(data, length) #this seems to work
+        s = string(<char*> blob.data(), blob.length()) #this seems to work
         
         del blob #not sure if this is necessary 
        
         return s
-            
+    
+    def fromstring(self, string data):
+        
+        cdef magickBlob *blob = new magickBlob()
+        
+        blob.update(data.c_str(),data.size())
+        
+        del self.thisptr
+        self.thisptr = new magickImage(deref(blob))
+        
+        del blob
 
     def __dealloc__(self):
         del self.thisptr
