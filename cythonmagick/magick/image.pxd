@@ -26,7 +26,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick":
         void quantize()
         void compressType(CompressionType)
         CompressionType compressType()
-        void magick(const string&)
+        void magick(const string&) except +
         string magick()
         void depth(const size_t)
         size_t depth()
