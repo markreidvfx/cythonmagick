@@ -7,6 +7,7 @@ from magick.image cimport InitializeMagick
 from magick.geometry cimport Geometry as magickGeometry
 from magick.color cimport Color as magickColor
 from magick.blob cimport Blob as magickBlob
+from magick.coderinfo cimport CoderInfo as magickCoderInfo
 
 from magick.gravity cimport GravityType
 cimport magick.gravity
@@ -24,7 +25,23 @@ def _nocase_lookup(d,k):
         if key.lower() == k.lower():
             return value
     
-
+def coderinfo(string format):
+    d = {}
+    cdef magickCoderInfo *info
+    try:
+        info = new magickCoderInfo(format)
+    except:
+        d = {'name':format,'isReadable':False, 'isWritable':False,}
+        return d
+    
+    
+    d['name'] = info.name()
+    d['description'] = info.description()
+    d['isReadable'] = info.isReadable()
+    d['isWritable'] = info.isWritable()
+    d['isMultiFrame'] = info.isMultiFrame()
+    
+    return d
 
 cdef class Image:
     cdef magickImage *thisptr

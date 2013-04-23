@@ -11,6 +11,17 @@ class TestStringConvert(unittest.TestCase):
     def setUp(self):
         cythonmagick.initialize()
         
+    def test_coderinfo(self):
+        
+        d = cythonmagick.coderinfo("JPG")
+        self.assertEqual(d['isReadable'], True)
+        self.assertEqual(d['isWritable'], True)
+        d = cythonmagick.coderinfo("BOB")
+        self.assertEqual(d['isReadable'], False)
+        self.assertEqual(d['isWritable'], False)
+        
+        #print cythonmagick.coderinfo("EXR")
+        
     def test_value_lookup(self):
         
         d = {"One":1,"Two":2,"Three":3}
