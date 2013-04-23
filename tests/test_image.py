@@ -13,9 +13,35 @@ class TestStringConvert(unittest.TestCase):
         
     def test_formats(self):
         
-        for item in cythonmagick.listformats():
-            print item['name'],':',item['description']
-            print "   ", 'read:',item['read'], 'write:', item['write'],'multiframe:',item['multiframe']
+        
+        for item in cythonmagick.listformats(read=True):
+            self.assertEqual(item['read'], True)
+        for item in cythonmagick.listformats(read=False):
+            self.assertEqual(item['read'], False)
+        
+        for item in cythonmagick.listformats(write=True):
+            self.assertEqual(item['write'], True)
+        for item in cythonmagick.listformats(write=False):
+            self.assertEqual(item['write'], False)
+            
+        for item in cythonmagick.listformats(multiframe=True):
+            self.assertEqual(item['multiframe'], True)
+            
+        for item in cythonmagick.listformats(multiframe=False):
+            self.assertEqual(item['multiframe'], False)
+            
+        for item in cythonmagick.listformats(read=True,write=True):
+            self.assertEqual(item['read'], True)
+            self.assertEqual(item['write'], True)
+            
+        for item in cythonmagick.listformats(read=True,write=False):
+            self.assertEqual(item['read'], True)
+            self.assertEqual(item['write'], False)
+            
+        
+        #for item in cythonmagick.listformats():
+            #print item['name'],':',item['description']
+            #print "   ", 'read:',item['read'], 'write:', item['write'],'multiframe:',item['multiframe']
         
     def test_coderinfo(self):
         
