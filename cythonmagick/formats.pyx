@@ -51,10 +51,7 @@ def listformats(read=None, write=None, multiframe=None):
     formats = []
     
     cdef cpplist[magickCoderInfo] *coderlist = new cpplist[magickCoderInfo]()
-    coderInfoList(coderlist,
-                 read,
-                 write,
-                 magick.coderinfo.AnyMatch)
+    coderInfoList(coderlist, read, write, multiframe)
     
     cdef cpplist[magickCoderInfo].iterator it = coderlist.begin()
     
