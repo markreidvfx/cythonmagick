@@ -1,7 +1,7 @@
 
 import unittest
 import subprocess
-
+from pprint import pprint
 import cythonmagick
 
 from common import *
@@ -11,14 +11,20 @@ class TestStringConvert(unittest.TestCase):
     def setUp(self):
         cythonmagick.initialize()
         
+    def test_formats(self):
+        
+        for item in cythonmagick.listformats():
+            print item['name'],':',item['description']
+            print "   ", 'read:',item['read'], 'write:', item['write'],'multiframe:',item['multiframe']
+        
     def test_coderinfo(self):
         
         d = cythonmagick.coderinfo("JPG")
-        self.assertEqual(d['isReadable'], True)
-        self.assertEqual(d['isWritable'], True)
+        self.assertEqual(d['read'], True)
+        self.assertEqual(d['write'], True)
         d = cythonmagick.coderinfo("BOB")
-        self.assertEqual(d['isReadable'], False)
-        self.assertEqual(d['isWritable'], False)
+        self.assertEqual(d['read'], False)
+        self.assertEqual(d['write'], False)
         
         #print cythonmagick.coderinfo("EXR")
         

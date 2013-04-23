@@ -24,24 +24,6 @@ def _nocase_lookup(d,k):
     for key,value in d.items():
         if key.lower() == k.lower():
             return value
-    
-def coderinfo(string format):
-    d = {}
-    cdef magickCoderInfo *info
-    try:
-        info = new magickCoderInfo(format)
-    except:
-        d = {'name':format,'isReadable':False, 'isWritable':False,}
-        return d
-    
-    
-    d['name'] = info.name()
-    d['description'] = info.description()
-    d['isReadable'] = info.isReadable()
-    d['isWritable'] = info.isWritable()
-    d['isMultiFrame'] = info.isMultiFrame()
-    
-    return d
 
 cdef class Image:
     cdef magickImage *thisptr
@@ -131,7 +113,7 @@ cdef class Image:
             
             info = coderinfo(magick_)
             
-            if info['isWritable']:
+            if info['write']:
             
                 self.thisptr.magick(magick_)
             else:
