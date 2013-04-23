@@ -74,6 +74,19 @@ class TestStringConvert(unittest.TestCase):
         self.assertEqual(1920,width)
         self.assertEqual(1080,height)
         
+    def test_crop(self):
+        i = cythonmagick.Image(get_test_image("eyeball.jpg"))
+        
+        #i.crop()
+        
+        
+    def test_extent(self):
+        i = cythonmagick.Image(get_test_image("eyeball.jpg"))
+        
+        i.extent("1920x1080","Red",'Center')
+        
+        #i.display()
+        
     def test_depth(self):
         
         i = cythonmagick.Image(get_test_image("eyeball.jpg"))
@@ -87,7 +100,6 @@ class TestStringConvert(unittest.TestCase):
             test_image = cythonmagick.Image(out)
             
             self.assertEqual(d, test_image.depth)
-            
     
     def test_tostring_size_match(self):
         
@@ -98,15 +110,14 @@ class TestStringConvert(unittest.TestCase):
             
             out = output_test_image("tostring_test.%s" % format)
             i.write(out)
-            
             s = i.tostring()
-            
             f = open(out)
             
             s2 = f.read()
             f.close()
             
             self.assertEqual(s, s2,"output image data does not match")
+            
     def test_fromstring(self):
         
         test_image = get_test_image("eyeball.jpg")

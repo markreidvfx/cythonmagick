@@ -8,6 +8,9 @@ from magick.geometry cimport Geometry as magickGeometry
 from magick.color cimport Color as magickColor
 from magick.blob cimport Blob as magickBlob
 
+from magick.gravity cimport GravityType
+cimport magick.gravity
+
 def initialize():
     InitializeMagick(NULL)
 
@@ -47,6 +50,16 @@ cdef class Image:
             self.thisptr.resize(deref(geo))
         finally:
             del geo
+            
+    def extent(self, string size, string color_="Transparent",string gravity_ = "Center"):
+        cdef magickGeometry *geo = new magickGeometry(size)
+        cdef magickColor *col = new magickColor(color_)
+        cdef GravityType grav = _nocase_lookup(GravityTypes,gravity_)
+        
+        self.thisptr.extent(deref(geo), deref(col), grav)
+        
+        del geo
+        del col
 
     def rotate(self,double degrees):
         self.thisptr.rotate(degrees)

@@ -3,6 +3,7 @@ from libcpp.string cimport string
 from geometry cimport Geometry
 from colorspace cimport ColorspaceType
 from compress cimport CompressionType
+from gravity cimport GravityType
 from blob cimport Blob
 from color cimport Color
 
@@ -31,3 +32,8 @@ cdef extern from "Magick++/Image.h" namespace "Magick":
         size_t depth()
         void size(const Geometry&)
         const Geometry size()
+        void crop(const Geometry&)
+        void extent(const Geometry&)
+        void extent(const Geometry&, const Color&)
+        void extent(const Geometry&, const GravityType)
+        void extent(const Geometry&, const Color&, const GravityType)
