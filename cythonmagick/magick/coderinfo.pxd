@@ -10,3 +10,9 @@ cdef extern from "Magick++/CoderInfo.h" namespace "Magick":
         bool isReadable()
         bool isWritable()
         bool isMultiFrame()
+        
+cdef extern from * namespace "Magick::CoderInfo":
+    ctypedef enum MatchType:
+        AnyMatch      # match any coder
+        TrueMatch     # match coder if true
+        FalseMatch    # match coder if false
