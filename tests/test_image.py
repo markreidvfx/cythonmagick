@@ -116,7 +116,7 @@ class TestStringConvert(unittest.TestCase):
         
         i = cythonmagick.Image(get_test_image("eyeball.jpg"))
         
-        for format in ("png","exr","jpg","dpx","gif"):
+        for format in ("png","jpg","dpx","gif"):
             i.magick = format
             
             out = output_test_image("tostring_test.%s" % format)

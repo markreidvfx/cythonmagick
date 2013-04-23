@@ -128,7 +128,14 @@ cdef class Image:
             return self.thisptr.magick()
             
         def __set__(self,string magick_):
-            self.thisptr.magick(magick_)
+            
+            info = coderinfo(magick_)
+            
+            if info['isWritable']:
+            
+                self.thisptr.magick(magick_)
+            else:
+                raise ValueError("%s format is not supported" % magick_)
             
     property depth:
         def __get__(self):
