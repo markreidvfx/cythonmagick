@@ -124,6 +124,18 @@ cdef class Image:
             return self.thisptr.depth()
         def __set__(self,int depth):
             self.thisptr.depth(depth)
+    property compress:
+        def __get__(self):
+            return _value_lookup(CompressTypes, self.thisptr.compressType())
+        
+        def __set__(self, string compress_):
+            
+            c_value = _nocase_lookup(CompressTypes,compress_)
+            
+            if c_value is None:
+                raise ValueError("%s not valid compression" % str(c_value))
+            
+            self.thisptr.compressType(c_value)
             
     property colorspace:
         

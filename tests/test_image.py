@@ -99,6 +99,42 @@ class TestStringConvert(unittest.TestCase):
             with self.assertRaises(ValueError):
                 i.colorspace = c
                 
+    def test_compress(self):
+        i = cythonmagick.Image(get_test_image("eyeball.jpg"))
+        
+        i.magick = "TIFF"
+        
+        
+        for item in ("none", "LZW", 'ZIP', "RLE"):
+            i.compress = item
+            
+            out = output_test_image("compress_test_%s.%s" % (item,"tif"))
+            
+            i.write(out)
+            
+            i2 = cythonmagick.Image(out)
+            
+            self.assertEqual( i.compress.lower(),item.lower())
+        
+        
+        if cythonmagick.coderinfo("EXR")['read'] == True:
+            print 'testing exr compression'
+            i.magick = "EXR"
+            
+            for item in ("none", "ZIP", 'ZIPS','Piz','PXR24',"RLE"):
+                i.compress = item
+                
+                out = output_test_image("compress_test_%s.%s" % (item,"exr"))
+                
+                i.write(out)
+                
+                i2 = cythonmagick.Image(out)
+                
+                print i.compress, item
+                
+                self.assertEqual( i.compress.lower(),item.lower())
+        else:
+            print "No EXR Support"
         
         
     def test_size(self):
