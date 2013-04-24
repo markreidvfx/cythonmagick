@@ -1,7 +1,7 @@
 from libcpp.string cimport string
 from cython.operator cimport dereference as deref, preincrement as inc
 
-from magick.coderlist cimport coderInfoList
+from magick.coderlist cimport coderInfoList as magickCoderInfoList 
 from magick.coderinfo cimport CoderInfo as magickCoderInfo
 from libcpp.list cimport list as cpplist
 
@@ -51,7 +51,7 @@ def listformats(read=None, write=None, multiframe=None):
     formats = []
     
     cdef cpplist[magickCoderInfo] *coderlist = new cpplist[magickCoderInfo]()
-    coderInfoList(coderlist, read, write, multiframe)
+    magickCoderInfoList(coderlist, read, write, multiframe)
     
     cdef cpplist[magickCoderInfo].iterator it = coderlist.begin()
     
