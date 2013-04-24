@@ -11,7 +11,8 @@ from magick.coderinfo cimport CoderInfo as magickCoderInfo
 
 from magick.gravity cimport GravityType as magickGravityType 
 from magick.filter cimport FilterTypes as magickFilterType
-cimport magick.gravity
+from magick.compress cimport CompressionType as magickCompressionType
+from magick.colorspace cimport ColorspaceType as magickColorspaceType
 
 def initialize():
     InitializeMagick(NULL)
@@ -122,20 +123,19 @@ cdef class Image:
             return self.thisptr.depth()
         def __set__(self,int depth):
             self.thisptr.depth(depth)
+            
     property compress:
         def __get__(self):
             return _value_lookup(CompressTypes, self.thisptr.compressType())
-        
         def __set__(self, string compression):
-            value = CompressTypes[compression.lower()]
+            cdef magickCompressionType value = CompressTypes[compression.lower()]
             self.thisptr.compressType(value)
             
     property colorspace:
         def __get__(self):
             return _value_lookup(ColorspaceTypes,self.thisptr.colorSpace())
-
         def __set__(self,string colorspace):
-            value = ColorspaceTypes[colorspace.lower()]
+            cdef magickColorspaceType value = ColorspaceTypes[colorspace.lower()]
             self.thisptr.colorSpace(value)
             
     property filter:
