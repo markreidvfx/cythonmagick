@@ -62,17 +62,6 @@ class TestStringConvert(unittest.TestCase):
         self.assertEqual(cythonmagick._value_lookup(d,1),"One")
         self.assertEqual(cythonmagick._value_lookup(d,5),None)
         
-    
-    def test_nocase_lookup(self):
-        
-        d = {"One":1,"Two":2,"Three":3}
-        
-        self.assertEqual(cythonmagick._nocase_lookup(d,"tHrEe"),3)
-        self.assertEqual(cythonmagick._nocase_lookup(d,"THreE"),3)
-        self.assertEqual(cythonmagick._nocase_lookup(d,"TwO"),2)
-        self.assertEqual(cythonmagick._nocase_lookup(d,"One"),1)
-        self.assertEqual(cythonmagick._nocase_lookup(d,"wee"),None)
-        
     def test_colorspace(self):
         i = cythonmagick.Image(get_test_image("eyeball.jpg"))
         
@@ -96,7 +85,7 @@ class TestStringConvert(unittest.TestCase):
             self.assertEqual(i.colorspace,"yuv")
         
         for c in ("Cow","Pig"):
-            with self.assertRaises(ValueError):
+            with self.assertRaises(KeyError):
                 i.colorspace = c
                 
     def test_compress(self):

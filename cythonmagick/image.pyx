@@ -19,11 +19,6 @@ def _value_lookup(d,v):
     for key,value in d.items():
         if value == v:
             return key
-        
-def _nocase_lookup(d,k):
-    for key,value in d.items():
-        if key.lower() == k.lower():
-            return value
 
 cdef class Image:
     cdef magickImage *thisptr
@@ -50,10 +45,13 @@ cdef class Image:
         finally:
             del geo
             
-    def extent(self, string size, string color_="Transparent",string gravity_ = "Center"):
+    def extent(self, string size, string color_="transparent",string gravity = "center"):
+        
+        gravity_value = GravityTypes[gravity.lower()]
+        
         cdef magickGeometry *geo = new magickGeometry(size)
         cdef magickColor *col = new magickColor(color_)
-        cdef GravityType grav = _nocase_lookup(GravityTypes,gravity_)
+        cdef GravityType grav = gravity_value
         
         self.thisptr.extent(deref(geo), deref(col), grav)
         
@@ -70,16 +68,16 @@ cdef class Image:
         matched from PythonMagick helpers_src, seems to work...
         const char* data = static_cast<const char*>(blob.data());
         size_t length = blob.length();
-        return std::string(data,data+length);
+        return std::string(data,data);
         """
         
         cdef magickBlob *blob = new magickBlob()
 
         self.thisptr.write(blob)
         
-        s = string(<char*> blob.data(), blob.length()) #this seems to work
+        s = string(<char*> blob.data(), blob.length())
         
-        del blob #not sure if this is necessary 
+        del blob
        
         return s
     
@@ -109,15 +107,14 @@ cdef class Image:
         def __get__(self):
             return self.thisptr.magick()
             
-        def __set__(self,string magick_):
+        def __set__(self,string magick):
             
-            info = coderinfo(magick_)
-            
+            info = coderinfo(magick)
             if info['write']:
             
-                self.thisptr.magick(magick_)
+                self.thisptr.magick(magick)
             else:
-                raise ValueError("%s format is not supported" % magick_)
+                raise ValueError("%s format is not supported" % magick)
             
     property depth:
         def __get__(self):
@@ -128,27 +125,15 @@ cdef class Image:
         def __get__(self):
             return _value_lookup(CompressTypes, self.thisptr.compressType())
         
-        def __set__(self, string compress_):
-            
-            c_value = _nocase_lookup(CompressTypes,compress_)
-            
-            if c_value is None:
-                raise ValueError("%s not valid compression" % str(c_value))
-            
-            self.thisptr.compressType(c_value)
+        def __set__(self, string compression):
+            value = CompressTypes[compression.lower()]
+            self.thisptr.compressType(value)
             
     property colorspace:
-        
         def __get__(self):
-            
             return _value_lookup(ColorspaceTypes,self.thisptr.colorSpace())
 
-        def __set__(self,string colorspace_):
-        
-            c_space = _nocase_lookup(ColorspaceTypes,colorspace_)
- 
-            if c_space is None:
-                raise ValueError("%s not valid colorspace" % str(colorspace_))
-            
-            self.thisptr.colorSpace(c_space)
+        def __set__(self,string colorspace):
+            value = ColorspaceTypes[colorspace.lower()]
+            self.thisptr.colorSpace(value)
 
