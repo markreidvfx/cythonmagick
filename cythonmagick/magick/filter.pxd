@@ -1,0 +1,34 @@
+cdef extern from "Magick++/Include.h" namespace "MagickCore":
+    ctypedef enum FilterTypes:
+        UndefinedFilter
+        PointFilter
+        BoxFilter
+        TriangleFilter
+        HermiteFilter
+        HanningFilter
+        HammingFilter
+        BlackmanFilter
+        GaussianFilter
+        QuadraticFilter
+        CubicFilter
+        CatromFilter
+        MitchellFilter
+        JincFilter
+        SincFilter
+        SincFastFilter
+        KaiserFilter
+        WelshFilter
+        ParzenFilter
+        BohmanFilter
+        BartlettFilter
+        LagrangeFilter
+        LanczosFilter
+        LanczosSharpFilter
+        Lanczos2Filter
+        Lanczos2SharpFilter
+        RobidouxFilter
+        RobidouxSharpFilter
+        CosineFilter
+        SplineFilter
+        LanczosRadiusFilter
+        SentinelFilter
