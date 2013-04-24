@@ -1,15 +1,15 @@
 from magick cimport gravity
 
 GravityTypes = dict(
-Forget = gravity.ForgetGravity,
-NorthWest = gravity.NorthWestGravity,
-North = gravity.NorthGravity,
-NorthEast = gravity.NorthEastGravity,
-West = gravity.WestGravity,
-Center = gravity.CenterGravity,
-East = gravity.EastGravity,
-SouthWest = gravity.SouthWestGravity,
-South = gravity.SouthGravity,
-SouthEast = gravity.SouthEastGravity,
-Static = gravity.StaticGravity
+forget = gravity.ForgetGravity,
+northwest = gravity.NorthWestGravity,
+north = gravity.NorthGravity,
+northeast = gravity.NorthEastGravity,
+west = gravity.WestGravity,
+center = gravity.CenterGravity,
+east = gravity.EastGravity,
+southwest = gravity.SouthWestGravity,
+south = gravity.SouthGravity,
+southeast = gravity.SouthEastGravity,
+static = gravity.StaticGravity
 )

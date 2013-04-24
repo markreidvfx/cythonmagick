@@ -81,7 +81,7 @@ class TestStringConvert(unittest.TestCase):
         #print cythonmagick.ColorspaceTypes
         ColorspaceTypes = dict(cythonmagick.ColorspaceTypes)
         
-        del ColorspaceTypes['Transparent']
+        del ColorspaceTypes['transparent']
         
         for c in ColorspaceTypes.keys():
             
@@ -93,7 +93,7 @@ class TestStringConvert(unittest.TestCase):
         for c in ("YUV","yUv","yuv"):
             #i.fromstring(s)
             i.colorspace = c
-            self.assertEqual(i.colorspace,"YUV")
+            self.assertEqual(i.colorspace,"yuv")
         
         for c in ("Cow","Pig"):
             with self.assertRaises(ValueError):
