@@ -1,9 +1,9 @@
 from libcpp.string cimport string
+from libcpp.list cimport list as cpplist
 from cython.operator cimport dereference as deref, preincrement as inc
 
 from magick.coderlist cimport coderInfoList as magickCoderInfoList 
 from magick.coderinfo cimport CoderInfo as magickCoderInfo
-from libcpp.list cimport list as cpplist
 
 cimport magick.coderinfo
 
