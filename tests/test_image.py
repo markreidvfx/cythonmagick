@@ -42,6 +42,22 @@ class TestStringConvert(unittest.TestCase):
         #for item in cythonmagick.listformats():
             #print item['name'],':',item['description']
             #print "   ", 'read:',item['read'], 'write:', item['write'],'multiframe:',item['multiframe']
+            
+    def test_filter(self):
+        
+        filters = dict(cythonmagick.FilterTypes)
+        
+        
+        
+        for f in filters.keys():
+            i = cythonmagick.Image(get_test_image("eyeball.jpg"))
+            
+            i.filter = f
+            
+            i.resize("10x10")
+            
+            self.assertEqual(i.filter,f)
+            
         
     def test_coderinfo(self):
         

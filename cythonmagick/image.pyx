@@ -9,7 +9,8 @@ from magick.color cimport Color as magickColor
 from magick.blob cimport Blob as magickBlob
 from magick.coderinfo cimport CoderInfo as magickCoderInfo
 
-from magick.gravity cimport GravityType
+from magick.gravity cimport GravityType as magickGravityType 
+from magick.filter cimport FilterTypes as magickFilterType
 cimport magick.gravity
 
 def initialize():
@@ -51,7 +52,7 @@ cdef class Image:
         
         cdef magickGeometry *geo = new magickGeometry(size)
         cdef magickColor *col = new magickColor(color_)
-        cdef GravityType grav = gravity_value
+        cdef magickGravityType grav = gravity_value
         
         self.thisptr.extent(deref(geo), deref(col), grav)
         
@@ -136,4 +137,10 @@ cdef class Image:
         def __set__(self,string colorspace):
             value = ColorspaceTypes[colorspace.lower()]
             self.thisptr.colorSpace(value)
-
+            
+    property filter:
+        def __get__(self):
+            return _value_lookup(FilterTypes,self.thisptr.filterType())
+        def __set__(self, string filter):
+            cdef magickFilterType value = FilterTypes[filter.lower()]
+            self.thisptr.filterType(value)

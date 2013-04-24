@@ -4,6 +4,7 @@ from geometry cimport Geometry
 from colorspace cimport ColorspaceType
 from compress cimport CompressionType
 from gravity cimport GravityType
+from filter cimport FilterTypes as FilterType
 from blob cimport Blob
 from color cimport Color
 
@@ -26,6 +27,8 @@ cdef extern from "Magick++/Image.h" namespace "Magick":
         void quantize()
         void compressType(CompressionType)
         CompressionType compressType()
+        void filterType(const FilterType)
+        const FilterType filterType()
         void magick(const string&) except +
         string magick()
         void depth(const size_t)

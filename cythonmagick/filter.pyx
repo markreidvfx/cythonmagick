@@ -32,5 +32,5 @@ robidouxsharp = filter.RobidouxSharpFilter,
 cosine = filter.CosineFilter,
 spline = filter.SplineFilter,
 lanczosradius = filter.LanczosRadiusFilter,
-sentinel = filter.SentinelFilter,
+#sentinel = filter.SentinelFilter,
 )
