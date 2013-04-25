@@ -241,7 +241,7 @@ class TestStringConvert(unittest.TestCase):
             
             i.background = item
             
-            self.assertEqual(item, i.background)
+            self.assertEqual(item, i.background.tostring())
             
         #i.display()
         
