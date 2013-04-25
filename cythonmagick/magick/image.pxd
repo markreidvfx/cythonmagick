@@ -40,3 +40,5 @@ cdef extern from "Magick++/Image.h" namespace "Magick":
         void extent(const Geometry&, const Color&)
         void extent(const Geometry&, const GravityType)
         void extent(const Geometry&, const Color&, const GravityType)
+        void backgroundColor(const const Color&)
+        Color backgroundColor()

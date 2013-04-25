@@ -231,8 +231,19 @@ class TestStringConvert(unittest.TestCase):
         
         self.assertEqual(len(s1),len(s2))
         self.assertEqual(s1,s2,msg="output image data does not match")
+    
+    def test_backgroundcolor(self):
+        test_image = get_test_image("eyeball.jpg")
         
+        i = cythonmagick.Image(test_image)
         
+        for item in ('#FFFF00000000','#00000000FFFF'):
+            
+            i.background = item
+            
+            self.assertEqual(item, i.background)
+            
+        #i.display()
         
 
 if __name__ == '__main__':

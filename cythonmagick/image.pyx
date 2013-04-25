@@ -118,6 +118,19 @@ cdef class Image:
             else:
                 raise ValueError("%s format is not supported" % magick)
             
+    property background:
+        def __get__(self):
+            color = self.thisptr.backgroundColor()
+            s = <string> color
+            return s
+            
+        def __set__(self,string color):
+            cdef magickColor *col = new magickColor(color)
+            self.thisptr.backgroundColor(deref(col))
+            
+            
+            del col
+            
     property depth:
         def __get__(self):
             return self.thisptr.depth()
