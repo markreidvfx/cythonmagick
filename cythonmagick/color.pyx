@@ -15,29 +15,34 @@ cdef magickColor tomagickColor(object color) except *:
     return  magickColor(s) 
 
 cdef class Color:
-    cdef magickColorRGB *thisptr
+    cdef double _r
+    cdef double _g
+    cdef double _b
+    cdef double _a
     
     def __cinit__(self,color=None):
+        self._r = 0
+        self._g = 0
+        self._b = 0
+        self._a = 0
+        cdef magickColorRGB c
         if color:
-            self.thisptr = new magickColorRGB(str(color))
-        else:
-            self.thisptr = new magickColorRGB("black")
+            c = magickColorRGB(str(color))
+            self._r = c.red()
+            self._g = c.green()
+            self._b = c.blue()
+            self._a = c.alpha()
+            
     @classmethod       
     def from_rgba(cls,red=None, green=None, blue=None, alpha=None):
         c = cls()
         c.set_rgba(red,green,blue,alpha)
         return c
             
-    def __dealloc__(self):
-        if self.thisptr is not NULL:
-        
-            del self.thisptr
-            
     def __str__(self):
         return self.tostring()
     
     def __richcmp__(x,y,int op):
-        
         if op not in (2,3):
             return False
         
@@ -51,25 +56,22 @@ cdef class Color:
             return not c1.tostring() == c2.tostring()
 
     def set_rgba(self, r=None,g=None,b=None,a=None):
-
         if r is not None:
-            self.thisptr.red(r)
+            self._r = r
         if g is not None:
-            self.thisptr.green(g)            
+            self._g = g         
         if b is not None:
-            self.thisptr.blue(b)
+            self._b = b
         if a is not None:
-            self.thisptr.alpha(a)
+            self._a = a
 
     def get_rgba(self):
- 
-        return self.thisptr.red(),self.thisptr.green(),self.thisptr.blue(),self.thisptr.alpha()
+        return self._r,self._g,self._b,self._a
     
     def tostring(self):
-        
-        s = <string> deref(self.thisptr)
-        
-        return s
+        cdef magickColorRGB c = magickColorRGB(self._r,self._g,self._b)
+        c.alpha(self._a)
+        return <string> c
 
     property red:
         def __get__(self):

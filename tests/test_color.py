@@ -54,7 +54,7 @@ class TestStringConvert(unittest.TestCase):
         for r,g,b,a in ((1, 1, 1, 1), 
                         (.2, .1, .5, .8), 
                         (.3, .4, .5, .6),
-                        (.03, .04, .05, .06),
+                        (.033, .042, .051, .06456),
                         (.003, .004, .005, .006)):
             c = cythonmagick.Color()
             c.red = r
@@ -67,9 +67,9 @@ class TestStringConvert(unittest.TestCase):
             #print 'blue:', c.blue,b
             #print 'alpha', c.alpha,a
             
-            self.assertAlmostEquals(c.red, r,2)
-            self.assertAlmostEquals(c.green, g,2)
-            self.assertAlmostEquals(c.blue, b,2)
-            self.assertAlmostEquals(c.alpha, a,2)
+            self.assertEqual(c.red, r,2)
+            self.assertEqual(c.green, g,2)
+            self.assertEqual(c.blue, b,2)
+            self.assertEqual(c.alpha, a,2)
 if __name__ == '__main__':
     unittest.main()
