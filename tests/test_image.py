@@ -173,6 +173,11 @@ class TestStringConvert(unittest.TestCase):
         
         self.assertEqual(i.size(), (1920,1080))
         
+        for color in ("what the","bad name", 3412):
+            with self.assertRaises(RuntimeError):
+                 i = cythonmagick.Image(get_test_image("eyeball.jpg"))
+                 i.extent("1920x1080",color,'Center')
+        
     def test_depth(self):
         
         i = cythonmagick.Image(get_test_image("eyeball.jpg"))
@@ -249,6 +254,10 @@ class TestStringConvert(unittest.TestCase):
         
         i.background = c
         self.assertEqual(i.background,c)
+        
+        for item in ("what the","bad name", 3412):
+            with self.assertRaises(RuntimeError):
+                i.background = item
         
     
         

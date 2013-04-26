@@ -5,8 +5,8 @@ cdef extern from "Magick++/Include.h" namespace "Magick":
     
 cdef extern from "Magick++/Color.h" namespace "Magick":
     cdef cppclass Color:
-        Color()
         Color(string&) except +
+        Color() except +
         Color(Quantum, #red_
               Quantum, #green_
               Quantum, #blue_
@@ -28,7 +28,7 @@ cdef extern from "Magick++/Color.h" namespace "Magick":
         #double alpha()
         
     cdef cppclass ColorRGB(Color):
-        ColorRGB( double, double, double)
+        ColorRGB( double, double, double) except+
         ColorRGB()
         ColorRGB( const Color& )
         void red(double)

@@ -38,7 +38,6 @@ cdef class Image:
         self.thisptr.write(path)
     def resize(self, string size):
         cdef magickGeometry geo = magickGeometry(size)
-
         self.thisptr.resize(geo)
             
     def extent(self, string size, color="transparent",string gravity = "center"):
@@ -51,7 +50,6 @@ cdef class Image:
         
         self.thisptr.extent(geo, col, grav)
  
-
     def rotate(self,double degrees):
         self.thisptr.rotate(degrees)
     def display(self):
@@ -101,12 +99,9 @@ cdef class Image:
         
         def __get__(self):
             return self.thisptr.magick()
-            
         def __set__(self,string magick):
-            
             info = coderinfo(magick)
             if info['write']:
-            
                 self.thisptr.magick(magick)
             else:
                 raise ValueError("%s format is not supported" % magick)
