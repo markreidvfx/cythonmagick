@@ -24,6 +24,13 @@ class TestStringConvert(unittest.TestCase):
         
         with self.assertRaises(RuntimeError):
             c  = cythonmagick.Color("this is not a color")
+    def test_from_string(self):
+        for string in ('firebrick2','LightPink1','SkyBlue3'):
+
+            c = cythonmagick.Color.fromstring(string)
+            
+            self.assertEqual(c, string)
+
     
     def test_from_rgba(self):
         
@@ -47,10 +54,6 @@ class TestStringConvert(unittest.TestCase):
             self.assertFalse(c < color)
     
     def test_setting_rgb_color(self):
-        
-        
-        
-        
         for r,g,b,a in ((1, 1, 1, 1), 
                         (.2, .1, .5, .8), 
                         (.3, .4, .5, .6),

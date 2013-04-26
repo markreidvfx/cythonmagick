@@ -38,7 +38,11 @@ cdef class Color:
         c = cls()
         c.set_rgba(red,green,blue,alpha)
         return c
-            
+    
+    @classmethod
+    def fromstring(cls,string color):
+        return cls(color)
+
     def __str__(self):
         return self.tostring()
     
