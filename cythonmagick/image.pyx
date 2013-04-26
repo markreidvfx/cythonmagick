@@ -40,15 +40,12 @@ cdef class Image:
         cdef magickGeometry geo = magickGeometry(size)
         self.thisptr.resize(geo)
             
-    def extent(self, string size, color="transparent",string gravity = "center"):
-        
+    def extent(self, string size, string gravity = "center"):
         gravity_value = GravityTypes[gravity.lower()]
-        col = tomagickColor(color)
-        
         cdef magickGeometry geo = magickGeometry(size)
         cdef magickGravityType grav = gravity_value
         
-        self.thisptr.extent(geo, col, grav)
+        self.thisptr.extent(geo, grav)
  
     def rotate(self,double degrees):
         self.thisptr.rotate(degrees)

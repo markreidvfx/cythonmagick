@@ -165,18 +165,24 @@ class TestStringConvert(unittest.TestCase):
         
         
     def test_extent(self):
+        
+        
         i = cythonmagick.Image(get_test_image("eyeball.jpg"))
+        i.background = "red"
+        i.extent("1920x1080",'Center')
+        #i.display()
         
-        i.extent("1920x1080","Red",'Center')
-        
+        i = cythonmagick.Image(get_test_image("eyeball.jpg"))
+        i.background = "blue"
+        i.extent("1920x1080",'Center')
         #i.display()
         
         self.assertEqual(i.size(), (1920,1080))
         
-        for color in ("what the","bad name", 3412):
-            with self.assertRaises(RuntimeError):
+        for gravity in ("what the","bad name"):
+            with self.assertRaises(KeyError):
                  i = cythonmagick.Image(get_test_image("eyeball.jpg"))
-                 i.extent("1920x1080",color,'Center')
+                 i.extent("1920x1080",gravity)
         
     def test_depth(self):
         
