@@ -22,6 +22,11 @@ cdef class Color:
             self.thisptr = new magickColor(str(color))
         else:
             self.thisptr = new magickColor("black")
+    @classmethod       
+    def from_rgba(cls,red=None, green=None, blue=None, alpha=None):
+        c = cls()
+        c.set_rgba(red,green,blue,alpha)
+        return c
             
     def __dealloc__(self):
         if self.thisptr is not NULL:

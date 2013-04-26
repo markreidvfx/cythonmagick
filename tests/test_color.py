@@ -24,6 +24,16 @@ class TestStringConvert(unittest.TestCase):
         
         with self.assertRaises(RuntimeError):
             c  = cythonmagick.Color("this is not a color")
+    
+    def test_from_rgba(self):
+        
+        c = cythonmagick.Color.from_rgba(1,0,0)
+        
+        self.assertEqual(c, 'red')
+        
+        with self.assertRaises(TypeError):
+            c = cythonmagick.Color.from_rgba("goat","cow","pig")
+             
         
     def test_tostring(self):
         
