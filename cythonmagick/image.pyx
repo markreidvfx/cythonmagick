@@ -26,16 +26,13 @@ cdef class Image:
     cdef magickImage *thisptr
     def __cinit__(self, path = None):
         cdef string s
-        cdef magickGeometry *geo = new magickGeometry("0x0")
-        cdef magickColor *color = new magickColor("black")
+        cdef magickGeometry geo = magickGeometry("0x0")
+        color = tomagickColor("black")
         if path:
             s = path
             self.thisptr = new magickImage(s)
         else:
-            self.thisptr = new magickImage(deref(geo),deref(color))
-            
-        del geo
-        del color
+            self.thisptr = new magickImage(geo,color)
         
     def write(self, string path):
         self.thisptr.write(path)
@@ -90,7 +87,8 @@ cdef class Image:
         del blob
 
     def __dealloc__(self):
-        del self.thisptr
+        if self.thisptr is not NULL:
+            del self.thisptr
         
     def size(self):
         geo = self.thisptr.size()
