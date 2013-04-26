@@ -40,25 +40,20 @@ cdef class Image:
     def write(self, string path):
         self.thisptr.write(path)
     def resize(self, string size):
-        cdef magickGeometry *geo = new magickGeometry(size)
+        cdef magickGeometry geo = magickGeometry(size)
 
-        try:
-            self.thisptr.resize(deref(geo))
-        finally:
-            del geo
+        self.thisptr.resize(geo)
             
-    def extent(self, string size, string color_="transparent",string gravity = "center"):
+    def extent(self, string size, color="transparent",string gravity = "center"):
         
         gravity_value = GravityTypes[gravity.lower()]
+        col = tomagickColor(color)
         
-        cdef magickGeometry *geo = new magickGeometry(size)
-        cdef magickColor *col = new magickColor(color_)
+        cdef magickGeometry geo = magickGeometry(size)
         cdef magickGravityType grav = gravity_value
         
-        self.thisptr.extent(deref(geo), deref(col), grav)
-        
-        del geo
-        del col
+        self.thisptr.extent(geo, col, grav)
+ 
 
     def rotate(self,double degrees):
         self.thisptr.rotate(degrees)
