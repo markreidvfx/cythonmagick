@@ -121,16 +121,10 @@ cdef class Image:
     property background:
         def __get__(self):
             color = self.thisptr.backgroundColor()
-            s = <string> color
-            return Color(s)
-            
+            return toColor(color)
         def __set__(self, color):
-            
-            c = Color(color)
-                
-            self.thisptr.backgroundColor(deref(c.thisptr))
-                
-     
+            c = tomagickColor(color)
+            self.thisptr.backgroundColor(c) 
             
     property depth:
         def __get__(self):

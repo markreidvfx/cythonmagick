@@ -31,8 +31,10 @@ class TestStringConvert(unittest.TestCase):
             c = cythonmagick.Color(color)
             
             
-            print color, c.tostring(),c.get_rgba()
-        
+            self.assertEqual(c, color)
+            self.assertNotEqual(c, "black")
+            self.assertFalse(c > color)
+            self.assertFalse(c < color)
     
     def test_setting_rgb_color(self):
         

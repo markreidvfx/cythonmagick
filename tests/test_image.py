@@ -241,9 +241,14 @@ class TestStringConvert(unittest.TestCase):
             
             i.background = item
             
-            self.assertEqual(item, i.background.tostring())
+            self.assertEqual(item, i.background)
             
-        #i.display()
+        c = cythonmagick.Color("Blue")
+        
+        i.background = c
+        self.assertEqual(i.background,c)
+        
+    
         
 
 if __name__ == '__main__':
