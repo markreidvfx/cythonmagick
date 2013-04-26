@@ -48,22 +48,25 @@ class TestStringConvert(unittest.TestCase):
     
     def test_setting_rgb_color(self):
         
-        c = cythonmagick.Color()
+        
         
         
         for r,g,b,a in ((1, 1, 1, 1), 
                         (.2, .1, .5, .8), 
-                        (.3, .4, .5, .6)):
-        
+                        (.3, .4, .5, .6),
+                        (.03, .04, .05, .06),
+                        (.003, .004, .005, .006)):
+            c = cythonmagick.Color()
             c.red = r
             c.green = g
             c.blue = b
             c.alpha = a
             
-            #print (r,g,b,a)
-            #print c.get_rgba()
+            #print 'red:', c.red,r
+            #print 'green:', c.green,g
+            #print 'blue:', c.blue,b
+            #print 'alpha', c.alpha,a
             
-            #self.assertAlmostEquals(first, second, places, msg, delta)
             self.assertAlmostEquals(c.red, r,2)
             self.assertAlmostEquals(c.green, g,2)
             self.assertAlmostEquals(c.blue, b,2)

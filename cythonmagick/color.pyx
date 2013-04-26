@@ -15,13 +15,13 @@ cdef magickColor tomagickColor(object color) except *:
     return  magickColor(s) 
 
 cdef class Color:
-    cdef magickColor *thisptr
+    cdef magickColorRGB *thisptr
     
     def __cinit__(self,color=None):
         if color:
-            self.thisptr = new magickColor(str(color))
+            self.thisptr = new magickColorRGB(str(color))
         else:
-            self.thisptr = new magickColor("black")
+            self.thisptr = new magickColorRGB("black")
     @classmethod       
     def from_rgba(cls,red=None, green=None, blue=None, alpha=None):
         c = cls()
@@ -51,26 +51,19 @@ cdef class Color:
             return not c1.tostring() == c2.tostring()
 
     def set_rgba(self, r=None,g=None,b=None,a=None):
-        color = <magickColorRGB*> self.thisptr
-        
+
         if r is not None:
-            color.red(r)
+            self.thisptr.red(r)
         if g is not None:
-            color.green(g)            
+            self.thisptr.green(g)            
         if b is not None:
-            color.blue(b)
+            self.thisptr.blue(b)
         if a is not None:
-            color.alpha(a)
-            
-        self.thisptr.redQuantum(color.redQuantum())
-        self.thisptr.greenQuantum(color.greenQuantum())
-        self.thisptr.blueQuantum(color.blueQuantum())
-        self.thisptr.alphaQuantum(color.alphaQuantum())
-        
+            self.thisptr.alpha(a)
+
     def get_rgba(self):
-        color = <magickColorRGB*> self.thisptr
-        
-        return color.red(),color.green(),color.blue(),color.alpha()
+ 
+        return self.thisptr.red(),self.thisptr.green(),self.thisptr.blue(),self.thisptr.alpha()
     
     def tostring(self):
         

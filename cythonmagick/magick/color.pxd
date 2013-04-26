@@ -28,9 +28,9 @@ cdef extern from "Magick++/Color.h" namespace "Magick":
         #double alpha()
         
     cdef cppclass ColorRGB(Color):
-        ColorRGB( double, double, double) except+
         ColorRGB()
-        ColorRGB( const Color& )
+        ColorRGB(string&) except +
+        ColorRGB( double, double, double) except+
         void red(double)
         double red()
         void green(double)
