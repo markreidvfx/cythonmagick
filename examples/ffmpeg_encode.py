@@ -9,10 +9,12 @@ import os
 def rotate(angle):
     
     i = cythonmagick.Image("logo:")
-    #print angle
+    
+    i.filter = "triangle"
     i.rotate(angle)
-
-    i.extent("1280x720")
+    i.extent("1920x1080")
+    i.resize("1280x720")
+    #i.write(os.path.expanduser('~/out/out.%04d.png') % angle)
     i.magick = 'ppm'
     s = i.tostring()
     return s
@@ -40,7 +42,7 @@ def ffmpeg_encode(threads=1):
     p.stdin.close()
     
     p.wait()
-    
+    #
 if __name__ =="__main__":
     
     cythonmagick.initialize()

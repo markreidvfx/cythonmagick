@@ -133,7 +133,8 @@ cdef class Image:
             return _value_lookup(ColorspaceTypes,self.thisptr.colorSpace())
         def __set__(self,string colorspace):
             cdef magickColorspaceType value = ColorspaceTypes[colorspace.lower()]
-            self.thisptr.colorSpace(value)
+            with nogil:
+                self.thisptr.colorSpace(value)
             
     property filter:
         def __get__(self):
