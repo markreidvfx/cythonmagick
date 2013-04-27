@@ -30,7 +30,8 @@ cdef class Image:
         color = tomagickColor("black")
         if path:
             s = path
-            self.thisptr = new magickImage(s)
+            with nogil:
+                self.thisptr = new magickImage(s)
         else:
             self.thisptr = new magickImage(geo,color)
         
@@ -38,7 +39,8 @@ cdef class Image:
         self.thisptr.write(path)
     def resize(self, string size):
         cdef magickGeometry geo = magickGeometry(size)
-        self.thisptr.resize(geo)
+        with nogil:
+            self.thisptr.resize(geo)
             
     def extent(self, string size, string gravity = "center"):
         gravity_value = GravityTypes[gravity.lower()]
@@ -48,7 +50,8 @@ cdef class Image:
         self.thisptr.extent(geo, grav)
  
     def rotate(self,double degrees):
-        self.thisptr.rotate(degrees)
+        with nogil:
+            self.thisptr.rotate(degrees)
     def display(self):
         self.thisptr.display()
         
@@ -61,13 +64,12 @@ cdef class Image:
         """
         
         cdef magickBlob *blob = new magickBlob()
-
-        self.thisptr.write(blob)
-        
-        s = string(<char*> blob.data(), blob.length())
-        
-        del blob
-       
+        cdef string s
+        with nogil:
+            self.thisptr.write(blob)
+            s = string(<char*> blob.data(), blob.length())
+            del blob
+           
         return s
     
     def fromstring(self, string data):

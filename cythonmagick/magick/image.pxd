@@ -11,15 +11,15 @@ from color cimport Color
 cdef extern from "Magick++/Image.h" namespace "Magick":
     void InitializeMagick(const char*)
     cdef cppclass Image:
-        Image(string) except +
+        Image(string) nogil except +
         Image(const Geometry&, Color&)
         Image(const Blob&)
         void read(const string)
         void read(const Blob&)
-        void write(const string&)
-        void write(const Blob*)
-        void resize(const Geometry&)
-        void rotate(const double)
+        void write(const string&) nogil
+        void write(const Blob*) nogil
+        void resize(const Geometry&) nogil
+        void rotate(const double) nogil
         void display()
         void colorSpace(ColorspaceType)
         ColorspaceType colorSpace()
