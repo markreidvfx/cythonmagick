@@ -1,5 +1,6 @@
 include "image.pyx"
 include "color.pyx"
+include "geometry.pyx"
 include "colorspace.pyx"
 include "compress.pyx"
 include "gravity.pyx"
