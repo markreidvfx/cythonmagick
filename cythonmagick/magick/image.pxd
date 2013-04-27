@@ -21,24 +21,24 @@ cdef extern from "Magick++/Image.h" namespace "Magick":
         void resize(const Geometry&) nogil
         void rotate(const double) nogil
         void display()
-        void colorSpace(ColorspaceType)
-        ColorspaceType colorSpace()
+        void colorSpace(ColorspaceType) nogil
+        ColorspaceType colorSpace() nogil
         void quantizeColorSpace(ColorspaceType)
         void quantize()
         void compressType(CompressionType)
         CompressionType compressType()
         void filterType(const FilterType)
         const FilterType filterType()
-        void magick(const string&) except +
-        string magick()
+        void magick(const string&) nogil except +
+        string magick() nogil
         void depth(const size_t)
         size_t depth()
         void size(const Geometry&)
         const Geometry size()
         void crop(const Geometry&)
-        void extent(const Geometry&)
-        void extent(const Geometry&, Color&)
-        void extent(const Geometry&, const GravityType)
-        void extent(const Geometry&, Color&, const GravityType)
+        void extent(const Geometry&) nogil
+        void extent(const Geometry&, Color&) nogil
+        void extent(const Geometry&, const GravityType) nogil
+        void extent(const Geometry&, Color&, const GravityType) nogil
         void backgroundColor(const const Color&)
         Color backgroundColor()

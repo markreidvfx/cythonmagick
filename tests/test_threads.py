@@ -16,7 +16,7 @@ def rotate(angle):
 
 def thread_test(threads=1):
     
-    with ProcessPoolExecutor(max_workers=threads) as e:
+    with ThreadPoolExecutor(max_workers=threads) as e:
         for result in e.map(rotate,xrange(25)):
             length = len(result)
             pass

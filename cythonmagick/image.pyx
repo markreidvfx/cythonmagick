@@ -36,7 +36,8 @@ cdef class Image:
             self.thisptr = new magickImage(geo,color)
         
     def write(self, string path):
-        self.thisptr.write(path)
+        with nogil:
+            self.thisptr.write(path)
     def resize(self, string size):
         cdef magickGeometry geo = magickGeometry(size)
         with nogil:
@@ -46,8 +47,8 @@ cdef class Image:
         gravity_value = GravityTypes[gravity.lower()]
         cdef magickGeometry geo = magickGeometry(size)
         cdef magickGravityType grav = gravity_value
-        
-        self.thisptr.extent(geo, grav)
+        with nogil:
+            self.thisptr.extent(geo, grav)
  
     def rotate(self,double degrees):
         with nogil:
@@ -101,7 +102,8 @@ cdef class Image:
         def __set__(self,string magick):
             info = coderinfo(magick)
             if info['write']:
-                self.thisptr.magick(magick)
+                with nogil:
+                    self.thisptr.magick(magick)
             else:
                 raise ValueError("%s format is not supported" % magick)
             
