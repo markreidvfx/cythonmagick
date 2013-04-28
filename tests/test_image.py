@@ -169,7 +169,26 @@ class TestStringConvert(unittest.TestCase):
         
         self.assertEqual(1280,width)
         self.assertEqual(720,height)
+    
+    def test_crop(self):
+        i = cythonmagick.Image(get_test_image("eyeball.jpg"))
         
+        g = cythonmagick.Geometry(500,480)
+        
+        i.crop(g)
+        #i.display()
+        
+        self.assertEqual(i.size(), g)
+        
+        i = cythonmagick.Image(get_test_image("eyeball.jpg"))
+
+        i.crop("90x60-10-10")
+        self.assertEqual(i.size(),"90x60")
+        
+        
+        with self.assertRaises(RuntimeError):
+            i.crop("this is not a valid geo size")
+            
         
     def test_extent(self):
         
@@ -177,21 +196,24 @@ class TestStringConvert(unittest.TestCase):
         i = cythonmagick.Image(get_test_image("eyeball.jpg"))
         i.background = "red"
         i.extent("1920x1080",'Center')
+        
+        self.assertEqual(i.size(), "1920x1080")
         #i.display()
         
         i = cythonmagick.Image(get_test_image("eyeball.jpg"))
         i.background = "blue"
-        i.extent("1920x1080",'Center')
-        #i.display()
+        i.extent("20x40",'Center')
         
-        geo = i.size()
         
-        self.assertEqual((geo.width,geo.height), (1920,1080))
+        self.assertEqual(i.size(), "20x40")
         
         for gravity in ("what the","bad name"):
             with self.assertRaises(KeyError):
-                 i = cythonmagick.Image(get_test_image("eyeball.jpg"))
-                 i.extent("1920x1080",gravity)
+                i = cythonmagick.Image(get_test_image("eyeball.jpg"))
+                i.extent("1920x1080",gravity)
+                
+        with self.assertRaises(RuntimeError):
+            i.extent("this is not a valid geo size")
         
     def test_depth(self):
         

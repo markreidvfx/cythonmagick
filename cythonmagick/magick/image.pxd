@@ -35,7 +35,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick":
         size_t depth()
         void size(const Geometry&)
         const Geometry size()
-        void crop(const Geometry&)
+        void crop(Geometry&) nogil except +
         void extent(const Geometry&) nogil
         void extent(const Geometry&, Color&) nogil
         void extent(const Geometry&, const GravityType) nogil

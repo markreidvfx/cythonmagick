@@ -11,7 +11,7 @@ cdef extern from "Magick++/Geometry.h" namespace "Magick":
                  ssize_t, #xOff_ = 0
                  ssize_t, #yOff_ = 0
                  bool,    #xNegative_ = false Sign of X offset negative?
-                 bool)    #yNegative_ = false Sign of Y offset negative?
+                 bool) except +    #yNegative_ = false Sign of Y offset negative?
         void width(size_t)
         size_t width()
         void height(size_t)

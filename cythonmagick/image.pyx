@@ -42,18 +42,31 @@ cdef class Image:
         
         with nogil:
             self.thisptr.write(path)
+    
+    def crop(self,size):
+        
+        """Crops image to specified size.
+        size can be a string (e.g. "640x480) or a Geometry object
+        """
+        
+        cdef magickGeometry geo = to_magickGeometry(size)
+        with nogil:
+            self.thisptr.crop(geo)
+            
     def resize(self, size):
         
         """Resize image to specified size.
+        size can be a string (e.g. "640x480) or a Geometry object
         """
         
         cdef magickGeometry geo = to_magickGeometry(size)
         with nogil:
             self.thisptr.resize(geo)
             
-    def extent(self, string size, string gravity = "center"):
+    def extent(self, size, string gravity = "center"):
         
         """extends the image as defined by the geometry and gravity.
+        size can be a string (e.g. "640x480) or a Geometry object
         """
         
         gravity_value = GravityTypes[gravity.lower()]

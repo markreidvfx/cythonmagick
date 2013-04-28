@@ -25,6 +25,17 @@ class TestStringConvert(unittest.TestCase):
 
         with self.assertRaises(RuntimeError):
             g = cythonmagick.Geometry.fromstring("thsi si a badd size")
+            
+    def test_comparisions(self):
+        
+        self.assertEqual(cythonmagick.Geometry(640,480), "640x480")
+        self.assertNotEqual(cythonmagick.Geometry(640,480), "640x481")
+        self.assertEqual(cythonmagick.Geometry(640,480), cythonmagick.Geometry(640,480))
+        
+        g = cythonmagick.Geometry(640,480)
+        g.aspect = True
+        
+        self.assertEqual(g, "640x480!")
         
         
     def test_size(self):

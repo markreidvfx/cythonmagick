@@ -11,7 +11,10 @@ cdef object toGeometry(magickGeometry geo):
 
 cdef magickGeometry to_magickGeometry(object geo) except *:
     s = <string> str(geo)
-    return  magickGeometry(s) 
+    cdef magickGeometry g = magickGeometry(s)
+    if not g.isValid():
+        raise RuntimeError("invalid geometry")
+    return  g
 
 cdef class Geometry:
     cdef magickGeometry geo
@@ -44,6 +47,19 @@ cdef class Geometry:
     
     def __str__(self):
         return self.tostring()
+    
+    def __richcmp__(x,y,int op):
+        if op not in (2,3):
+            return False
+
+        g1 = Geometry.fromstring(str(x))
+        g2 = Geometry.fromstring(str(y))
+        
+        if op == 2:
+            return g1.tostring() == g2.tostring()
+        
+        elif op == 3:
+            return not g1.tostring() == g2.tostring()
     
     property width:
         def __get__(self):
