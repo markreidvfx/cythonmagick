@@ -1,5 +1,10 @@
 from libcpp.string cimport string
 
+cdef extern from * namespace "Magick::Blob":
+    ctypedef enum Allocator:
+        MallocAllocator
+        NewAllocator
+
 
 cdef extern from "Magick++/Blob.h" namespace "Magick":
     cdef cppclass Blob:
