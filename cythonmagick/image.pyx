@@ -38,11 +38,6 @@ cdef class Image:
     def write(self, string path):
         
         """Write image to a file using filename path.
-        Caution: if an image format is selected which is capable 
-        of supporting fewer colors than the original image or
-        quantization has been requested, the original image 
-        will be quantized to fewer colors. Use a copy of the 
-        original if this is a problem.
         """
         
         with nogil:
@@ -58,7 +53,7 @@ cdef class Image:
             
     def extent(self, string size, string gravity = "center"):
         
-        """extends the image as defined by the geometry, gravity.
+        """extends the image as defined by the geometry and gravity.
         """
         
         gravity_value = GravityTypes[gravity.lower()]
@@ -79,11 +74,7 @@ cdef class Image:
         
     def tostring(self):
         
-        """
-        matched from PythonMagick helpers_src, seems to work...
-        const char* data = static_cast<const char*>(blob.data());
-        size_t length = blob.length();
-        return std::string(data,length);
+        """Write image to a string. returns a string
         """
         
         cdef magickBlob blob
@@ -96,6 +87,9 @@ cdef class Image:
         return data
     
     def fromstring(self, string data):
+        
+        """Construct Image by reading from encoded image data contained in string.
+        """
         
         cdef magickBlob blob = magickBlob()
         with nogil:
@@ -113,6 +107,9 @@ cdef class Image:
         return toGeometry(geo)
         
     property magick:
+    
+        """image format (e.g. "GIF")
+        """
         
         def __get__(self):
             return self.thisptr.magick()
@@ -125,6 +122,10 @@ cdef class Image:
                 raise ValueError("%s format is not supported" % magick)
             
     property background:
+    
+        """Image background color
+        """
+    
         def __get__(self):
             color = self.thisptr.backgroundColor()
             return toColor(color)
@@ -133,12 +134,24 @@ cdef class Image:
             self.thisptr.backgroundColor(c) 
             
     property depth:
+    
+        """Image depth. 
+        Used to specify the bit depth when reading or writing raw 
+        images or when the output format supports multiple depths. 
+        Defaults to the quantum depth that ImageMagick is compiled with.
+        """
+        
         def __get__(self):
             return self.thisptr.depth()
         def __set__(self,int depth):
             self.thisptr.depth(depth)
             
     property compress:
+    
+        """Image compresion type. 
+        The default is the compression type of the specified image file.
+        """
+        
         def __get__(self):
             return _value_lookup(CompressTypes, self.thisptr.compressType())
         def __set__(self, string compression):
@@ -146,6 +159,10 @@ cdef class Image:
             self.thisptr.compressType(value)
             
     property colorspace:
+    
+        """The colorspace (e.g. log) used to represent the image pixel colors.
+        """
+        
         def __get__(self):
             return _value_lookup(ColorspaceTypes,self.thisptr.colorSpace())
         def __set__(self,string colorspace):
@@ -154,6 +171,14 @@ cdef class Image:
                 self.thisptr.colorSpace(value)
             
     property filter:
+    
+        """Filter to use when resizing image. 
+        The reduction filter employed has a sigificant effect on the 
+        time required to resize an image and the resulting quality. 
+        The default filter is Lanczos which has been shown to produce 
+        high quality results when reducing most images.
+        """
+        
         def __get__(self):
             return _value_lookup(FilterTypes,self.thisptr.filterType())
         def __set__(self, string filter):
