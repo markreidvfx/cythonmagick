@@ -12,10 +12,10 @@ cdef extern from "Magick++/Image.h" namespace "Magick":
     void InitializeMagick(const char*)
     cdef cppclass Image:
         Image(string) nogil except +
-        Image(const Geometry&, Color&)
-        Image(Blob&)
+        Image(const Geometry&, Color&) nogil
+        Image(Blob&) nogil
         void read(const string)
-        void read(const Blob&)
+        void read(Blob&)
         void write(const string&) nogil
         void write(Blob*) nogil
         void resize(const Geometry&) nogil

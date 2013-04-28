@@ -75,14 +75,11 @@ cdef class Image:
     
     def fromstring(self, string data):
         
-        cdef magickBlob *blob = new magickBlob()
-        
-        blob.update(data.c_str(),data.size())
-        
-        del self.thisptr
-        self.thisptr = new magickImage(deref(blob))
-        
-        del blob
+        cdef magickBlob blob = magickBlob()
+        with nogil:
+            blob.update(data.c_str(),data.size())
+            del self.thisptr
+            self.thisptr = new magickImage(blob)
 
     def __dealloc__(self):
         if self.thisptr is not NULL:
