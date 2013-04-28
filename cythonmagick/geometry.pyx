@@ -5,8 +5,13 @@ from libcpp cimport bool
 
 from magick.geometry cimport Geometry as magickGeometry
 
+cdef object toGeometry(magickGeometry geo):
+    s = <string> geo
+    return Geometry.fromstring(s)
 
-
+cdef magickGeometry to_magickGeometry(object geo) except *:
+    s = <string> str(geo)
+    return  magickGeometry(s) 
 
 cdef class Geometry:
     cdef magickGeometry geo

@@ -145,23 +145,30 @@ class TestStringConvert(unittest.TestCase):
     def test_size(self):
         i = cythonmagick.Image(get_test_image("eyeball.jpg"))
         
-        width,height = i.size()
+        geo = i.size()
+         
+        width,height = geo.width,geo.height
         
         self.assertEqual(600,width)
         self.assertEqual(593,height)
         
         i.resize("1920x1080!")
         
-        
-        width,height = i.size()
+        geo = i.size()
+        width,height = geo.width,geo.height
         
         self.assertEqual(1920,width)
         self.assertEqual(1080,height)
         
-    def test_crop(self):
-        i = cythonmagick.Image(get_test_image("eyeball.jpg"))
         
-        #i.crop()
+        geo = cythonmagick.Geometry.fromstring("1280x720!")
+        
+        i.resize(geo)
+        geo = i.size()
+        width,height = geo.width,geo.height
+        
+        self.assertEqual(1280,width)
+        self.assertEqual(720,height)
         
         
     def test_extent(self):
@@ -177,7 +184,9 @@ class TestStringConvert(unittest.TestCase):
         i.extent("1920x1080",'Center')
         #i.display()
         
-        self.assertEqual(i.size(), (1920,1080))
+        geo = i.size()
+        
+        self.assertEqual((geo.width,geo.height), (1920,1080))
         
         for gravity in ("what the","bad name"):
             with self.assertRaises(KeyError):

@@ -38,14 +38,14 @@ cdef class Image:
     def write(self, string path):
         with nogil:
             self.thisptr.write(path)
-    def resize(self, string size):
-        cdef magickGeometry geo = magickGeometry(size)
+    def resize(self, size):
+        cdef magickGeometry geo = to_magickGeometry(size)
         with nogil:
             self.thisptr.resize(geo)
             
     def extent(self, string size, string gravity = "center"):
         gravity_value = GravityTypes[gravity.lower()]
-        cdef magickGeometry geo = magickGeometry(size)
+        cdef magickGeometry geo = to_magickGeometry(size)
         cdef magickGravityType grav = gravity_value
         with nogil:
             self.thisptr.extent(geo, grav)
@@ -87,10 +87,8 @@ cdef class Image:
         
     def size(self):
         geo = self.thisptr.size()
-        
-        width = geo.width()
-        height = geo.height()
-        return (width,height)
+ 
+        return toGeometry(geo)
         
     property magick:
         
