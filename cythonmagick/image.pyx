@@ -115,6 +115,10 @@ cdef class Image:
             del self.thisptr
         
     def size(self):
+        
+        """returns a Geometry object that represents the image dimensions
+        """
+        
         geo = self.thisptr.size()
  
         return toGeometry(geo)
