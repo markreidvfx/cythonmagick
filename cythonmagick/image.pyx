@@ -27,7 +27,7 @@ cdef class Image:
     def __cinit__(self, path = None):
         cdef string s
         cdef magickGeometry geo = magickGeometry("0x0")
-        color = tomagickColor("black")
+        color = to_magickColor("black")
         if path:
             s = path
             with nogil:
@@ -143,7 +143,7 @@ cdef class Image:
             color = self.thisptr.backgroundColor()
             return toColor(color)
         def __set__(self, color):
-            c = tomagickColor(color)
+            c = to_magickColor(color)
             self.thisptr.backgroundColor(c) 
             
     property depth:

@@ -10,7 +10,7 @@ cdef object toColor(magickColor color):
     s = <string> color
     return Color(s)
 
-cdef magickColor tomagickColor(object color) except *:
+cdef magickColor to_magickColor(object color) except *:
     s = <string> str(color)
     return  magickColor(s) 
 
