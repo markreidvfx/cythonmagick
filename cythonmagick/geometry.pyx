@@ -30,11 +30,16 @@ cdef class Geometry:
         else:
             self.geo = magickGeometry(width,height,xOff,yOff,xNegative,yNegative)
             
+        if not self.geo.isValid():
+            raise RuntimeError("invalid geometry")
+            
     @classmethod
     def fromstring(cls,string s):
         return cls(geometry_string = s)
     
-    def tostring(self):      
+    def tostring(self):
+        if not self.geo.isValid():
+            raise RuntimeError("invalid geometry")      
         return <string> self.geo
     
     def __str__(self):

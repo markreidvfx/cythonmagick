@@ -22,8 +22,9 @@ class TestStringConvert(unittest.TestCase):
         #print g.tostring()
         
         g = cythonmagick.Geometry(1920, 1080,10,10,True,True)
-        
-        #print g.tostring()
+
+        with self.assertRaises(RuntimeError):
+            g = cythonmagick.Geometry.fromstring("thsi si a badd size")
         
         
     def test_size(self):
