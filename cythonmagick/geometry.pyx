@@ -83,4 +83,40 @@ cdef class Geometry:
         def __set__(self, bool value):
             self.geo.yNegative(value)
             
+    property percent:
+        
+        """Width and height are expressed as percentages"""
+        
+        def __get__(self):
+            return self.geo.percent()
+        def __set__(self, bool value):
+            self.geo.percent(value)
+            
+    property aspect:
+        
+        """Resize without preserving aspect ratio (!)"""
+        
+        def __get__(self):
+            return self.geo.aspect()
+        def __set__(self, bool value):
+            self.geo.aspect(value)
+        
+    property greater:
+    
+        """Resize if image is greater than size (>)"""
+        
+        def __get__(self):
+            return self.geo.greater()
+        def __set__(self, bool value):
+            self.geo.greater(value)
+        
+    property less:
+        
+        """Resize if image is less than size (<)"""
+        
+        def __get__(self):
+            return self.geo.less()
+        def __set__(self, bool value):
+            self.geo.less(value)
+            
     
