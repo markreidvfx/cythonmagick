@@ -36,14 +36,31 @@ cdef class Image:
             self.thisptr = new magickImage(geo,color)
         
     def write(self, string path):
+        
+        """Write image to a file using filename path.
+        Caution: if an image format is selected which is capable 
+        of supporting fewer colors than the original image or
+        quantization has been requested, the original image 
+        will be quantized to fewer colors. Use a copy of the 
+        original if this is a problem.
+        """
+        
         with nogil:
             self.thisptr.write(path)
     def resize(self, size):
+        
+        """Resize image to specified size.
+        """
+        
         cdef magickGeometry geo = to_magickGeometry(size)
         with nogil:
             self.thisptr.resize(geo)
             
     def extent(self, string size, string gravity = "center"):
+        
+        """extends the image as defined by the geometry, gravity.
+        """
+        
         gravity_value = GravityTypes[gravity.lower()]
         cdef magickGeometry geo = to_magickGeometry(size)
         cdef magickGravityType grav = gravity_value
@@ -51,12 +68,17 @@ cdef class Image:
             self.thisptr.extent(geo, grav)
  
     def rotate(self,double degrees):
+        
+        """Rotate image counter-clockwise by specified number of degrees.
+        """
+        
         with nogil:
             self.thisptr.rotate(degrees)
     def display(self):
         self.thisptr.display()
         
     def tostring(self):
+        
         """
         matched from PythonMagick helpers_src, seems to work...
         const char* data = static_cast<const char*>(blob.data());
