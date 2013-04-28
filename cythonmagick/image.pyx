@@ -61,17 +61,17 @@ cdef class Image:
         matched from PythonMagick helpers_src, seems to work...
         const char* data = static_cast<const char*>(blob.data());
         size_t length = blob.length();
-        return std::string(data,data);
+        return std::string(data,length);
         """
         
-        cdef magickBlob *blob = new magickBlob()
-        cdef string s
+        cdef magickBlob blob
+        cdef string data
         with nogil:
-            self.thisptr.write(blob)
-            s = string(<char*> blob.data(), blob.length())
-            del blob
+            blob = magickBlob()
+            self.thisptr.write(&blob)
+            data = string(<char*> blob.data(), blob.length())
            
-        return s
+        return data
     
     def fromstring(self, string data):
         
