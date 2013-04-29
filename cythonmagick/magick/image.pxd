@@ -7,6 +7,7 @@ from gravity cimport GravityType
 from filter cimport FilterTypes as FilterType
 from blob cimport Blob
 from color cimport Color
+from composite cimport CompositeOperator
 
 cdef extern from "Magick++/Image.h" namespace "Magick":
     void InitializeMagick(const char*)
@@ -42,3 +43,9 @@ cdef extern from "Magick++/Image.h" namespace "Magick":
         void extent(const Geometry&, Color&, const GravityType) nogil
         void backgroundColor(const const Color&)
         Color backgroundColor()
+        void composite(Image,
+                       ssize_t, #xOffset_
+                       ssize_t, #yOffset_
+                       CompositeOperator)
+        void composite(Image, Geometry, CompositeOperator)
+        void composite(Image, GravityType, CompositeOperator)
