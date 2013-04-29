@@ -69,5 +69,5 @@ darkenintensity = composite.DarkenIntensityCompositeOp,
 lighten = composite.LightenIntensityCompositeOp,
 )
 
-CompositeOperators["None"] = composite.NoCompositeOp
-CompositeOperators['in'] = composite.InCompositeOp,
+CompositeOperators["none"] = composite.NoCompositeOp
+CompositeOperators['in'] = composite.InCompositeOp

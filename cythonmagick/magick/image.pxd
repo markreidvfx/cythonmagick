@@ -43,9 +43,9 @@ cdef extern from "Magick++/Image.h" namespace "Magick":
         void extent(const Geometry&, Color&, const GravityType) nogil
         void backgroundColor(const const Color&)
         Color backgroundColor()
-        void composite(Image,
+        void composite(Image&,
                        ssize_t, #xOffset_
                        ssize_t, #yOffset_
-                       CompositeOperator)
-        void composite(Image, Geometry, CompositeOperator)
-        void composite(Image, GravityType, CompositeOperator)
+                       CompositeOperator) nogil
+        void composite(Image&, Geometry, CompositeOperator) nogil
+        void composite(Image&, GravityType, CompositeOperator) nogil

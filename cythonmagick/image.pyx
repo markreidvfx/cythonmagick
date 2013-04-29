@@ -13,6 +13,7 @@ from magick.gravity cimport GravityType as magickGravityType
 from magick.filter cimport FilterTypes as magickFilterType
 from magick.compress cimport CompressionType as magickCompressionType
 from magick.colorspace cimport ColorspaceType as magickColorspaceType
+from magick.composite cimport CompositeOperator as magickCompositeOperator
 
 def initialize():
     InitializeMagick(NULL)
@@ -52,6 +53,33 @@ cdef class Image:
         cdef magickGeometry geo = to_magickGeometry(size)
         with nogil:
             self.thisptr.crop(geo)
+            
+    def composite(self, Image image, string compose = "in", offset=None, gravity=None):
+        
+        """Compose an image onto the current image using the composition algorithm specified by compose.
+        The CompositeOperators available in cythonmagick.CompositeOperators.keys().
+        If offset is specified the composed image will be offset, gravity will be ignored.
+        If gravity is specified the image will be composed using gravity.
+        If gravity and offset are both None there will be no offset.
+        """
+        
+        cdef magickCompositeOperator compose_ = CompositeOperators[compose]
+        cdef magickGravityType gravity_
+        cdef magickGeometry geo
+        
+        if offset:
+            geo = to_magickGeometry(offset)
+            with nogil:
+                self.thisptr.composite(deref(image.thisptr), geo,compose_)
+        elif gravity:
+            gravity_ = GravityTypes[gravity.lower()]
+            with nogil:
+                self.thisptr.composite(deref(image.thisptr), gravity_, compose_)
+        else:
+            geo = to_magickGeometry("0x0")
+            with nogil:
+                self.thisptr.composite(deref(image.thisptr), geo, compose_)
+        
             
     def resize(self, size):
         

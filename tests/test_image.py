@@ -295,9 +295,45 @@ class TestStringConvert(unittest.TestCase):
         for item in ("what the","bad name", 3412):
             with self.assertRaises(RuntimeError):
                 i.background = item
+                
+    def test_composite(self):
+        test_image = get_test_image("eyeball.jpg")
+        i1 = cythonmagick.Image("logo:")
+        i2 = cythonmagick.Image(test_image)
         
-    
+        i1.composite(i2,compose="multiply")
         
-
+        i1 = cythonmagick.Image("logo:")
+        
+        i1.composite(i2,offset="-200x0",compose="multiply")
+        
+        ops = dict(cythonmagick.CompositeOperators)
+        
+        #these operators don't seem to work with composite
+        del ops['blur']
+        del ops['displace']
+        del ops['distort']
+        
+        for compose in ops.keys():
+            i1 = cythonmagick.Image("logo:")
+            i1.composite(i2,compose=compose)
+            i1 = cythonmagick.Image("logo:")
+            i1.composite(i2,compose=compose,offset="-200x0")
+            i1 = cythonmagick.Image("logo:")
+            i1.composite(i2,compose=compose,offset=cythonmagick.Geometry(200,0))
+        
+        with self.assertRaises(TypeError):
+            i1.composite("not a image")
+            
+        with self.assertRaises(KeyError):
+            i1.composite(i2,gravity="this is not gravity")
+        with self.assertRaises(KeyError):
+            i1.composite(i2,compose="this is not a composite operator")
+            
+        with self.assertRaises(RuntimeError):
+            i1.composite(i2,offset="this is a bad offset")
+        
+            
+            
 if __name__ == '__main__':
     unittest.main()
