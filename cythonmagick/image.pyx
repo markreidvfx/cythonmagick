@@ -150,21 +150,6 @@ cdef class Image:
         geo = self.thisptr.size()
  
         return toGeometry(geo)
-        
-    property magick:
-    
-        """image format (e.g. "GIF")
-        """
-        
-        def __get__(self):
-            return self.thisptr.magick()
-        def __set__(self,string magick):
-            info = coderinfo(magick)
-            if info['write']:
-                with nogil:
-                    self.thisptr.magick(magick)
-            else:
-                raise ValueError("%s format is not supported" % magick)
             
     property background:
     
@@ -178,19 +163,18 @@ cdef class Image:
             c = to_magickColor(color)
             self.thisptr.backgroundColor(c) 
             
-    property depth:
+    property colorspace:
     
-        """Image depth. 
-        Used to specify the bit depth when reading or writing raw 
-        images or when the output format supports multiple depths. 
-        Defaults to the quantum depth that ImageMagick is compiled with.
+        """The colorspace (e.g. log) used to represent the image pixel colors.
         """
         
         def __get__(self):
-            return self.thisptr.depth()
-        def __set__(self,int depth):
-            self.thisptr.depth(depth)
-            
+            return _value_lookup(ColorspaceTypes,self.thisptr.colorSpace())
+        def __set__(self,string colorspace):
+            cdef magickColorspaceType value = ColorspaceTypes[colorspace.lower()]
+            with nogil:
+                self.thisptr.colorSpace(value)
+                
     property compress:
     
         """Image compresion type. 
@@ -203,17 +187,18 @@ cdef class Image:
             cdef magickCompressionType value = CompressTypes[compression.lower()]
             self.thisptr.compressType(value)
             
-    property colorspace:
+    property depth:
     
-        """The colorspace (e.g. log) used to represent the image pixel colors.
+        """Image depth. 
+        Used to specify the bit depth when reading or writing raw 
+        images or when the output format supports multiple depths. 
+        Defaults to the quantum depth that ImageMagick is compiled with.
         """
         
         def __get__(self):
-            return _value_lookup(ColorspaceTypes,self.thisptr.colorSpace())
-        def __set__(self,string colorspace):
-            cdef magickColorspaceType value = ColorspaceTypes[colorspace.lower()]
-            with nogil:
-                self.thisptr.colorSpace(value)
+            return self.thisptr.depth()
+        def __set__(self,int depth):
+            self.thisptr.depth(depth)
             
     property filter:
     
@@ -229,3 +214,18 @@ cdef class Image:
         def __set__(self, string filter):
             cdef magickFilterType value = FilterTypes[filter.lower()]
             self.thisptr.filterType(value)
+            
+    property magick:
+    
+        """image format (e.g. "GIF")
+        """
+        
+        def __get__(self):
+            return self.thisptr.magick()
+        def __set__(self,string magick):
+            info = coderinfo(magick)
+            if info['write']:
+                with nogil:
+                    self.thisptr.magick(magick)
+            else:
+                raise ValueError("%s format is not supported" % magick)
