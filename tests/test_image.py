@@ -332,6 +332,35 @@ class TestStringConvert(unittest.TestCase):
             
         with self.assertRaises(RuntimeError):
             i1.composite(i2,offset="this is a bad offset")
+            
+    def test_compare(self):
+        
+        i1 = cythonmagick.Image("logo:")
+        i2 = cythonmagick.Image("logo:")
+        
+        self.assertTrue(i1.compare(i2))
+        
+        i2.rotate(180)
+        
+        self.assertFalse(i1.compare(i2))
+        test_image = get_test_image("eyeball.jpg")
+        i3 = cythonmagick.Image(test_image)
+        
+        i3.colorspace = "yuv"
+        
+        self.assertFalse(i1.compare(i3))
+        
+    def test_haldclut(self):
+        orignal = cythonmagick.Image("logo:")
+        i1 = cythonmagick.Image("logo:")
+        
+        
+        lut = cythonmagick.Image("hald:10")
+        lut.gamma(.5)
+        
+        i1.haldclut(lut)
+        
+        self.assertFalse(orignal.compare(i1))
         
             
             

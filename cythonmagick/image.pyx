@@ -70,6 +70,19 @@ cdef class Image:
             self.thisptr.write(path)
             
     ##Image Image Manipulation Methods
+    
+    def compare(self, Image image):
+        
+        """Compare current image with another image.
+        True is returned if the images are identical
+        """
+        
+        cdef bool result
+        
+        with nogil:
+            result = self.thisptr.compare(deref(image.thisptr))
+            
+        return result
             
     def composite(self, Image image, string compose = "in", offset=None, gravity=None):
         
@@ -121,6 +134,22 @@ cdef class Image:
         cdef magickGravityType grav = gravity_value
         with nogil:
             self.thisptr.extent(geo, grav)
+    
+    def gamma(self,double value):
+        
+        """Gamma correct image (uniform red, green, and blue correction).
+        """
+        
+        with nogil:
+            self.thisptr.gamma(value)
+            
+    def haldclut(self, Image image):
+        
+        """apply a Hald color lookup table to the image.
+        """
+        
+        with nogil:
+            self.thisptr.haldClut(deref(image.thisptr))
         
             
     def resize(self, size):

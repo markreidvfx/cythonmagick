@@ -1,5 +1,7 @@
 
 from libcpp.string cimport string
+from libcpp cimport bool
+
 from geometry cimport Geometry
 from colorspace cimport ColorspaceType
 from compress cimport CompressionType
@@ -17,6 +19,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick":
         Image(Blob&) nogil
         
         #Image Image Manipulation Methods
+        bool compare(Image&) nogil
         void composite(Image&,
                        ssize_t, #xOffset_
                        ssize_t, #yOffset_
@@ -29,6 +32,9 @@ cdef extern from "Magick++/Image.h" namespace "Magick":
         void extent(const Geometry&, Color&) nogil
         void extent(const Geometry&, const GravityType) nogil
         void extent(const Geometry&, Color&, const GravityType) nogil
+        void gamma(double) nogil
+        void gamma(double, double, double) nogil
+        void haldClut(Image&) nogil
         void read(const string)
         void read(Blob&)
         void resize(const Geometry&) nogil
