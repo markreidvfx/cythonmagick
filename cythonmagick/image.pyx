@@ -35,6 +35,31 @@ cdef class Image:
                 self.thisptr = new magickImage(s)
         else:
             self.thisptr = new magickImage(geo,color)
+            
+    def fromstring(self, string data):
+        
+        """Construct Image by reading from encoded image data contained in string.
+        """
+        
+        cdef magickBlob blob = magickBlob()
+        with nogil:
+            blob.update(data.c_str(),data.size())
+            del self.thisptr
+            self.thisptr = new magickImage(blob)
+            
+    def tostring(self):
+        
+        """Write image to a string. returns a string
+        """
+        
+        cdef magickBlob blob
+        cdef string data
+        with nogil:
+            blob = magickBlob()
+            self.thisptr.write(&blob)
+            data = string(<char*> blob.data(), blob.length())
+           
+        return data
         
     def write(self, string path):
         
@@ -43,16 +68,8 @@ cdef class Image:
         
         with nogil:
             self.thisptr.write(path)
-    
-    def crop(self,size):
-        
-        """Crops image to specified size.
-        size can be a string (e.g. "640x480) or a Geometry object
-        """
-        
-        cdef magickGeometry geo = to_magickGeometry(size)
-        with nogil:
-            self.thisptr.crop(geo)
+            
+    ##Image Image Manipulation Methods
             
     def composite(self, Image image, string compose = "in", offset=None, gravity=None):
         
@@ -79,18 +96,20 @@ cdef class Image:
             geo = to_magickGeometry("0x0")
             with nogil:
                 self.thisptr.composite(deref(image.thisptr), geo, compose_)
+                
+    def crop(self,size):
         
-            
-    def resize(self, size):
-        
-        """Resize image to specified size.
+        """Crops image to specified size.
         size can be a string (e.g. "640x480) or a Geometry object
         """
         
         cdef magickGeometry geo = to_magickGeometry(size)
         with nogil:
-            self.thisptr.resize(geo)
+            self.thisptr.crop(geo)
             
+    def display(self):
+        self.thisptr.display()
+        
     def extent(self, size, string gravity = "center"):
         
         """extends the image as defined by the geometry and gravity.
@@ -102,6 +121,17 @@ cdef class Image:
         cdef magickGravityType grav = gravity_value
         with nogil:
             self.thisptr.extent(geo, grav)
+        
+            
+    def resize(self, size):
+        
+        """Resize image to specified size.
+        size can be a string (e.g. "640x480) or a Geometry object
+        """
+        
+        cdef magickGeometry geo = to_magickGeometry(size)
+        with nogil:
+            self.thisptr.resize(geo)
  
     def rotate(self,double degrees):
         
@@ -110,37 +140,12 @@ cdef class Image:
         
         with nogil:
             self.thisptr.rotate(degrees)
-    def display(self):
-        self.thisptr.display()
-        
-    def tostring(self):
-        
-        """Write image to a string. returns a string
-        """
-        
-        cdef magickBlob blob
-        cdef string data
-        with nogil:
-            blob = magickBlob()
-            self.thisptr.write(&blob)
-            data = string(<char*> blob.data(), blob.length())
-           
-        return data
-    
-    def fromstring(self, string data):
-        
-        """Construct Image by reading from encoded image data contained in string.
-        """
-        
-        cdef magickBlob blob = magickBlob()
-        with nogil:
-            blob.update(data.c_str(),data.size())
-            del self.thisptr
-            self.thisptr = new magickImage(blob)
 
     def __dealloc__(self):
         if self.thisptr is not NULL:
             del self.thisptr
+            
+    ##Image Attributes
         
     def size(self):
         
