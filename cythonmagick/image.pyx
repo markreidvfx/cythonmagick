@@ -15,6 +15,8 @@ from magick.compress cimport CompressionType as magickCompressionType
 from magick.colorspace cimport ColorspaceType as magickColorspaceType
 from magick.composite cimport CompositeOperator as magickCompositeOperator
 
+import os
+
 def initialize():
     InitializeMagick(NULL)
 
@@ -65,6 +67,9 @@ cdef class Image:
         
         """Write image to a file using filename path.
         """
+        
+        if not os.path.exists(os.path.abspath(os.path.dirname(path))):
+            raise IOError("ouput directory does not exist %s" % path)
         
         with nogil:
             self.thisptr.write(path)

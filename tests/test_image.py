@@ -58,6 +58,12 @@ class TestStringConvert(unittest.TestCase):
             
             self.assertEqual(i.filter,f)
             
+    def test_write(self):
+        
+        i = cythonmagick.Image("logo:")
+        with self.assertRaises(IOError):
+            i.write("/this/path/does/not/exists/at/all.jpg")
+            
         
     def test_coderinfo(self):
         
