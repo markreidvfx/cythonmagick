@@ -407,6 +407,18 @@ class TestStringConvert(unittest.TestCase):
             i.quality = value
             self.assertEqual(i.quality, value)
   
+    def test_imagetype(self):
+        
+        imagetypes = dict(cythonmagick.ImageTypes)
+        
+        del imagetypes['undefined']
+        
+        for imagetype in imagetypes.keys():
+            i = cythonmagick.Image("logo:")
+            i.type = imagetype
+            
+            
+            self.assertEqual(i.type, imagetype)
         
         
             

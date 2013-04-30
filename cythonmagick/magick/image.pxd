@@ -7,6 +7,7 @@ from colorspace cimport ColorspaceType
 from compress cimport CompressionType
 from gravity cimport GravityType
 from filter cimport FilterTypes as FilterType
+from imagetype cimport ImageType
 from blob cimport Blob
 from color cimport Color
 from composite cimport CompositeOperator
@@ -65,6 +66,8 @@ cdef extern from "Magick++/Image.h" namespace "Magick":
         void quantize()
         void quantizeColorSpace(ColorspaceType)
         void size(const Geometry&)
+        void type(ImageType) nogil
+        ImageType type() nogil
         const Geometry size()
         void verbose(bool)
         bool verbose()

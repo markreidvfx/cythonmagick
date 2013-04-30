@@ -14,6 +14,7 @@ from magick.gravity cimport GravityType as magickGravityType
 from magick.filter cimport FilterTypes as magickFilterType
 from magick.compress cimport CompressionType as magickCompressionType
 from magick.colorspace cimport ColorspaceType as magickColorspaceType
+from magick.imagetype cimport ImageType as magickImageType
 from magick.composite cimport CompositeOperator as magickCompositeOperator
 
 import os
@@ -305,6 +306,17 @@ cdef class Image:
             return self.thisptr.quality()
         def __set__(self,size_t value):
             self.thisptr.quality(value)
+            
+    property type:
+    
+        """Image type
+        """
+            
+        def __get__(self):
+            return _value_lookup(ImageTypes,self.thisptr.type())
+        def __set__(self,string imagetype):
+            cdef magickImageType value = ImageTypes[imagetype.lower()]
+            self.thisptr.type(value)
             
     property verbose:
         
