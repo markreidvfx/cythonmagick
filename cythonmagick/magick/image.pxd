@@ -32,6 +32,8 @@ cdef extern from "Magick++/Image.h" namespace "Magick":
         void extent(const Geometry&, Color&) nogil
         void extent(const Geometry&, const GravityType) nogil
         void extent(const Geometry&, Color&, const GravityType) nogil
+        void flip() nogil
+        void flop() nogil
         void gamma(double) nogil
         void gamma(double, double, double) nogil
         void haldClut(Image&) nogil
@@ -50,13 +52,19 @@ cdef extern from "Magick++/Image.h" namespace "Magick":
         ColorspaceType colorSpace() nogil
         void compressType(CompressionType)
         CompressionType compressType()
+        void debug(bool)
+        bool debug()
         void depth(const size_t)
         size_t depth()
         void filterType(const FilterType)
         const FilterType filterType()
         void magick(const string&) nogil except +
         string magick() nogil
+        void quality(size_t)
+        size_t quality()
         void quantize()
         void quantizeColorSpace(ColorspaceType)
         void size(const Geometry&)
         const Geometry size()
+        void verbose(bool)
+        bool verbose()

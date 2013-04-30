@@ -1,5 +1,6 @@
 
 from libcpp.string cimport string
+from libcpp cimport bool
 from cython.operator cimport dereference as deref
 
 from magick.image cimport Image as magickImage
@@ -139,6 +140,22 @@ cdef class Image:
         cdef magickGravityType grav = gravity_value
         with nogil:
             self.thisptr.extent(geo, grav)
+            
+    def flip(self):
+        
+        """Flip image (reflect each scanline in the vertical direction)
+        """
+        
+        with nogil:
+            self.thisptr.flip()
+        
+    def flop(self):
+        
+        """Flop image (reflect each scanline in the horizontal direction)
+        """
+        
+        with nogil:
+            self.thisptr.flop()
     
     def gamma(self,double value):
         
@@ -226,6 +243,16 @@ cdef class Image:
             cdef magickCompressionType value = CompressTypes[compression.lower()]
             self.thisptr.compressType(value)
             
+    property debug:
+    
+        """Enable printing of internal debug messages from ImageMagick as it executes.
+        """
+        
+        def __get__(self):
+            return self.thisptr.debug()
+        def __set__(self, bool value):
+            self.thisptr.debug(value)
+            
     property depth:
     
         """Image depth. 
@@ -268,3 +295,14 @@ cdef class Image:
                     self.thisptr.magick(magick)
             else:
                 raise ValueError("%s format is not supported" % magick)
+            
+    property verbose:
+        
+        """Print detailed information about the image
+        """
+        
+        def __get__(self):
+            return self.thisptr.verbose()
+        def __set__(self, bool value):
+            self.thisptr.verbose(value)
+            

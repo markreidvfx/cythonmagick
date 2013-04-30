@@ -368,6 +368,39 @@ class TestStringConvert(unittest.TestCase):
         
         self.assertFalse(orignal.compare(i1))
         
+    def test_flip_flop(self):
+        orignal = cythonmagick.Image("logo:")
+        i = cythonmagick.Image("logo:")
+        
+        i.flip()
+        i.flop()
+        
+        self.assertFalse(i.compare(orignal))
+        
+        i.flip()
+        i.flop()
+        
+        self.assertTrue(i.compare(orignal))
+        
+    
+    def test_debug_verbose(self):
+        
+        i = cythonmagick.Image("logo:")
+        
+        self.assertFalse(i.verbose)
+        self.assertFalse(i.debug)
+        
+        i.verbose = True
+        i.debug = True
+        
+        self.assertTrue(i.verbose)
+        self.assertTrue(i.debug)
+        
+        i.verbose = False
+        i.debug = False
+                         
+        
+        
             
             
 if __name__ == '__main__':
