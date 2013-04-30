@@ -398,7 +398,15 @@ class TestStringConvert(unittest.TestCase):
         
         i.verbose = False
         i.debug = False
-                         
+        
+    def test_quality(self):
+        
+        i = cythonmagick.Image("logo:")
+        
+        for value in (10,30,50,60,90,100):
+            i.quality = value
+            self.assertEqual(i.quality, value)
+  
         
         
             

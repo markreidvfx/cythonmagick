@@ -296,6 +296,16 @@ cdef class Image:
             else:
                 raise ValueError("%s format is not supported" % magick)
             
+    property quality:
+    
+        """JPEG/MIFF/PNG compression level (default 75).
+        """
+        
+        def __get__(self):
+            return self.thisptr.quality()
+        def __set__(self,size_t value):
+            self.thisptr.quality(value)
+            
     property verbose:
         
         """Print detailed information about the image
