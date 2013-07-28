@@ -28,7 +28,7 @@ def _value_lookup(d,v):
             return key
 
 cdef class Image:
-    cdef magickImage *thisptr
+    cdef magickImage thisptr
     def __cinit__(self, path = None):
         cdef string s
         cdef magickGeometry geo = magickGeometry("0x0")
@@ -36,9 +36,9 @@ cdef class Image:
         if path:
             s = path
             with nogil:
-                self.thisptr = new magickImage(s)
+                self.thisptr = magickImage(s)
         else:
-            self.thisptr = new magickImage(geo,color)
+            self.thisptr = magickImage(geo,color)
             
     def fromstring(self, string data):
         
@@ -48,8 +48,7 @@ cdef class Image:
         cdef magickBlob blob = magickBlob()
         with nogil:
             blob.update(data.c_str(),data.size())
-            del self.thisptr
-            self.thisptr = new magickImage(blob)
+            self.thisptr = magickImage(blob)
             
     def tostring(self):
         
@@ -87,7 +86,7 @@ cdef class Image:
         cdef bool result
         
         with nogil:
-            result = self.thisptr.compare(deref(image.thisptr))
+            result = self.thisptr.compare(image.thisptr)
             
         return result
             
@@ -107,15 +106,15 @@ cdef class Image:
         if offset:
             geo = to_magickGeometry(offset)
             with nogil:
-                self.thisptr.composite(deref(image.thisptr), geo,compose_)
+                self.thisptr.composite(image.thisptr, geo,compose_)
         elif gravity:
             gravity_ = GravityTypes[gravity.lower()]
             with nogil:
-                self.thisptr.composite(deref(image.thisptr), gravity_, compose_)
+                self.thisptr.composite(image.thisptr, gravity_, compose_)
         else:
             geo = to_magickGeometry("0x0")
             with nogil:
-                self.thisptr.composite(deref(image.thisptr), geo, compose_)
+                self.thisptr.composite(image.thisptr, geo, compose_)
                 
     def crop(self,size):
         
@@ -172,7 +171,7 @@ cdef class Image:
         """
         
         with nogil:
-            self.thisptr.haldClut(deref(image.thisptr))
+            self.thisptr.haldClut(image.thisptr)
         
             
     def resize(self, size):
@@ -192,10 +191,6 @@ cdef class Image:
         
         with nogil:
             self.thisptr.rotate(degrees)
-
-    def __dealloc__(self):
-        if self.thisptr is not NULL:
-            del self.thisptr
             
     ##Image Attributes
         

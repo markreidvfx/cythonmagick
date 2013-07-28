@@ -15,6 +15,7 @@ from composite cimport CompositeOperator
 cdef extern from "Magick++/Image.h" namespace "Magick":
     void InitializeMagick(const char*)
     cdef cppclass Image:
+        Image()
         Image(string) nogil except +
         Image(const Geometry&, Color&) nogil
         Image(Blob&) nogil
