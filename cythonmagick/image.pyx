@@ -3,6 +3,8 @@ from libcpp.string cimport string
 from libcpp cimport bool
 from cython.operator cimport dereference as deref
 
+cimport cython
+
 from magick.image cimport Image as magickImage
 from magick.image cimport InitializeMagick
 from magick.geometry cimport Geometry as magickGeometry
@@ -16,6 +18,7 @@ from magick.compress cimport CompressionType as magickCompressionType
 from magick.colorspace cimport ColorspaceType as magickColorspaceType
 from magick.imagetype cimport ImageType as magickImageType
 from magick.composite cimport CompositeOperator as magickCompositeOperator
+cimport magick.imagetype
 
 import os
 
@@ -26,6 +29,12 @@ def _value_lookup(d,v):
     for key,value in d.items():
         if value == v:
             return key
+
+cdef dict StorageTypes = {'char': magick.imagetype.CharPixel,
+                          'short': magick.imagetype.ShortPixel,
+                          'int' : magick.imagetype.IntegerPixel,
+                          'float': magick.imagetype.FloatPixel,
+                          'double': magick.imagetype.DoublePixel}
 
 cdef class Image:
     cdef magickImage thisptr
@@ -39,20 +48,31 @@ cdef class Image:
                 self.thisptr = magickImage(s)
         else:
             self.thisptr = magickImage(geo,color)
+                 
+    def fromrawbuffer(self, unsigned char[::1] view, 
+                      size_t width, size_t height, 
+                      bytes pix_fmt, bytes dtype):
+        
+        
+        cdef magick.imagetype.StorageType _dtype
+        
+        _dtype = StorageTypes[dtype.lower()]
+        
+        self.thisptr = magickImage(width, height, pix_fmt, _dtype, &view[0])
             
-    def frombuffer(self, object[char, ndim=1] data):
+    def frombuffer(self, object[unsigned char, ndim=1] data):
         
         """Construct Image by reading from encoded image data contained in string.
         """
         
         cdef magickBlob blob = magickBlob()
 
-        cdef char * ptr = <char*> data
+        cdef char * ptr = <char*> &data[0]
         cdef size_t size = len(data)
         with nogil:
             blob.update(<void*> ptr, size)
             
-        self.thisptr = magickImage(blob)
+        self.thisptr.read(blob)
             
     def tostring(self):
         

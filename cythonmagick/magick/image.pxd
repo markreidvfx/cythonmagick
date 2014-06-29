@@ -11,6 +11,7 @@ from imagetype cimport ImageType
 from blob cimport Blob
 from color cimport Color
 from composite cimport CompositeOperator
+from imagetype cimport StorageType 
 
 cdef extern from "Magick++/Functions.h" namespace "Magick":
     cdef void InitializeMagick(const char*)
@@ -21,6 +22,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         Image(string) except +
         Image(const Geometry&, Color&) except +
         Image(Blob&) except +
+        Image(size_t width, size_t height, string map, StorageType type, void *pixels)
         
         #Image Image Manipulation Methods
         bool compare(Image&) except +

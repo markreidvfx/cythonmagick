@@ -13,3 +13,10 @@ cdef extern from "Magick++/Include.h" namespace "MagickCore":
         ColorSeparationMatteType
         OptimizeType
         PaletteBilevelMatteType
+        
+    ctypedef enum StorageType:
+        CharPixel
+        ShortPixel
+        IntegerPixel
+        FloatPixel
+        DoublePixel
