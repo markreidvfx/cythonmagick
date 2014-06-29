@@ -4,9 +4,9 @@ import subprocess
 from pprint import pprint
 import cythonmagick
 
-from common import *
+import common
 
-class TestStringConvert(unittest.TestCase):
+class TestImage(unittest.TestCase):
     
     def setUp(self):
         cythonmagick.initialize()
@@ -50,7 +50,7 @@ class TestStringConvert(unittest.TestCase):
         
         
         for f in filters.keys():
-            i = cythonmagick.Image(get_test_image("eyeball.jpg"))
+            i = cythonmagick.Image(common.get_test_image("eyeball.jpg"))
             
             i.filter = f
             
@@ -85,7 +85,7 @@ class TestStringConvert(unittest.TestCase):
         self.assertEqual(cythonmagick._value_lookup(d,5),None)
         
     def test_colorspace(self):
-        i = cythonmagick.Image(get_test_image("eyeball.jpg"))
+        i = cythonmagick.Image(common.get_test_image("eyeball.jpg"))
         
         #s = i.tostring()
         
@@ -111,7 +111,7 @@ class TestStringConvert(unittest.TestCase):
                 i.colorspace = c
                 
     def test_compress(self):
-        i = cythonmagick.Image(get_test_image("eyeball.jpg"))
+        i = cythonmagick.Image(common.get_test_image("eyeball.jpg"))
         
         i.magick = "TIFF"
         
@@ -119,7 +119,7 @@ class TestStringConvert(unittest.TestCase):
         for item in ("none", "LZW", 'ZIP', "RLE"):
             i.compress = item
             
-            out = output_test_image("compress_test_%s.%s" % (item,"tif"))
+            out = common.output_test_image("compress_test_%s.%s" % (item,"tif"))
             
             i.write(out)
             
@@ -135,7 +135,7 @@ class TestStringConvert(unittest.TestCase):
             for item in ("none", "ZIP", 'ZIPS','Piz','PXR24',"RLE"):
                 i.compress = item
                 
-                out = output_test_image("compress_test_%s.%s" % (item,"exr"))
+                out = common.output_test_image("compress_test_%s.%s" % (item,"exr"))
                 
                 i.write(out)
                 
@@ -149,7 +149,7 @@ class TestStringConvert(unittest.TestCase):
         
         
     def test_size(self):
-        i = cythonmagick.Image(get_test_image("eyeball.jpg"))
+        i = cythonmagick.Image(common.get_test_image("eyeball.jpg"))
         
         geo = i.size()
          
@@ -177,7 +177,7 @@ class TestStringConvert(unittest.TestCase):
         self.assertEqual(720,height)
     
     def test_crop(self):
-        i = cythonmagick.Image(get_test_image("eyeball.jpg"))
+        i = cythonmagick.Image(common.get_test_image("eyeball.jpg"))
         
         g = cythonmagick.Geometry(500,480)
         
@@ -186,7 +186,7 @@ class TestStringConvert(unittest.TestCase):
         
         self.assertEqual(i.size(), g)
         
-        i = cythonmagick.Image(get_test_image("eyeball.jpg"))
+        i = cythonmagick.Image(common.get_test_image("eyeball.jpg"))
 
         i.crop("90x60-10-10")
         self.assertEqual(i.size(),"90x60")
@@ -199,14 +199,14 @@ class TestStringConvert(unittest.TestCase):
     def test_extent(self):
         
         
-        i = cythonmagick.Image(get_test_image("eyeball.jpg"))
+        i = cythonmagick.Image(common.get_test_image("eyeball.jpg"))
         i.background = "red"
         i.extent("1920x1080",'Center')
         
         self.assertEqual(i.size(), "1920x1080")
         #i.display()
         
-        i = cythonmagick.Image(get_test_image("eyeball.jpg"))
+        i = cythonmagick.Image(common.get_test_image("eyeball.jpg"))
         i.background = "blue"
         i.extent("20x40",'Center')
         
@@ -215,7 +215,7 @@ class TestStringConvert(unittest.TestCase):
         
         for gravity in ("what the","bad name"):
             with self.assertRaises(KeyError):
-                i = cythonmagick.Image(get_test_image("eyeball.jpg"))
+                i = cythonmagick.Image(common.get_test_image("eyeball.jpg"))
                 i.extent("1920x1080",gravity)
                 
         with self.assertRaises(RuntimeError):
@@ -223,8 +223,8 @@ class TestStringConvert(unittest.TestCase):
         
     def test_depth(self):
         
-        i = cythonmagick.Image(get_test_image("eyeball.jpg"))
-        out = output_test_image("depth_test.%s" % "miff")
+        i = cythonmagick.Image(common.get_test_image("eyeball.jpg"))
+        out = common.output_test_image("depth_test.%s" % "miff")
         
         for d in (8,16):
             i.depth = d
@@ -237,12 +237,12 @@ class TestStringConvert(unittest.TestCase):
     
     def test_tostring_size_match(self):
         
-        i = cythonmagick.Image(get_test_image("eyeball.jpg"))
+        i = cythonmagick.Image(common.get_test_image("eyeball.jpg"))
         
         for format in ("png","jpg","dpx","gif"):
             i.magick = format
             
-            out = output_test_image("tostring_test.%s" % format)
+            out = common.output_test_image("tostring_test.%s" % format)
             i.write(out)
             s = i.tostring()
             f = open(out)
@@ -254,18 +254,18 @@ class TestStringConvert(unittest.TestCase):
             
     def test_fromstring(self):
         
-        test_image = get_test_image("eyeball.jpg")
+        test_image = common.get_test_image("eyeball.jpg")
         
         f = open(test_image)
         s = f.read()
         f.close()
         
-        out1 = output_test_image("fromstring_test1.ppm")
-        out2 = output_test_image("fromstring_test2.ppm")
+        out1 = common.output_test_image("fromstring_test1.ppm")
+        out2 = common.output_test_image("fromstring_test2.ppm")
         
         i = cythonmagick.Image()
         i.resize("1920x1090")
-        i.fromstring(s)
+        i.frombuffer(s)
         i.write(out1)
         
         cmd = ['convert',test_image,out2]
@@ -283,7 +283,7 @@ class TestStringConvert(unittest.TestCase):
         self.assertEqual(s1,s2,msg="output image data does not match")
     
     def test_backgroundcolor(self):
-        test_image = get_test_image("eyeball.jpg")
+        test_image = common.get_test_image("eyeball.jpg")
         
         i = cythonmagick.Image(test_image)
         
@@ -303,7 +303,7 @@ class TestStringConvert(unittest.TestCase):
                 i.background = item
                 
     def test_composite(self):
-        test_image = get_test_image("eyeball.jpg")
+        test_image = common.get_test_image("eyeball.jpg")
         i1 = cythonmagick.Image("logo:")
         i2 = cythonmagick.Image(test_image)
         
@@ -349,7 +349,7 @@ class TestStringConvert(unittest.TestCase):
         i2.rotate(180)
         
         self.assertFalse(i1.compare(i2))
-        test_image = get_test_image("eyeball.jpg")
+        test_image = common.get_test_image("eyeball.jpg")
         i3 = cythonmagick.Image(test_image)
         
         i3.colorspace = "yuv"

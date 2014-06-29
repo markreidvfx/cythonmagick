@@ -4,9 +4,9 @@ import subprocess
 from pprint import pprint
 import cythonmagick
 
-from common import *
+import common
 
-class TestStringConvert(unittest.TestCase):
+class TestGeometry(unittest.TestCase):
         
     def setUp(self):
         cythonmagick.initialize()

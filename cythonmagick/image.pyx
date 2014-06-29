@@ -40,15 +40,19 @@ cdef class Image:
         else:
             self.thisptr = magickImage(geo,color)
             
-    def fromstring(self, string data):
+    def frombuffer(self, object[char, ndim=1] data):
         
         """Construct Image by reading from encoded image data contained in string.
         """
         
         cdef magickBlob blob = magickBlob()
+
+        cdef char * ptr = <char*> data
+        cdef size_t size = len(data)
         with nogil:
-            blob.update(data.c_str(),data.size())
-            self.thisptr = magickImage(blob)
+            blob.update(<void*> ptr, size)
+            
+        self.thisptr = magickImage(blob)
             
     def tostring(self):
         
@@ -57,6 +61,7 @@ cdef class Image:
         
         cdef magickBlob blob
         cdef string data
+        
         with nogil:
             blob = magickBlob()
             self.thisptr.write(&blob)
@@ -84,9 +89,11 @@ cdef class Image:
         """
         
         cdef bool result
-        
-        with nogil:
-            result = self.thisptr.compare(image.thisptr)
+        try:
+            with nogil:
+                result = self.thisptr.compare(image.thisptr)
+        except:
+            return False
             
         return result
             
