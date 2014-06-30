@@ -6,13 +6,15 @@ cdef extern from * namespace "Magick::Blob":
         NewAllocator
 
 
-cdef extern from "Magick++/Blob.h" namespace "Magick":
+cdef extern from "Magick++/Blob.h" namespace "Magick" nogil:
     cdef cppclass Blob:
-        Blob() nogil except +
-        void update(const void*, size_t) nogil
-        void updateNoCopy(void*, size_t) nogil
-        base64(const string) nogil
-        string base64() nogil
-        size_t length() nogil
-        const void* data() nogil
+        Blob() except +
+        Blob(const void* data_, size_t length_) except +
+        void update(const void*, size_t) except +
+        void updateNoCopy(void* data, size_t length) except +
+        void updateNoCopy(void* data, size_t length, Allocator allocator) except +
+        base64(const string) except +
+        string base64() except +
+        size_t length() except +
+        const void* data() except +
         

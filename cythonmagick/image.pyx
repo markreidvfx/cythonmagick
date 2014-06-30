@@ -4,6 +4,8 @@ from libcpp cimport bool
 from cython.operator cimport dereference as deref
 
 cimport cython
+from cpython cimport PyBuffer_FillInfo
+from libc.stdlib cimport malloc, free
 
 from magick.image cimport Image as magickImage
 from magick.image cimport InitializeMagick
@@ -36,7 +38,17 @@ cdef dict StorageTypes = {'char': magick.imagetype.CharPixel,
                           'float': magick.imagetype.FloatPixel,
                           'double': magick.imagetype.DoublePixel}
 
-cdef class Image:
+cdef class Blob(object):
+    cdef magickBlob ptr
+    
+    def __cinit__(self, buffer=None):
+        self.ptr = magickBlob()
+    
+    def __getbuffer__(self, Py_buffer *view, int flags):
+        # has except -1, cython will raise exception for you
+        PyBuffer_FillInfo(view, self, <void*>self.ptr.data(),
+                          self.ptr.length(), 0, flags)
+cdef class Image(object):
     cdef magickImage thisptr
     def __init__(self, path = None):
         cdef string s
@@ -47,7 +59,9 @@ cdef class Image:
             with nogil:
                 self.thisptr = magickImage(s)
         else:
-            self.thisptr = magickImage(geo,color)
+            with nogil:
+                self.thisptr = magickImage(geo,color)
+                
     @cython.boundscheck(False)  
     @cython.wraparound(False)      
     def fromrawbuffer(self, const unsigned char[::1] view, 
@@ -92,7 +106,52 @@ cdef class Image:
             data = string(<char*> blob.data(), blob.length())
            
         return data
+    
+    def tobuffer(self):
+        cdef Blob blob = Blob.__new__(Blob)
         
+        with nogil:
+            self.thisptr.write(&blob.ptr)
+        
+        return blob
+    
+    def torawbuffer(self,size_t x, size_t y, size_t width, size_t height, bytes pix_fmt, bytes dtype):
+        cdef magick.imagetype.StorageType _dtype
+        
+        _dtype = StorageTypes[dtype.lower()]
+        
+        cdef string _pix_fmt = pix_fmt
+        
+        cdef size_t size = width  * height * len(pix_fmt)
+        
+        if _dtype == magick.imagetype.CharPixel:
+            size *= sizeof(unsigned char)
+        elif _dtype == magick.imagetype.ShortPixel:
+            size *= sizeof(unsigned short)
+        elif _dtype == magick.imagetype.IntegerPixel:
+            size *= sizeof(unsigned int)
+        elif _dtype == magick.imagetype.FloatPixel:
+            size *= sizeof(float)
+        elif _dtype == magick.imagetype.DoublePixel:
+            size *= sizeof(double)
+        
+        cdef Blob blob_obj = Blob.__new__(Blob)
+
+        cdef unsigned char * data = <unsigned char *> malloc(size)
+        if not data:
+            raise MemoryError()
+        
+        try:
+            self.thisptr.write(x,y , width, height, _pix_fmt, _dtype, <void *> data)
+            blob_obj.ptr.updateNoCopy(data, size)
+            return blob_obj
+        except:
+            free(data)
+            raise
+        
+        #return blob_obj
+    
+    
     def write(self, bytes path):
         
         """Write image to a file using filename path.

@@ -50,6 +50,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         void rotate(const double) except +
         void write(const string&) except +
         void write(Blob*) except +
+        void write(size_t x, size_t y, size_t width, size_t height, string &map, StorageType type, void *pixels) except +
 
         
         #Image Attributes
