@@ -22,7 +22,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         Image(string) except +
         Image(const Geometry&, Color&) except +
         Image(Blob&) except +
-        Image(size_t width, size_t height, string map, StorageType type, void *pixels)
+        Image(size_t width, size_t height, string map, StorageType type, void *pixels) except +
         
         #Image Image Manipulation Methods
         bool compare(Image&) except +
@@ -45,6 +45,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         void haldClut(Image&) except +
         void read(const string) except +
         void read(Blob&) except +
+        void read(size_t width, size_t height, string map, StorageType type, void *pixels) except +
         void resize(const Geometry&) except +
         void rotate(const double) except +
         void write(const string&) except +
@@ -52,6 +53,14 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
 
         
         #Image Attributes
+        void attribute(const string, const string) except +
+        string attribute(const string) except +
+        void artifact(const string, const string) except +
+        string artifact(const string) except +
+        void defineSet(const string& magick,  const string &key, bool flag)
+        bool defineSet(const string& magick,  const string &key)
+        void defineValue(const string &magick,const string &key, const string &value)
+        string defineValue(const string &magick,const string &key)
         void backgroundColor(const const Color&) except +
         Color backgroundColor() except +
         void colorSpace(ColorspaceType) except +

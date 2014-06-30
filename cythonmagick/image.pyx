@@ -38,7 +38,7 @@ cdef dict StorageTypes = {'char': magick.imagetype.CharPixel,
 
 cdef class Image:
     cdef magickImage thisptr
-    def __cinit__(self, path = None):
+    def __init__(self, path = None):
         cdef string s
         cdef magickGeometry geo = magickGeometry("0x0")
         color = to_magickColor("black")
@@ -48,8 +48,9 @@ cdef class Image:
                 self.thisptr = magickImage(s)
         else:
             self.thisptr = magickImage(geo,color)
-                 
-    def fromrawbuffer(self, unsigned char[::1] view, 
+    @cython.boundscheck(False)  
+    @cython.wraparound(False)      
+    def fromrawbuffer(self, const unsigned char[::1] view, 
                       size_t width, size_t height, 
                       bytes pix_fmt, bytes dtype):
         
@@ -58,7 +59,10 @@ cdef class Image:
         
         _dtype = StorageTypes[dtype.lower()]
         
-        self.thisptr = magickImage(width, height, pix_fmt, _dtype, &view[0])
+        cdef string _pix_fmt = pix_fmt
+        
+        with nogil:
+            self.thisptr.read(width, height, _pix_fmt, _dtype, &view[0])
             
     def frombuffer(self, object[unsigned char, ndim=1] data):
         
@@ -89,7 +93,7 @@ cdef class Image:
            
         return data
         
-    def write(self, string path):
+    def write(self, bytes path):
         
         """Write image to a file using filename path.
         """
@@ -97,8 +101,10 @@ cdef class Image:
         if not os.path.exists(os.path.abspath(os.path.dirname(path))):
             raise IOError("ouput directory does not exist %s" % path)
         
+        cdef string s_path = path
+        
         with nogil:
-            self.thisptr.write(path)
+            self.thisptr.write(s_path)
             
     ##Image Image Manipulation Methods
     
@@ -155,6 +161,12 @@ cdef class Image:
             
     def display(self):
         self.thisptr.display()
+        
+    def copy(self):
+        cdef Image i = Image.__new__(Image)
+        
+        i.thisptr = self.thisptr
+        return i
         
     def extent(self, size, string gravity = "center"):
         
@@ -229,7 +241,15 @@ cdef class Image:
         geo = self.thisptr.size()
  
         return toGeometry(geo)
-            
+    
+    def __getitem__(self, bytes key):
+        
+        return self.thisptr.attribute(key)
+    
+    def __setitem__(self, bytes key, bytes value):
+        self.thisptr.artifact(key, value)
+        self.thisptr.attribute(key, value)
+
     property background:
     
         """Image background color
