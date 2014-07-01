@@ -148,8 +148,34 @@ cdef class Image(object):
         except:
             free(data)
             raise
+
+    def into_rawbuffer(self, const unsigned char[::1] view,
+                           size_t x, size_t y, size_t width, size_t height, bytes pix_fmt, bytes dtype):
         
-        #return blob_obj
+        cdef magick.imagetype.StorageType _dtype
+        
+        _dtype = StorageTypes[dtype.lower()]
+        
+        cdef string _pix_fmt = pix_fmt
+        
+        cdef size_t size = width  * height * len(pix_fmt)
+        
+        if _dtype == magick.imagetype.CharPixel:
+            size *= sizeof(unsigned char)
+        elif _dtype == magick.imagetype.ShortPixel:
+            size *= sizeof(unsigned short)
+        elif _dtype == magick.imagetype.IntegerPixel:
+            size *= sizeof(unsigned int)
+        elif _dtype == magick.imagetype.FloatPixel:
+            size *= sizeof(float)
+        elif _dtype == magick.imagetype.DoublePixel:
+            size *= sizeof(double)
+            
+        if len(view) < size:
+            raise BufferError("Buffer too small")
+        
+        with nogil:
+            self.thisptr.write(x,y , width, height, _pix_fmt, _dtype, <void *> &view[0])
     
     
     def write(self, bytes path):
