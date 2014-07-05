@@ -264,8 +264,8 @@ class TestImage(unittest.TestCase):
         out2 = common.output_test_image("fromstring_test2.ppm")
         
         i = cythonmagick.Image()
-        i.resize("1920x1090")
-        i.frombuffer(s)
+        i.magick = 'jpg'
+        i.fromstring(s)
         i.write(out1)
         
         cmd = ['convert',test_image,out2]

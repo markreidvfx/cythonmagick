@@ -80,34 +80,32 @@ cdef class Image(object):
         with nogil:
             self.thisptr.read(width, height, _pix_fmt, _dtype, &view[0])
             
-    def frombuffer(self, object[unsigned char, ndim=1] data):
+    def fromstring(self, bytes data):
         
         """Construct Image by reading from encoded image data contained in string.
         """
         
         cdef magickBlob blob = magickBlob()
 
-        cdef char * ptr = <char*> &data[0]
+        cdef char *ptr = data
         cdef size_t size = len(data)
         with nogil:
             blob.update(<void*> ptr, size)
-            
-        self.thisptr.read(blob)
+            self.thisptr.read(blob)
             
     def tostring(self):
         
         """Write image to a string. returns a string
         """
         
-        cdef magickBlob blob
-        cdef string data
+        cdef magickBlob blob = magickBlob()
+        cdef char *ptr
         
         with nogil:
-            blob = magickBlob()
             self.thisptr.write(&blob)
-            data = string(<char*> blob.data(), blob.length())
-           
-        return data
+        ptr = <char*> blob.data()
+        
+        return ptr[:blob.length()]
     
     def tobuffer(self):
         cdef Blob blob = Blob.__new__(Blob)
