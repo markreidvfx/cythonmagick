@@ -4,6 +4,7 @@ from Cython.Distutils import build_ext
 
 import shlex
 import subprocess
+import sys
 
 extension_kwargs = {}
 try:
@@ -15,6 +16,8 @@ else:
     cppflags,stderr = p.communicate()
     p = subprocess.Popen(['Magick++-config', '--libs'],stdout=subprocess.PIPE)
     libs,stderr = p.communicate()
+    if p.returncode < 0:
+        sys.exit(p.returncode)
     extension_kwargs['extra_compile_args'] = shlex.split(cppflags) + ['-I./cythonmagick/magick']
     extension_kwargs['extra_link_args'] = shlex.split(libs)
 
