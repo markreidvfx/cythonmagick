@@ -7,36 +7,38 @@ cimport cython
 from cpython cimport PyBuffer_FillInfo
 from libc.stdlib cimport malloc, free
 
-from magick.image cimport Image as magickImage
-from magick.image cimport InitializeMagick
-from magick.geometry cimport Geometry as magickGeometry
-from magick.color cimport Color as magickColor
-from magick.blob cimport Blob as magickBlob
-from magick.coderinfo cimport CoderInfo as magickCoderInfo
+from image cimport Image as magickImage
+from image cimport InitializeMagick
+from geometry cimport Geometry as magickGeometry
+from color cimport Color as magickColor
+from blob cimport Blob as magickBlob
+from coderinfo cimport CoderInfo as magickCoderInfo
 
-from magick.gravity cimport GravityType as magickGravityType 
-from magick.filter cimport FilterTypes as magickFilterType
-from magick.compress cimport CompressionType as magickCompressionType
-from magick.colorspace cimport ColorspaceType as magickColorspaceType
-from magick.imagetype cimport ImageType as magickImageType
-from magick.composite cimport CompositeOperator as magickCompositeOperator
-cimport magick.imagetype
+from gravity cimport GravityType as magickGravityType 
+from filter cimport FilterTypes as magickFilterType
+from compress cimport CompressionType as magickCompressionType
+from colorspace cimport ColorspaceType as magickColorspaceType
+from imagetype cimport ImageType as magickImageType
+from composite cimport CompositeOperator as magickCompositeOperator
+cimport imagetype
 
 import os
 
 def initialize():
     InitializeMagick(NULL)
+    
+initialize()  
 
 def _value_lookup(d,v):
     for key,value in d.items():
         if value == v:
             return key
 
-cdef dict StorageTypes = {'char': magick.imagetype.CharPixel,
-                          'short': magick.imagetype.ShortPixel,
-                          'int' : magick.imagetype.IntegerPixel,
-                          'float': magick.imagetype.FloatPixel,
-                          'double': magick.imagetype.DoublePixel}
+cdef dict StorageTypes = {'char': imagetype.CharPixel,
+                          'short': imagetype.ShortPixel,
+                          'int' : imagetype.IntegerPixel,
+                          'float': imagetype.FloatPixel,
+                          'double': imagetype.DoublePixel}
 
 cdef class Blob(object):
     cdef magickBlob ptr
@@ -69,7 +71,7 @@ cdef class Image(object):
                       bytes pix_fmt, bytes dtype):
         
         
-        cdef magick.imagetype.StorageType _dtype
+        cdef imagetype.StorageType _dtype
         
         _dtype = StorageTypes[dtype.lower()]
         
@@ -116,7 +118,7 @@ cdef class Image(object):
         return blob
     
     def torawbuffer(self,size_t x, size_t y, size_t width, size_t height, bytes pix_fmt, bytes dtype):
-        cdef magick.imagetype.StorageType _dtype
+        cdef imagetype.StorageType _dtype
         
         _dtype = StorageTypes[dtype.lower()]
         
@@ -124,15 +126,15 @@ cdef class Image(object):
         
         cdef size_t size = width  * height * len(pix_fmt)
         
-        if _dtype == magick.imagetype.CharPixel:
+        if _dtype == imagetype.CharPixel:
             size *= sizeof(unsigned char)
-        elif _dtype == magick.imagetype.ShortPixel:
+        elif _dtype == imagetype.ShortPixel:
             size *= sizeof(unsigned short)
-        elif _dtype == magick.imagetype.IntegerPixel:
+        elif _dtype == imagetype.IntegerPixel:
             size *= sizeof(unsigned int)
-        elif _dtype == magick.imagetype.FloatPixel:
+        elif _dtype == imagetype.FloatPixel:
             size *= sizeof(float)
-        elif _dtype == magick.imagetype.DoublePixel:
+        elif _dtype == imagetype.DoublePixel:
             size *= sizeof(double)
         
         cdef Blob blob_obj = Blob.__new__(Blob)
@@ -152,7 +154,7 @@ cdef class Image(object):
     def into_rawbuffer(self, const unsigned char[::1] view,
                            size_t x, size_t y, size_t width, size_t height, bytes pix_fmt, bytes dtype):
         
-        cdef magick.imagetype.StorageType _dtype
+        cdef imagetype.StorageType _dtype
         
         _dtype = StorageTypes[dtype.lower()]
         
@@ -160,15 +162,15 @@ cdef class Image(object):
         
         cdef size_t size = width  * height * len(pix_fmt)
         
-        if _dtype == magick.imagetype.CharPixel:
+        if _dtype == imagetype.CharPixel:
             size *= sizeof(unsigned char)
-        elif _dtype == magick.imagetype.ShortPixel:
+        elif _dtype == imagetype.ShortPixel:
             size *= sizeof(unsigned short)
-        elif _dtype == magick.imagetype.IntegerPixel:
+        elif _dtype == imagetype.IntegerPixel:
             size *= sizeof(unsigned int)
-        elif _dtype == magick.imagetype.FloatPixel:
+        elif _dtype == imagetype.FloatPixel:
             size *= sizeof(float)
-        elif _dtype == magick.imagetype.DoublePixel:
+        elif _dtype == imagetype.DoublePixel:
             size *= sizeof(double)
             
         if len(view) < size:

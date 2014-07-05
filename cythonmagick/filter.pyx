@@ -1,4 +1,4 @@
-from magick cimport filter
+cimport filter
 
 FilterTypes = dict(
 undefined = filter.UndefinedFilter,

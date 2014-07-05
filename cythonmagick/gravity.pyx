@@ -1,4 +1,4 @@
-from magick cimport gravity
+cimport gravity
 
 GravityTypes = dict(
 forget = gravity.ForgetGravity,

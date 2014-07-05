@@ -1,6 +1,6 @@
 from distutils.core import setup
 from distutils.extension import Extension
-from Cython.Distutils import build_ext
+from Cython.Build import cythonize
 
 import shlex
 import subprocess
@@ -18,8 +18,13 @@ else:
     libs,stderr = p.communicate()
     if p.returncode < 0:
         sys.exit(p.returncode)
-    extension_kwargs['extra_compile_args'] = shlex.split(cppflags) + ['-I./cythonmagick/magick']
+    extension_kwargs['extra_compile_args'] = shlex.split(cppflags)
     extension_kwargs['extra_link_args'] = shlex.split(libs)
+    
+extensions= [Extension('cythonmagick',
+                       ["cythonmagick/cythonmagick.pyx"],
+                        language="c++",
+                        **extension_kwargs)]
 
 setup(
     name="cythonmagick",
@@ -31,10 +36,7 @@ setup(
     author_email='mindmark@gmail.com',
     license='Apache License (2.0)',
     
-    cmdclass = {'build_ext': build_ext},
-    ext_modules = [Extension('cythonmagick',["cythonmagick/core.pyx"],
-                                             language="c++",
-                                             **extension_kwargs)],
+    ext_modules = cythonize(extensions, include_path=['cythonmagick', 'include']),
     classifiers=[
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',

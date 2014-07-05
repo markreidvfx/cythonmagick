@@ -2,8 +2,8 @@
 from libcpp.string cimport string
 from cython.operator cimport dereference as deref
 
-from magick.color cimport Color as magickColor
-from magick.color cimport ColorRGB as magickColorRGB
+from color cimport Color as magickColor
+from color cimport ColorRGB as magickColorRGB
 
 
 cdef object toColor(magickColor color):

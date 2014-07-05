@@ -1,6 +1,6 @@
 
 LDFLAGS ?= ""
-CFLAGS ?= "-O0"
+CFLAGS ?= ""
 
 .PHONY: default build_ext build clean clean-all info test docs
 

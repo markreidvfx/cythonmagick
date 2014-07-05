@@ -1,4 +1,4 @@
-from magick cimport composite
+cimport composite
 
 CompositeOperators = dict(
 undefined = composite.UndefinedCompositeOp,

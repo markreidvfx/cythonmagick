@@ -1,4 +1,4 @@
-from magick cimport imagetype
+cimport imagetype
 
 ImageTypes = dict(
 undefined = imagetype.UndefinedType,

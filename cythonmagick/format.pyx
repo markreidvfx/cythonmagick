@@ -2,10 +2,10 @@ from libcpp.string cimport string
 from libcpp.list cimport list as cpplist
 from cython.operator cimport dereference as deref, preincrement as inc
 
-from magick.coderlist cimport coderInfoList as magickCoderInfoList 
-from magick.coderinfo cimport CoderInfo as magickCoderInfo
+from coderlist cimport coderInfoList as magickCoderInfoList 
+from coderinfo cimport CoderInfo as magickCoderInfo
 
-cimport magick.coderinfo
+cimport coderinfo
 
 def coderinfo(string format):
     d = {}
@@ -28,25 +28,25 @@ def coderinfo(string format):
 def listformats(read=None, write=None, multiframe=None):
     
     if read is None:
-        read = magick.coderinfo.AnyMatch
+        read = coderinfo.AnyMatch
     elif read:
-        read = magick.coderinfo.TrueMatch
+        read = coderinfo.TrueMatch
     else:
-        read = magick.coderinfo.FalseMatch
+        read = coderinfo.FalseMatch
     
     if write is None:
-        write = magick.coderinfo.AnyMatch
+        write = coderinfo.AnyMatch
     elif write:
-        write = magick.coderinfo.TrueMatch
+        write = coderinfo.TrueMatch
     else:
-        write = magick.coderinfo.FalseMatch
+        write = coderinfo.FalseMatch
         
     if multiframe is None:
-        multiframe = magick.coderinfo.AnyMatch
+        multiframe = coderinfo.AnyMatch
     elif multiframe:
-        multiframe = magick.coderinfo.TrueMatch
+        multiframe = coderinfo.TrueMatch
     else:
-        multiframe = magick.coderinfo.FalseMatch
+        multiframe = coderinfo.FalseMatch
         
     formats = []
     

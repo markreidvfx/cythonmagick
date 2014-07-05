@@ -1,0 +1,6 @@
+*.pyc
+*.so
+cythonmagick/*.cpp
+.DS_Store
+build/*
+tests/test_output/*

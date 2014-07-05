@@ -3,7 +3,7 @@ from libcpp.string cimport string
 from cython.operator cimport dereference as deref
 from libcpp cimport bool
 
-from magick.geometry cimport Geometry as magickGeometry
+from geometry cimport Geometry as magickGeometry
 
 cdef object toGeometry(magickGeometry geo):
     s = <string> geo

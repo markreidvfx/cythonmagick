@@ -1,4 +1,4 @@
-from magick cimport colorspace
+cimport colorspace
 
 ColorspaceTypes = dict(
 cmyk = colorspace.CMYKColorspace,

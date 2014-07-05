@@ -1,5 +1,5 @@
 
-from magick cimport compress
+cimport compress
 
 CompressTypes = dict(
 undefined = compress.UndefinedCompression,
