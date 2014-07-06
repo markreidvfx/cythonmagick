@@ -3,27 +3,27 @@ from libcpp.string cimport string
 cdef extern from "Magick++/Include.h" namespace "Magick":
     ctypedef unsigned short Quantum 
     
-cdef extern from "Magick++/Color.h" namespace "Magick":
+cdef extern from "Magick++/Color.h" namespace "Magick" nogil:
     cdef cppclass Color:
         Color(string&) except +
         Color() except +
-        Color(Quantum, #red_
-              Quantum, #green_
-              Quantum, #blue_
-              ) 
-        Color(Quantum, #red_
-              Quantum, #green_
-              Quantum, #blue_
-              Quantum, #alpha_
-              ) 
-        void redQuantum(Quantum)
-        const Quantum redQuantum()
-        void greenQuantum(Quantum)
-        const Quantum greenQuantum()
-        void blueQuantum (Quantum)
-        const Quantum blueQuantum()
-        void alphaQuantum(Quantum)
-        const Quantum alphaQuantum()
+        Color(Quantum red,
+              Quantum green,
+              Quantum blue,
+              ) except +
+        Color(Quantum red,
+              Quantum green,
+              Quantum blue,
+              Quantum alpha,
+              ) except +
+        void redQuantum(Quantum) except +
+        const Quantum redQuantum() except +
+        void greenQuantum(Quantum) except +
+        const Quantum greenQuantum() except +
+        void blueQuantum (Quantum) except +
+        const Quantum blueQuantum() except +
+        void alphaQuantum(Quantum) except +
+        const Quantum alphaQuantum() except +
         #void alpha(double)
         #double alpha()
         
