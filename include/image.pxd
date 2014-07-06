@@ -13,7 +13,7 @@ from color cimport Color
 from composite cimport CompositeOperator
 from imagetype cimport StorageType 
 
-cdef extern from "Magick++/Functions.h" namespace "Magick":
+cdef extern from "Magick++/Include.h" namespace "MagickCore":
     cdef void InitializeMagick(const char*)
 
 cdef extern from "Magick++/Image.h" namespace "Magick" nogil:

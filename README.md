@@ -1,5 +1,7 @@
 Python Bindings for ImageMagick Magick++ API written in Cython.
 
+[![Build Status](https://secure.travis-ci.org/markreidvfx/cythonmagick.png?branch=master)](https://travis-ci.org/markreidvfx/cythonmagick)
+
 ImageMagick
 http://www.imagemagick.org/
 
