@@ -21,6 +21,7 @@ from colorspace cimport ColorspaceType as magickColorspaceType
 from imagetype cimport ImageType as magickImageType
 from composite cimport CompositeOperator as magickCompositeOperator
 cimport imagetype
+cimport magickcore
 
 import os
 
@@ -316,6 +317,20 @@ cdef class Image(object):
     def __setitem__(self, bytes key, bytes value):
         self.thisptr.artifact(key, value)
         self.thisptr.attribute(key, value)
+        
+    def iterkeys(self):
+        cdef magickcore.Image *ptr = self.thisptr.image()
+        magickcore.ResetImagePropertyIterator(ptr)
+        keys = []
+        cdef char *prop
+        while True:
+            prop = magickcore.GetNextImageProperty(ptr)
+            if prop is NULL:
+                break
+            yield prop
+    
+    def keys(self):
+        return list(self.iterkeys())
 
     property background:
     

@@ -12,6 +12,7 @@ from blob cimport Blob
 from color cimport Color
 from composite cimport CompositeOperator
 from imagetype cimport StorageType 
+cimport magickcore
 
 cdef extern from "Magick++/Include.h" namespace "MagickCore":
     cdef void InitializeMagick(const char*)
@@ -86,3 +87,5 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         const Geometry size() except +
         void verbose(bool) except +
         bool verbose() except +
+        
+        magickcore.Image* image() except +

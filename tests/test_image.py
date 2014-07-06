@@ -416,11 +416,17 @@ class TestImage(unittest.TestCase):
         del imagetypes['undefined']
         
         for imagetype in imagetypes.keys():
-            i = cythonmagick.Image("logo:")
+            i = cythonmagick.Image(common.get_test_image("eyeball.jpg"))
             i.type = imagetype
             
             
             self.assertEqual(i.type, imagetype)
+            
+    def test_keys(self):
+        i = cythonmagick.Image(common.get_test_image("eyeball.jpg"))
+        
+        for key in i.keys():
+            print key, i[key]
             
     def test_buffer(self):
         # Note: rounding can occur when using int, float, and double depending 
