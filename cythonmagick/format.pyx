@@ -9,9 +9,9 @@ cimport coderinfo
 
 def coderinfo(string format):
     d = {}
-    cdef magickCoderInfo *info
+    cdef magickCoderInfo info
     try:
-        info = new magickCoderInfo(format)
+        info = magickCoderInfo(format)
     except:
         d = {'name':format,'read':False, 'write':False,'multiframe':False}
         return d
