@@ -20,9 +20,9 @@ def convert(frame, number, format='dpx'):
 
     
     v = "02:20:30:01"
-    i['dpx:television.time.code'] = v
-    i['dpx:film.slate'] = "slate"
-    i['dpx:television.frame_rate'] = '23.97'
+    i.artifacts['dpx:television.time.code'] = v
+    i.artifacts['dpx:film.slate'] = "slate"
+    i.artifacts['dpx:television.frame_rate'] = '23.97'
     
 
     i.magick = 'dpx'
@@ -42,7 +42,7 @@ def convert(frame, number, format='dpx'):
     #print len(bytearray()
     #
     #i.depth= 8
-    print number,i.depth, i['dpx:television.time.code']
+    print number,i.depth, i.artifacts['dpx:television.time.code']
 
     out_file = "test.%04d.%s" % (number, format)
     i.write(out_file)
@@ -74,7 +74,7 @@ with ThreadPoolExecutor(8) as executor:
                 f = futures.pop(0)
                 f.result()
     
-        if frame_count > 1000:
+        if frame_count > 100:
             break
         
     for f in concurrent.futures.as_completed(futures):

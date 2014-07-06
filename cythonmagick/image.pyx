@@ -305,32 +305,19 @@ cdef class Image(object):
         
         """returns a Geometry object that represents the image dimensions
         """
-        
         geo = self.thisptr.size()
- 
         return toGeometry(geo)
     
-    def __getitem__(self, bytes key):
+    property attributes:
+        def __get__(self):
+            cdef Attributes attributes = Attributes.__new__(Attributes, self)
+            return attributes
         
-        return self.thisptr.attribute(key)
-    
-    def __setitem__(self, bytes key, bytes value):
-        self.thisptr.artifact(key, value)
-        self.thisptr.attribute(key, value)
-        
-    def iterkeys(self):
-        cdef magickcore.Image *ptr = self.thisptr.image()
-        magickcore.ResetImagePropertyIterator(ptr)
-        keys = []
-        cdef char *prop
-        while True:
-            prop = magickcore.GetNextImageProperty(ptr)
-            if prop is NULL:
-                break
-            yield prop
-    
-    def keys(self):
-        return list(self.iterkeys())
+    property artifacts:
+        def __get__(self):
+            cdef Artifacts artifacts = Artifacts.__new__(Artifacts, self)
+            return artifacts
+
 
     property background:
     
@@ -451,4 +438,85 @@ cdef class Image(object):
             return self.thisptr.verbose()
         def __set__(self, bool value):
             self.thisptr.verbose(value)
-            
+
+cdef class Properties(object):
+    cdef Image image
+    def __cinit__(self, Image image):
+        self.image =  image
+
+    def __init__(self):
+        raise TypeError("%s cannot be instantiated from Python" %  self.__class__.__name__)
+    
+    def keys(self):
+        return list(self.iterkeys())
+    
+    def iteritems(self):
+        for key in self.iterkeys():
+            yield key, self[key]
+    
+    def items(self):
+        return list(self.iteritems())
+    
+    def __contains__(self, x):
+        for key in self.iterkeys():
+            if key == x:
+                return 1
+        return 0
+
+cdef class Attributes(Properties):
+    def iterkeys(self):
+        cdef const magickcore.Image *ptr = self.image.thisptr.constImage()
+        magickcore.ResetImagePropertyIterator(ptr)
+        cdef char *prop
+        while True:
+            prop = magickcore.GetNextImageProperty(ptr)
+            if prop is NULL:
+                break
+            yield prop
+
+    def __getitem__(self, bytes key):
+        return self.image.thisptr.attribute(key) or None
+    
+    def __setitem__(self, bytes key, bytes value):
+        self.image.thisptr.attribute(key, value)
+    
+    def __delitem__(self, bytes key):
+        cdef magickcore.MagickBooleanType result
+        
+        self.image.thisptr.modifyImage()
+        
+        cdef magickcore.Image *ptr = self.image.thisptr.image()
+        
+        result = magickcore.DeleteImageProperty(ptr, key)
+        
+        if result == magickcore.MagickFalse:
+            raise RuntimeError("Unable to delete %s" % key)
+
+cdef class Artifacts(Properties):
+
+    def iterkeys(self):
+        cdef const magickcore.Image *ptr = self.image.thisptr.constImage()
+        magickcore.ResetImageArtifactIterator(ptr)
+        cdef char *prop
+        while True:
+            prop = magickcore.GetNextImageArtifact(ptr)
+            if prop is NULL:
+                break
+            yield prop
+
+    def __getitem__(self, bytes key):
+        return self.image.thisptr.artifact(key) or None
+    
+    def __setitem__(self, bytes key, bytes value):
+        self.image.thisptr.artifact(key, value)
+        
+    def __delitem__(self, bytes key):
+        cdef magickcore.MagickBooleanType result
+        self.image.thisptr.modifyImage()
+        
+        cdef magickcore.Image *ptr = self.image.thisptr.image()
+        
+        result = magickcore.DeleteImageArtifact(ptr, key)
+        
+        if result == magickcore.MagickFalse:
+            raise RuntimeError("Unable to delete %s" % key)

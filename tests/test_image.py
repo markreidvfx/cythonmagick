@@ -422,12 +422,42 @@ class TestImage(unittest.TestCase):
             
             self.assertEqual(i.type, imagetype)
             
-    def test_keys(self):
+    def test_attributes(self):
+        i = cythonmagick.Image(common.get_test_image("eyeball.jpg"))
+        i.magick = "miff"
+        print 'attributes'
+        
+        i.attributes['something'] = '21'
+        print "something =", i.attributes['something']
+        self.assertEqual(i.attributes['something'], '21')
+        
+        #del i.attributes['something']
+        print i.attributes.items()
+        
+        for key, value in i.attributes.items():
+            print "  ", key, value
+        
+        del i.attributes['something']
+        
+        self.assertFalse('something' in i.attributes)
+        
+        
+    def test_artifacts(self):
         i = cythonmagick.Image(common.get_test_image("eyeball.jpg"))
         
-        for key in i.keys():
-            print key, i[key]
+        i.artifacts['something'] = '21'
+        
+        self.assertEqual(i.artifacts['something'], '21')
             
+        print 'artifacts'
+        print i.artifacts.items()
+        for key, value in i.artifacts.items():
+            print "  ",key, str(value)
+            
+        del i.artifacts['something']
+        
+        self.assertFalse('something' in i.artifacts)
+        
     def test_buffer(self):
         # Note: rounding can occur when using int, float, and double depending 
         # on imagemagick the compiled-in Quantum size. this test assumes 16 bit

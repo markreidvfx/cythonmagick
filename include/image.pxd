@@ -89,3 +89,5 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         bool verbose() except +
         
         magickcore.Image* image() except +
+        const magickcore.Image* constImage() except +
+        void modifyImage() except +
