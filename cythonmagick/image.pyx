@@ -40,6 +40,26 @@ cdef dict StorageTypes = {'char': imagetype.CharPixel,
                           'float': imagetype.FloatPixel,
                           'double': imagetype.DoublePixel}
 
+def pixel_byte_size(str dtype):
+    cdef imagetype.StorageType _dtype
+        
+    _dtype = StorageTypes[dtype.lower()]
+    
+    cdef size_t size
+    
+    if _dtype == imagetype.CharPixel:
+        size = sizeof(unsigned char)
+    elif _dtype == imagetype.ShortPixel:
+        size = sizeof(unsigned short)
+    elif _dtype == imagetype.IntegerPixel:
+        size = sizeof(unsigned int)
+    elif _dtype == imagetype.FloatPixel:
+        size = sizeof(float)
+    elif _dtype == imagetype.DoublePixel:
+        size = sizeof(double)
+        
+    return int(size) 
+
 cdef class Blob(object):
     cdef magickBlob ptr
     
@@ -63,22 +83,6 @@ cdef class Image(object):
         else:
             with nogil:
                 self.thisptr = magickImage(geo,color)
-                
-    @cython.boundscheck(False)  
-    @cython.wraparound(False)      
-    def fromrawbuffer(self, const unsigned char[::1] view, 
-                      size_t width, size_t height, 
-                      bytes pix_fmt, bytes dtype):
-        
-        
-        cdef imagetype.StorageType _dtype
-        
-        _dtype = StorageTypes[dtype.lower()]
-        
-        cdef string _pix_fmt = pix_fmt
-        
-        with nogil:
-            self.thisptr.read(width, height, _pix_fmt, _dtype, &view[0])
             
     def fromstring(self, bytes data):
         
@@ -115,40 +119,29 @@ cdef class Image(object):
         
         return blob
     
-    def torawbuffer(self,size_t x, size_t y, size_t width, size_t height, bytes pix_fmt, bytes dtype):
+    @cython.boundscheck(False)  
+    @cython.wraparound(False)      
+    def from_rawbuffer(self, const unsigned char[::1] view, 
+                      size_t width, size_t height, 
+                      bytes pix_fmt, bytes dtype):
+        
+        
         cdef imagetype.StorageType _dtype
         
         _dtype = StorageTypes[dtype.lower()]
         
         cdef string _pix_fmt = pix_fmt
         
-        cdef size_t size = width  * height * len(pix_fmt)
+        cdef size_t size = width  * height * len(pix_fmt) * pixel_byte_size(dtype)
+            
+        if len(view) < size:
+            raise BufferError("Buffer too small")
         
-        if _dtype == imagetype.CharPixel:
-            size *= sizeof(unsigned char)
-        elif _dtype == imagetype.ShortPixel:
-            size *= sizeof(unsigned short)
-        elif _dtype == imagetype.IntegerPixel:
-            size *= sizeof(unsigned int)
-        elif _dtype == imagetype.FloatPixel:
-            size *= sizeof(float)
-        elif _dtype == imagetype.DoublePixel:
-            size *= sizeof(double)
-        
-        cdef Blob blob_obj = Blob.__new__(Blob)
-
-        cdef unsigned char * data = <unsigned char *> malloc(size)
-        if not data:
-            raise MemoryError()
-        
-        try:
-            self.thisptr.write(x,y , width, height, _pix_fmt, _dtype, <void *> data)
-            blob_obj.ptr.updateNoCopy(data, size)
-            return blob_obj
-        except:
-            free(data)
-            raise
-
+        with nogil:
+            self.thisptr.read(width, height, _pix_fmt, _dtype, &view[0])
+            
+    @cython.boundscheck(False)  
+    @cython.wraparound(False) 
     def into_rawbuffer(self, const unsigned char[::1] view,
                            size_t x, size_t y, size_t width, size_t height, bytes pix_fmt, bytes dtype):
         
@@ -158,19 +151,8 @@ cdef class Image(object):
         
         cdef string _pix_fmt = pix_fmt
         
-        cdef size_t size = width  * height * len(pix_fmt)
+        cdef size_t size = width  * height * len(pix_fmt)  * pixel_byte_size(dtype)
         
-        if _dtype == imagetype.CharPixel:
-            size *= sizeof(unsigned char)
-        elif _dtype == imagetype.ShortPixel:
-            size *= sizeof(unsigned short)
-        elif _dtype == imagetype.IntegerPixel:
-            size *= sizeof(unsigned int)
-        elif _dtype == imagetype.FloatPixel:
-            size *= sizeof(float)
-        elif _dtype == imagetype.DoublePixel:
-            size *= sizeof(double)
-            
         if len(view) < size:
             raise BufferError("Buffer too small")
         

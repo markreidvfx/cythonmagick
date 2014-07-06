@@ -16,7 +16,7 @@ import cythonmagick
 def convert(frame, number, format='dpx'):
     i = cythonmagick.Image()
 
-    i.fromrawbuffer(frame.planes[0], frame.width, frame.height, 'rgb',  'short')
+    i.from_rawbuffer(frame.planes[0], frame.width, frame.height, 'rgb',  'short')
 
     
     v = "02:20:30:01"

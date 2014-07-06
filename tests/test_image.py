@@ -5,6 +5,8 @@ from pprint import pprint
 import cythonmagick
 
 import common
+import random
+import array
 
 class TestImage(unittest.TestCase):
     
@@ -419,9 +421,63 @@ class TestImage(unittest.TestCase):
             
             
             self.assertEqual(i.type, imagetype)
-        
-        
             
+    def test_buffer(self):
+        # Note: rounding can occur when using int, float, and double depending 
+        # on imagemagick the compiled-in Quantum size. this test assumes 16 bit
+        
+        width = 32
+        height = 32
+
+        for pix_fmt in ('char', 'short'):
+            print 'format:', pix_fmt, 'byte size:', cythonmagick.pixel_byte_size(pix_fmt)
+            
+            byte_size = width * height * 3 * cythonmagick.pixel_byte_size(pix_fmt)
+    
+            buf  = bytearray(byte_size)
+            for i in xrange(len(buf)):
+                buf[i] = random.randrange(256)
+                
+            i = cythonmagick.Image()
+
+            i.from_rawbuffer(buf, width, height, 'rgb', pix_fmt)
+            
+            buf2 = bytearray(byte_size)
+            i.into_rawbuffer(buf2, 0,0, width, height, 'rgb', pix_fmt)
+            
+            self.assertEqual(buf, buf2, "pmt_fmt: %s buf1 not equal to buf2" % pix_fmt)
+            
+            out = common.output_test_image("buffer_test_%s.%s" % (pix_fmt,"png"))
+            i.write(out)
+            
+        def int_iter(size):
+            for i in xrange(size):              
+                yield random.choice([4294967295, 0])# max 32bit unsigned int
+
+        def float_iter(size):
+            for i in xrange(size):
+                yield random.choice([1.0, 0.0])
+   
+            
+        for array_type, pix_fmt in (( 'I','int'), ( 'f','float'), ( 'd','double') ):
+            print 'format:', pix_fmt, 'byte size:', cythonmagick.pixel_byte_size(pix_fmt)
+            
+            buffer_size = width * height * 3 #* cythonmagick.pixel_byte_size(pix_fmt)
+            
+            if pix_fmt == 'int':
+                buf = bytearray(array.array(array_type, int_iter(buffer_size)).tostring())
+            else:
+                buf = bytearray(array.array(array_type, float_iter(buffer_size)).tostring())
+
+            i = cythonmagick.Image()
+            i.from_rawbuffer(buf, width, height, 'rgb', pix_fmt)
+            
+            buf2 = bytearray(len(buf))
+            i.into_rawbuffer(buf2, 0,0, width, height, 'rgb', pix_fmt)
+            self.assertEqual(buf, buf2, "pmt_fmt: %s buf1 not equal to buf2" % pix_fmt)
+            
+            out = common.output_test_image("buffer_test_%s.%s" % (pix_fmt,"png"))
+            i.write(out)
             
 if __name__ == '__main__':
     unittest.main()
