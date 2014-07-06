@@ -457,11 +457,17 @@ cdef class Properties(object):
     def items(self):
         return list(self.iteritems())
     
+    def __len__(self):
+        return len(self.key())
+    
     def __contains__(self, x):
         for key in self.iterkeys():
             if key == x:
                 return 1
         return 0
+    
+    def __repr__(self):
+        return str(dict(self))
 
 cdef class Attributes(Properties):
     def iterkeys(self):

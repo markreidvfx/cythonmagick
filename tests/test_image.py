@@ -432,7 +432,7 @@ class TestImage(unittest.TestCase):
         self.assertEqual(i.attributes['something'], '21')
         
         #del i.attributes['something']
-        print i.attributes.items()
+        print i.attributes
         
         for key, value in i.attributes.items():
             print "  ", key, value
@@ -440,7 +440,7 @@ class TestImage(unittest.TestCase):
         del i.attributes['something']
         
         self.assertFalse('something' in i.attributes)
-        
+
         
     def test_artifacts(self):
         i = cythonmagick.Image(common.get_test_image("eyeball.jpg"))
@@ -450,13 +450,14 @@ class TestImage(unittest.TestCase):
         self.assertEqual(i.artifacts['something'], '21')
             
         print 'artifacts'
-        print i.artifacts.items()
+        print i.artifacts
         for key, value in i.artifacts.items():
             print "  ",key, str(value)
             
         del i.artifacts['something']
         
         self.assertFalse('something' in i.artifacts)
+
         
     def test_buffer(self):
         # Note: rounding can occur when using int, float, and double depending 
