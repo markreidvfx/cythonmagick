@@ -317,7 +317,14 @@ cdef class Image(object):
         def __get__(self):
             cdef Artifacts artifacts = Artifacts.__new__(Artifacts, self)
             return artifacts
-
+        
+    property width:
+        def __get__(self):
+            return self.size().width
+        
+    property height:
+        def __get__(self):
+            return self.size().height
 
     property background:
     
