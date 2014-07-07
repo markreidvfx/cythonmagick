@@ -28,7 +28,7 @@ import os
 def initialize():
     InitializeMagick(NULL)
     
-initialize()  
+initialize()
 
 def _value_lookup(d,v):
     for key,value in d.items():
@@ -313,10 +313,11 @@ cdef class Image(object):
             cdef Attributes attributes = Attributes.__new__(Attributes, self)
             return attributes
         
-    property artifacts:
-        def __get__(self):
-            cdef Artifacts artifacts = Artifacts.__new__(Artifacts, self)
-            return artifacts
+    IF MAGICKLIBVERSION > 686:
+        property artifacts:
+            def __get__(self):
+                cdef Artifacts artifacts = Artifacts.__new__(Artifacts, self)
+                return artifacts
         
     property width:
         def __get__(self):
@@ -504,32 +505,33 @@ cdef class Attributes(Properties):
         
         if result == magickcore.MagickFalse:
             raise RuntimeError("Unable to delete %s" % key)
-
-cdef class Artifacts(Properties):
-
-    def iterkeys(self):
-        cdef const magickcore.Image *ptr = self.image.thisptr.constImage()
-        magickcore.ResetImageArtifactIterator(ptr)
-        cdef char *prop
-        while True:
-            prop = magickcore.GetNextImageArtifact(ptr)
-            if prop is NULL:
-                break
-            yield prop
-
-    def __getitem__(self, bytes key):
-        return self.image.thisptr.artifact(key) or None
+        
+IF MAGICKLIBVERSION > 686:
+    cdef class Artifacts(Properties):
     
-    def __setitem__(self, bytes key, bytes value):
-        self.image.thisptr.artifact(key, value)
+        def iterkeys(self):
+            cdef const magickcore.Image *ptr = self.image.thisptr.constImage()
+            magickcore.ResetImageArtifactIterator(ptr)
+            cdef char *prop
+            while True:
+                prop = magickcore.GetNextImageArtifact(ptr)
+                if prop is NULL:
+                    break
+                yield prop
+    
+        def __getitem__(self, bytes key):
+            return self.image.thisptr.artifact(key) or None
         
-    def __delitem__(self, bytes key):
-        cdef magickcore.MagickBooleanType result
-        self.image.thisptr.modifyImage()
-        
-        cdef magickcore.Image *ptr = self.image.thisptr.image()
-        
-        result = magickcore.DeleteImageArtifact(ptr, key)
-        
-        if result == magickcore.MagickFalse:
-            raise RuntimeError("Unable to delete %s" % key)
+        def __setitem__(self, bytes key, bytes value):
+            self.image.thisptr.artifact(key, value)
+            
+        def __delitem__(self, bytes key):
+            cdef magickcore.MagickBooleanType result
+            self.image.thisptr.modifyImage()
+            
+            cdef magickcore.Image *ptr = self.image.thisptr.image()
+            
+            result = magickcore.DeleteImageArtifact(ptr, key)
+            
+            if result == magickcore.MagickFalse:
+                raise RuntimeError("Unable to delete %s" % key)
