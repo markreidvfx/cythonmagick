@@ -313,7 +313,7 @@ cdef class Image(object):
             cdef Attributes attributes = Attributes.__new__(Attributes, self)
             return attributes
         
-    IF MAGICKLIBVERSION > 686:
+    IF MAGICKLIBVERSION >= 657:
         property artifacts:
             def __get__(self):
                 cdef Artifacts artifacts = Artifacts.__new__(Artifacts, self)
@@ -506,7 +506,7 @@ cdef class Attributes(Properties):
         if result == magickcore.MagickFalse:
             raise RuntimeError("Unable to delete %s" % key)
         
-IF MAGICKLIBVERSION > 686:
+IF MAGICKLIBVERSION >= 657:
     cdef class Artifacts(Properties):
     
         def iterkeys(self):
@@ -520,10 +520,23 @@ IF MAGICKLIBVERSION > 686:
                 yield prop
     
         def __getitem__(self, bytes key):
-            return self.image.thisptr.artifact(key) or None
+            cdef const magickcore.Image *ptr = self.image.thisptr.constImage()            
+            cdef const char* value = magickcore.GetImageArtifact(ptr, key)
+            
+            if not value is NULL:
+                return value
+            return None
+
         
         def __setitem__(self, bytes key, bytes value):
-            self.image.thisptr.artifact(key, value)
+            cdef magickcore.MagickBooleanType result
+            self.image.thisptr.modifyImage()
+            cdef magickcore.Image *ptr = self.image.thisptr.image()
+            
+            result = magickcore.SetImageArtifact(ptr, key, value)
+            
+            if result == magickcore.MagickFalse:
+                raise ValueError("Failed to set %s = %s" % (key, value))
             
         def __delitem__(self, bytes key):
             cdef magickcore.MagickBooleanType result
