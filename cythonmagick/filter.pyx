@@ -28,9 +28,12 @@ lanczossharp = filter.LanczosSharpFilter,
 lanczos2 = filter.Lanczos2Filter,
 lanczos2sharp = filter.Lanczos2SharpFilter,
 robidoux = filter.RobidouxFilter,
-robidouxsharp = filter.RobidouxSharpFilter,
-cosine = filter.CosineFilter,
-spline = filter.SplineFilter,
-lanczosradius = filter.LanczosRadiusFilter,
-#sentinel = filter.SentinelFilter,
+
 )
+
+IF MAGICKLIBVERSION > 686:
+    FilterTypes['robidouxsharp'] = filter.RobidouxSharpFilter
+    FilterTypes['cosine'] = filter.CosineFilter
+    FilterTypes['spline'] = filter.SplineFilter
+    FilterTypes['lanczosradius'] = filter.LanczosRadiusFilter
+    #FilterTypes['sentinel'] = filter.SentinelFilter

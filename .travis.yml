@@ -4,25 +4,16 @@ python:
     - "2.7"
     - "2.6"
 env:
-    - LD_LIBRARY_PATH=/usr/local/lib
+    - LD_LIBRARY_PATH=/usr/local/lib MAGICKVERSION=latest
+    - MAGICKVERSION=current
 
 before_install:
-    - sudo apt-get update -qq
-    - sudo apt-get build-dep imagemagick --fix-missing
-    - wget http://www.imagemagick.org/download/ImageMagick.tar.gz
-    - mkdir ImageMagick
-    - tar -xf ImageMagick.tar.gz -C ImageMagick --strip-components=1
-    - cd ImageMagick
-    - ./configure --enable-hdri --without-lcms2 --without-lcms 
-    - make
-    - sudo make install
-    - cd ..
-
-# Install build requirements.
-install:
+    - scripts/test-setup.sh
     - pip install cython
     - pip install futures
 
-script:
+install:
     - make install
+
+script:
     - nosetests -v -s

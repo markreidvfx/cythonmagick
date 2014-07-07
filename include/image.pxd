@@ -59,15 +59,15 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         string attribute(const string) except +
         void artifact(const string, const string) except +
         string artifact(const string) except +
-        void defineSet(const string& magick,  const string &key, bool flag)
-        bool defineSet(const string& magick,  const string &key)
-        void defineValue(const string &magick,const string &key, const string &value)
-        string defineValue(const string &magick,const string &key)
+        void defineSet(const string& magick,  const string &key, bool flag) except +
+        bool defineSet(const string& magick,  const string &key) except +
+        void defineValue(const string &magick,const string &key, const string &value) except +
+        string defineValue(const string &magick,const string &key) except +
         void backgroundColor(const const Color&) except +
         Color backgroundColor() except +
         void colorSpace(ColorspaceType) except +
-        ColorspaceType colorSpace() nogil
-        void compressType(CompressionType)
+        ColorspaceType colorSpace() except +
+        void compressType(CompressionType) except +
         CompressionType compressType() except +
         void debug(bool) except +
         bool debug() except +

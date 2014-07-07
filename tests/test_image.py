@@ -95,6 +95,8 @@ class TestImage(common.TestCase):
         ColorspaceTypes = dict(cythonmagick.ColorspaceTypes)
         
         del ColorspaceTypes['transparent']
+        del ColorspaceTypes['undefined']
+        del ColorspaceTypes['gray']
         
         for c in ColorspaceTypes.keys():
             
@@ -444,6 +446,10 @@ class TestImage(common.TestCase):
         
     def test_artifacts(self):
         i = cythonmagick.Image(common.get_test_image("eyeball.jpg"))
+        
+        if not hasattr(i, 'artifacts'):
+            print 'image has not artifacts attr'
+            return
         
         i.artifacts['something'] = '21'
         
