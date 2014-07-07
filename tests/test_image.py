@@ -8,7 +8,7 @@ import common
 import random
 import array
 
-class TestImage(unittest.TestCase):
+class TestImage(common.TestCase):
     
     def setUp(self):
         cythonmagick.initialize()

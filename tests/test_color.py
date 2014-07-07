@@ -6,7 +6,7 @@ import cythonmagick
 
 import common
 
-class TestColor(unittest.TestCase):
+class TestColor(common.TestCase):
     
     def setUp(self):
         cythonmagick.initialize()

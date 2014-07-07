@@ -1,6 +1,7 @@
 
 import os
-
+import unittest
+import nose.tools
 
 def get_test_image(name):
     
@@ -22,4 +23,23 @@ def output_test_image(name):
         os.remove(out_file)
         
     return out_file
+
+class AssertRaisesContext(object):
+    def __init__(self, expected):
+        self.expected = expected
+
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, exc_type, exc_val, tb):
+        self.exception = exc_val
+        nose.tools.assert_equal(exc_type, self.expected)
+        # if you get to this line, the last assertion must have passed
+        # suppress the propagation of this exception
+        return True
+
+class TestCase(unittest.TestCase):
+    
+    def assertRaises(self, exc_type):
+        return AssertRaisesContext(exc_type) 
     

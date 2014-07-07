@@ -6,7 +6,7 @@ import cythonmagick
 
 import common
 
-class TestGeometry(unittest.TestCase):
+class TestGeometry(common.TestCase):
         
     def setUp(self):
         cythonmagick.initialize()
