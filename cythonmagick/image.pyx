@@ -4,6 +4,8 @@ from libcpp cimport bool
 from cython.operator cimport dereference as deref
 
 cimport cython
+from cython.view cimport array as cvarray
+
 from cpython cimport PyBuffer_FillInfo
 from libc.stdlib cimport malloc, free
 
@@ -140,6 +142,67 @@ cdef class Image(object):
         
         with nogil:
             self.thisptr.read(width, height, _pix_fmt, _dtype, &view[0])
+    
+    @cython.boundscheck(False)  
+    @cython.wraparound(False)       
+    def from_YCbCr444_rawbuffer(self, const unsigned char[::1] y_view,
+                                      const unsigned char[::1] cb_view,
+                                      const unsigned char[::1] cr_view,
+                                      size_t width, size_t height):
+        
+        buffer_len = width * height * sizeof(unsigned short)
+        assert len(y_view) == buffer_len
+        assert len(cb_view) == buffer_len
+        assert len(cr_view) == buffer_len
+        
+        cdef unsigned short *y_ptr = <unsigned short *> &y_view[0]
+        cdef unsigned short *cb_ptr = <unsigned short *> &cb_view[0]
+        cdef unsigned short *cr_ptr = <unsigned short *> &cr_view[0]
+        
+
+        cdef int p = 0
+        
+        cdef double Y = 0
+        cdef double Cb = 0
+        cdef double Cr = 0
+        
+        cdef double R = 0
+        cdef double G = 0
+        cdef double B = 0
+        
+        cdef string pix_fmt = 'rgb'
+
+        cdef size_t length = width*height*3 * sizeof(double)
+        cdef double *data = <double *> malloc(length)
+        if data is NULL:
+            raise MemoryError()
+
+        try:
+            with nogil:
+                
+                for i in xrange(width*height):
+
+                    Y =  (y_ptr[i]  / 65535.0) * 256.0 # why does this need to be 256 ? this makes it match output from nuke
+                    Cb = (cb_ptr[i] / 65535.0) * 256.0
+                    Cr = (cr_ptr[i] / 65535.0) * 256.0
+
+                    # ITU.BT-709 0.0 - 255.0 range
+                    R = ( (1.164 *(Y-16.0)) + (1.793 * (Cr - 128.0) ) ) / 255.0
+                    G = ( (1.164 *(Y-16.0)) - (0.534 * (Cr - 128.0) ) - (0.213 * (Cb - 128.0) ) ) / 255.0
+                    B = ( (1.164 *(Y-16.0)) + (2.115 * (Cb - 128.0) ) ) / 255.0
+                    
+                    data[p] = R
+                    p+= 1
+                    data[p] = G
+                    p+= 1
+                    data[p] = B
+                    p+= 1
+
+                self.thisptr.read(width, height, pix_fmt, imagetype.DoublePixel, data)
+        finally:
+            free(data)
+
+        
             
     @cython.boundscheck(False)  
     @cython.wraparound(False) 

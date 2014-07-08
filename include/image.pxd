@@ -23,6 +23,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         Image(string) except +
         Image(const Geometry&, Color&) except +
         Image(Blob&) except +
+        Image(Blob&, Geometry &size, size_t depth, string &magick) except +
         Image(size_t width, size_t height, string map, StorageType type, void *pixels) except +
         
         #Image Image Manipulation Methods
@@ -46,6 +47,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         void haldClut(Image&) except +
         void read(const string) except +
         void read(Blob&) except +
+        void read(Blob&, Geometry &size, size_t depth, string &magick)
         void read(size_t width, size_t height, string map, StorageType type, void *pixels) except +
         void resize(const Geometry&) except +
         void rotate(const double) except +
