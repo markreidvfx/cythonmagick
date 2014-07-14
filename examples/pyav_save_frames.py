@@ -1,5 +1,5 @@
 """
-messy example of how to use PyAV to extract frames and pass them to cyhtonmagick
+messy example of how to use PyAV to extract frames and pass them to cythonmagick
 """
 
 import os
