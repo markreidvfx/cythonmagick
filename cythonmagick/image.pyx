@@ -552,8 +552,14 @@ cdef class Attributes(Properties):
             yield prop
 
     def __getitem__(self, bytes key):
-        return self.image.thisptr.attribute(key) or None
-    
+        #return self.image.thisptr.attribute(key) or None
+        cdef const magickcore.Image *ptr = self.image.thisptr.constImage()            
+        cdef const char* value = magickcore.GetImageProperty(ptr, key)
+        
+        if not value is NULL:
+            return value
+        return None
+
     def __setitem__(self, bytes key, bytes value):
         self.image.thisptr.attribute(key, value)
     
