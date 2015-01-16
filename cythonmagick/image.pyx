@@ -254,7 +254,7 @@ cdef class Image(object):
             
         return result
             
-    def composite(self, Image image, string compose = "in", offset=None, gravity=None):
+    def composite(self, Image image, string compose = "over", offset=None, gravity=None):
         
         """Compose an image onto the current image using the composition algorithm specified by compose.
         The CompositeOperators available in cythonmagick.CompositeOperators.keys().
@@ -391,17 +391,40 @@ cdef class Image(object):
             return self.size().height
 
     property background:
-    
+
         """Image background color
         """
-    
+
         def __get__(self):
             color = self.thisptr.backgroundColor()
             return toColor(color)
         def __set__(self, color):
             c = to_magickColor(color)
             self.thisptr.backgroundColor(c) 
-            
+
+    property bounding_box:
+
+        """ smallest bounding box enclosing non-border pixels
+        """
+
+        def __get__(self):
+            cdef magickGeometry geo
+            with nogil:
+                geo = self.thisptr.boundingBox()
+            return toGeometry(geo)
+
+    property border:
+
+        """Image border color
+        """
+
+        def __get__(self):
+            color = self.thisptr.borderColor()
+            return toColor(color)
+
+        def __set__(self, color):
+            c = to_magickColor(color)
+
     property colorspace:
     
         """The colorspace (e.g. log) used to represent the image pixel colors.
@@ -464,6 +487,17 @@ cdef class Image(object):
             cdef magickFilterType value = FilterTypes[filter.lower()]
             self.thisptr.filterType(value)
             
+    property fuzz:
+
+        """Colors within this distance are considered equal. A number of algorithms search for a target  color.
+        By default the color must be exact. Use this option to match colors that are close to the target color in RGB space.
+        """
+
+        def __get__(self):
+            return self.thisptr.colorFuzz()
+        def __set__(self, double value):
+            self.thisptr.colorFuzz(value)
+
     property magick:
     
         """image format (e.g. "GIF")
@@ -478,7 +512,21 @@ cdef class Image(object):
                     self.thisptr.magick(magick)
             else:
                 raise ValueError("%s format is not supported" % magick)
-            
+
+    property page:
+
+        """Preferred size and location of an image canvas.
+        """
+
+        def __get__(self):
+            geo = self.thisptr.page()
+            return toGeometry(geo)
+
+        def __set__(self, value):
+            cdef magickGeometry geo = to_magickGeometry(value)
+            with nogil:
+                self.thisptr.page(geo)
+
     property quality:
     
         """JPEG/MIFF/PNG compression level (default 75).
@@ -499,7 +547,7 @@ cdef class Image(object):
         def __set__(self,string imagetype):
             cdef magickImageType value = ImageTypes[imagetype.lower()]
             self.thisptr.type(value)
-            
+
     property verbose:
         
         """Print detailed information about the image

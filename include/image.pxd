@@ -31,7 +31,8 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         void composite(Image&,
                        ssize_t, #xOffset_
                        ssize_t, #yOffset_
-                       CompositeOperator) nogil
+                       CompositeOperator)
+        Geometry boundingBox()  except +
         void composite(Image&, Geometry, CompositeOperator) except +
         void composite(Image&, GravityType, CompositeOperator) except +
         void crop(Geometry&) except +
@@ -67,6 +68,10 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         string defineValue(const string &magick,const string &key) except +
         void backgroundColor(const const Color&) except +
         Color backgroundColor() except +
+        void borderColor(const const Color&) except +
+        Color borderColor() except +
+        void colorFuzz(double fuzz_) except +
+        double colorFuzz() except +
         void colorSpace(ColorspaceType) except +
         ColorspaceType colorSpace() except +
         void compressType(CompressionType) except +
@@ -79,6 +84,8 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         const FilterType filterType() except +
         void magick(const string&) except +
         string magick()  except +
+        void page(Geometry &pageSize_) except +
+        Geometry page()  except +
         void quality(size_t) except +
         size_t quality() except +
         void quantize() except +
