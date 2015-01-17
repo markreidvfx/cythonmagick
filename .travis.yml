@@ -4,7 +4,7 @@ python:
     - "2.7"
     - "2.6"
 env:
-    - LD_LIBRARY_PATH=/usr/local/lib MAGICKVERSION=latest
+    - LD_LIBRARY_PATH=/usr/local/lib MAGICKVERSION=6.8.9-10
     - MAGICKVERSION=current
 
 before_install:
