@@ -33,6 +33,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
                        ssize_t, #yOffset_
                        CompositeOperator)
         Geometry boundingBox()  except +
+        void annotate(const string, Geometry &boundingArea_, GravityType gravity_, double degrees) except +
         void composite(Image&, Geometry, CompositeOperator) except +
         void composite(Image&, GravityType, CompositeOperator) except +
         void crop(Geometry&) except +
@@ -70,6 +71,8 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         Color backgroundColor() except +
         void borderColor(const const Color&) except +
         Color borderColor() except +
+        void boxColor(const const Color&) except +
+        Color boxColor() except +       
         void colorFuzz(double fuzz_) except +
         double colorFuzz() except +
         void colorSpace(ColorspaceType) except +
@@ -82,6 +85,8 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         size_t depth() except +
         void filterType(const FilterType) except +
         const FilterType filterType() except +
+        void fontPointsize(size_t pointSize_ ) except +
+        size_t fontPointsize() except +
         void magick(const string&) except +
         string magick()  except +
         void page(Geometry &pageSize_) except +

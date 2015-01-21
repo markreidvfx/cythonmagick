@@ -239,6 +239,22 @@ cdef class Image(object):
             
     ##Image Image Manipulation Methods
     
+    def annotate(self, string text, bounding_area=None, gravity = "center", double rotation =0):
+        
+        cdef magickGeometry bounding_geo
+        cdef magickGravityType gravity_type
+        
+        if bounding_area:
+            bounding_geo = to_magickGeometry(bounding_area)
+        else:
+            bounding_geo = self.thisptr.size()
+        
+        gravity_type = GravityTypes[gravity.lower()]
+        
+        with nogil:
+            self.thisptr. annotate(text, bounding_geo, gravity_type, rotation)
+        
+    
     def compare(self, Image image):
         
         """Compare current image with another image.
@@ -424,6 +440,7 @@ cdef class Image(object):
 
         def __set__(self, color):
             c = to_magickColor(color)
+            self.thisptr.borderColor(c) 
 
     property colorspace:
     
@@ -497,6 +514,28 @@ cdef class Image(object):
             return self.thisptr.colorFuzz()
         def __set__(self, double value):
             self.thisptr.colorFuzz(value)
+            
+    property box_color:
+        
+        """Base color that annotation text is rendered on.
+        """
+        
+        def __get__(self):
+            color = self.thisptr.boxColor()
+            return toColor(color)
+        def __set__(self, color):
+            c = to_magickColor(color)
+            self.thisptr.boxColor(c) 
+            
+    property font_point_size:
+        
+        """text rendering font point size
+        """
+        
+        def __get__(self):
+            return self.thisptr.fontPointsize()
+        def __set__(self, size_t value):
+            self.thisptr.fontPointsize(value)            
 
     property magick:
     
