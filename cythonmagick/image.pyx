@@ -358,8 +358,12 @@ cdef class Image(object):
         
         with nogil:
             self.thisptr.haldClut(image.thisptr)
+
+    def negate(self, bool grayscale = False):
         
-            
+        with nogil:
+            self.thisptr.negate(grayscale)
+
     def resize(self, size):
         
         """Resize image to specified size.

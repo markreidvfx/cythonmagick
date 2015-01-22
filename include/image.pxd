@@ -47,6 +47,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         void gamma(double) except +
         void gamma(double, double, double) except +
         void haldClut(Image&) except +
+        void negate(bool grayscale) except +
         void read(const string) except +
         void read(Blob&) except +
         void read(Blob&, Geometry &size, size_t depth, string &magick)
