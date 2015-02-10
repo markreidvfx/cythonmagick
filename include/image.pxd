@@ -14,8 +14,9 @@ from composite cimport CompositeOperator
 from imagetype cimport StorageType 
 cimport magickcore
 
-cdef extern from "Magick++/Include.h" namespace "MagickCore":
+cdef extern from "Magick++/Include.h" namespace "MagickCore" nogil:
     cdef void InitializeMagick(const char*)
+    ctypedef struct PixelPacket
 
 cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
     cdef cppclass Image:
@@ -106,3 +107,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         magickcore.Image* image() except +
         const magickcore.Image* constImage() except +
         void modifyImage() except +
+
+        # Pixels
+
+        const PixelPacket* getConstPixels(ssize_t x_, ssize_t y_, size_t columns_, size_t rows_) except +

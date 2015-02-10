@@ -11,8 +11,10 @@ from libc.stdlib cimport malloc, free
 
 from image cimport Image as magickImage
 from image cimport InitializeMagick
+from image cimport PixelPacket as magickPixelPacket
 from geometry cimport Geometry as magickGeometry
 from color cimport Color as magickColor
+from color cimport  ColorRGB as magickColorRGB
 from blob cimport Blob as magickBlob
 from coderinfo cimport CoderInfo as magickCoderInfo
 
@@ -202,8 +204,61 @@ cdef class Image(object):
         finally:
             free(data)
 
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    def into_YCbCr444p16_buffer(self, const unsigned char[::1] y_view,
+                                      const unsigned char[::1] cb_view,
+                                      const unsigned char[::1] cr_view):
+
+        cdef size_t width = self.width
+        cdef size_t height = self.height
+
+        cdef int i = 0
+        cdef const magickPixelPacket *pixels = NULL
+        cdef magickColorRGB color
+
+        cdef double Y = 0
+        cdef double Cb = 0
+        cdef double Cr = 0
+
+        cdef double R = 0
+        cdef double G = 0
+        cdef double B = 0
+
+        cdef double Kb = 0.0722
+        cdef double Kr = 0.2126
+
+        buffer_len = width * height * sizeof(unsigned short)
+        assert len(y_view) == buffer_len
+        assert len(cb_view) == buffer_len
+        assert len(cr_view) == buffer_len
         
-            
+        cdef unsigned short *y_ptr = <unsigned short *> &y_view[0]
+        cdef unsigned short *cb_ptr = <unsigned short *> &cb_view[0]
+        cdef unsigned short *cr_ptr = <unsigned short *> &cr_view[0]
+
+        with nogil:
+            pixels = self.thisptr.getConstPixels(0, 0, width, height)
+
+            for i in range(width*height):
+                color = <magickColorRGB>pixels[i]
+                R = color.red()
+                G = color.green()
+                B = color.blue()
+
+                Y = (Kr * R) + ((1-Kr-Kb) * G) + (Kb * B)
+                Cb = 0.5 + (0.5 * ( (B-Y)/(1-Kb) ) )
+                Cr = 0.5 + (0.5 * ( (R-Y)/(1-Kr) ) )
+
+                # Scaling
+                Y  = (16.0/256.0 + (Y  * (235.0 - 16.0)/256.0))
+                Cb = (16.0/256.0 + (Cb * (240.0 - 16.0)/256.0))
+                Cr = (16.0/256.0 + (Cr * (240.0 - 16.0)/256.0))
+
+                y_ptr[i] = <unsigned short> (Y * 65535.0)
+                cb_ptr[i] = <unsigned short> (Cb * 65535.0)
+                cr_ptr[i] = <unsigned short> (Cr * 65535.0)
+
     @cython.boundscheck(False)  
     @cython.wraparound(False) 
     def into_rawbuffer(self, const unsigned char[::1] view,
