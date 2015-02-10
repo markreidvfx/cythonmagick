@@ -8,7 +8,9 @@ cdef extern from "Magick++/Include.h" namespace "Magick":
         LogColorspace
         OHTAColorspace
         Rec601LumaColorspace
+        Rec601YCbCrColorspace
         Rec709LumaColorspace
+        Rec709YCbCrColorspace
         RGBColorspace
         sRGBColorspace
         TransparentColorspace
