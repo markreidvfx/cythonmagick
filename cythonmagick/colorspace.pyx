@@ -19,6 +19,7 @@ ycc = colorspace.YCCColorspace,
 yiq = colorspace.YIQColorspace,
 ypbpr = colorspace.YPbPrColorspace,
 yuv = colorspace.YUVColorspace,
-rec601ycbcr = colorspace.Rec601YCbCrColorspace,
-rec709ycbcr = colorspace.Rec709YCbCrColorspace,
 )
+IF MAGICKLIBVERSION >= 657:
+    ColorspaceTypes['rec601ycbcr'] = colorspace.Rec601YCbCrColorspace
+    ColorspaceTypes['rec709ycbcr'] = colorspace.Rec709YCbCrColorspace
