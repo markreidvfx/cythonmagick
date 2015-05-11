@@ -61,6 +61,8 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
 
         
         #Image Attributes
+        void adjoin(bool flag_) except +
+        bool adjoin() except +
         void attribute(const string, const string) except +
         string attribute(const string) except +
         void artifact(const string, const string) except +

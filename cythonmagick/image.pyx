@@ -465,6 +465,13 @@ cdef class Image(object):
         def __get__(self):
             return self.size().height
 
+    property adjoin:
+        def __get__(self):
+            return self.thisptr.adjoin()
+
+        def __set__(self, bool value):
+            self.thisptr.adjoin(value)
+
     property background:
 
         """Image background color
