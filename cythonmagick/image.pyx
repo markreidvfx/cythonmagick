@@ -1,6 +1,7 @@
 
 from libcpp.string cimport string
 from libcpp cimport bool
+from libcpp.list cimport list as cpplist
 from cython.operator cimport dereference as deref
 
 cimport cython
@@ -26,6 +27,7 @@ from imagetype cimport ImageType as magickImageType
 from composite cimport CompositeOperator as magickCompositeOperator
 cimport imagetype
 cimport magickcore
+cimport stl
 
 import os
 
@@ -75,16 +77,22 @@ cdef class Blob(object):
         # has except -1, cython will raise exception for you
         PyBuffer_FillInfo(view, self, <void*>self.ptr.data(),
                           self.ptr.length(), 0, flags)
+
 cdef class Image(object):
     cdef magickImage thisptr
     def __init__(self, path = None):
         cdef string s
+        cdef Blob blob
         cdef magickGeometry geo = magickGeometry("0x0")
         color = to_magickColor("black")
-        if path:
+        if isinstance(path, str):
             s = path
             with nogil:
                 self.thisptr = magickImage(s)
+        elif isinstance(path, Blob):
+            blob = path
+            with nogil:
+                self.thisptr = magickImage(blob.ptr)
         else:
             with nogil:
                 self.thisptr = magickImage(geo,color)
@@ -770,3 +778,14 @@ IF MAGICKLIBVERSION >= 657:
             
             if result == magickcore.MagickFalse:
                 raise RuntimeError("Unable to delete %s" % key)
+
+def write_images(images, string dest, bool adjoin=True):
+
+    cdef cpplist[magickImage] image_list;
+    cdef Image image;
+    cdef Blob blob = Blob()
+
+    for image in images:
+        image_list.push_back(image.thisptr)
+
+    stl.writeImages[cpplist[magickImage].iterator](image_list.begin(), image_list.end(), dest, adjoin)
