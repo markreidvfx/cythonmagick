@@ -2,7 +2,7 @@
 from libcpp.string cimport string
 from libcpp cimport bool
 from libcpp.list cimport list as cpplist
-from cython.operator cimport dereference as deref
+from cython.operator cimport dereference as deref, preincrement as inc
 
 cimport cython
 from cython.view cimport array as cvarray
@@ -783,9 +783,26 @@ def write_images(images, string dest, bool adjoin=True):
 
     cdef cpplist[magickImage] image_list;
     cdef Image image;
-    cdef Blob blob = Blob()
 
     for image in images:
         image_list.push_back(image.thisptr)
 
     stl.writeImages[cpplist[magickImage].iterator](image_list.begin(), image_list.end(), dest, adjoin)
+
+def read_images(path):
+    cdef cpplist[magickImage] image_list;
+    cdef Image image;
+
+    stl.readImages[cpplist[magickImage]](&image_list, path)
+
+    images = []
+
+    cdef cpplist[magickImage].iterator it = image_list.begin()
+
+    while it != image_list.end():
+        image = Image()
+        image.thisptr = deref(it)
+        images.append(image)
+        inc(it)
+
+    return images
