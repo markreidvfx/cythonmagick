@@ -9,6 +9,7 @@ from gravity cimport GravityType
 from filter cimport FilterTypes as FilterType
 from imagetype cimport ImageType
 from blob cimport Blob
+from channel cimport ChannelType
 from color cimport Color
 from composite cimport CompositeOperator
 from imagetype cimport StorageType 
@@ -35,6 +36,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
                        CompositeOperator)
         Geometry boundingBox()  except +
         void annotate(const string, Geometry &boundingArea_, GravityType gravity_, double degrees) except +
+        void channel(const ChannelType channel_) except +
         void composite(Image&, Geometry, CompositeOperator) except +
         void composite(Image&, GravityType, CompositeOperator) except +
         void crop(Geometry&) except +

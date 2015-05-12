@@ -21,6 +21,8 @@ from coderinfo cimport CoderInfo as magickCoderInfo
 
 from gravity cimport GravityType as magickGravityType 
 from filter cimport FilterTypes as magickFilterType
+
+from channel cimport ChannelType as magickChannelType
 from compress cimport CompressionType as magickCompressionType
 from colorspace cimport ColorspaceType as magickColorspaceType
 from imagetype cimport ImageType as magickImageType
@@ -377,6 +379,13 @@ cdef class Image(object):
         
         i.thisptr = self.thisptr
         return i
+
+    def channel(self, string channel_type):
+        cdef magickChannelType channel_type_ = ChannelTypes[channel_type.lower()]
+        cdef Image copy = self.copy()
+
+        copy.thisptr.channel(channel_type_)
+        return copy
         
     def extent(self, size, string gravity = "center"):
         
