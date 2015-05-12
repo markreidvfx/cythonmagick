@@ -13,6 +13,7 @@ from channel cimport ChannelType
 from color cimport Color
 from composite cimport CompositeOperator
 from imagetype cimport StorageType 
+from imagetype cimport ClassType
 cimport magickcore
 
 cdef extern from "Magick++/Include.h" namespace "MagickCore" nogil:
@@ -78,7 +79,9 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         void borderColor(const const Color&) except +
         Color borderColor() except +
         void boxColor(const const Color&) except +
-        Color boxColor() except +       
+        Color boxColor() except +
+        ClassType classType() except +
+        void classType(ClassType class_) except +
         void colorFuzz(double fuzz_) except +
         double colorFuzz() except +
         void colorSpace(ColorspaceType) except +

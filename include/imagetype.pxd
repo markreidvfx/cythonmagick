@@ -20,3 +20,8 @@ cdef extern from "Magick++/Include.h" namespace "MagickCore":
         IntegerPixel
         FloatPixel
         DoublePixel
+
+    ctypedef enum ClassType:
+        UndefinedClass
+        DirectClass
+        PseudoClass

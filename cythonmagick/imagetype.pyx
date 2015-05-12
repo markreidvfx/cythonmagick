@@ -14,3 +14,9 @@ colorseparationmatte = imagetype.ColorSeparationMatteType,
 optimize = imagetype.OptimizeType,
 palettebilevelmatte = imagetype.PaletteBilevelMatteType,
 )
+
+ClassTypes = dict(
+undefined = imagetype.UndefinedClass,
+direct = imagetype.DirectClass,
+pseudo = imagetype.PseudoClass
+)

@@ -26,6 +26,7 @@ from channel cimport ChannelType as magickChannelType
 from compress cimport CompressionType as magickCompressionType
 from colorspace cimport ColorspaceType as magickColorspaceType
 from imagetype cimport ImageType as magickImageType
+from imagetype cimport ClassType as magickClassType
 from composite cimport CompositeOperator as magickCompositeOperator
 cimport imagetype
 cimport magickcore
@@ -658,7 +659,16 @@ cdef class Image(object):
             return self.thisptr.quality()
         def __set__(self,size_t value):
             self.thisptr.quality(value)
-            
+ 
+    property class_type:
+
+        def __get__(self):
+            return _value_lookup(ClassTypes,self.thisptr.classType())
+
+        def __set__(self, string value):
+            cdef magickClassType value_ = ClassTypes[value.lower()]
+            self.thisptr.classType(value_)
+
     property type:
     
         """Image type
