@@ -42,6 +42,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         void composite(Image&, GravityType, CompositeOperator) except +
         void crop(Geometry&) except +
         void display()
+        void erase()
         void extent(const Geometry&) except +
         void extent(const Geometry&, Color&) except +
         void extent(const Geometry&, const GravityType) except +
@@ -96,6 +97,8 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         const FilterType filterType() except +
         void fontPointsize(size_t pointSize_ ) except +
         size_t fontPointsize() except +
+        bool matte() except +
+        void matte(bool mattFlag_) except +
         void magick(const string&) except +
         string magick()  except +
         void page(Geometry &pageSize_) except +

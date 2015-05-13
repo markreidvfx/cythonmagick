@@ -381,6 +381,9 @@ cdef class Image(object):
         i.thisptr = self.thisptr
         return i
 
+    def erase(self):
+        self.thisptr.erase()
+
     def channel(self, string channel_type):
         cdef magickChannelType channel_type_ = ChannelTypes[channel_type.lower()]
         cdef Image copy = self.copy()
@@ -619,7 +622,14 @@ cdef class Image(object):
         def __get__(self):
             return self.thisptr.fontPointsize()
         def __set__(self, size_t value):
-            self.thisptr.fontPointsize(value)            
+            self.thisptr.fontPointsize(value)
+
+    property matte:
+
+        def __get__(self):
+            return self.thisptr.matte()
+        def __set__(self, bool value):
+            self.thisptr.matte(value)
 
     property magick:
     
