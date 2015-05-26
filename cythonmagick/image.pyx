@@ -467,6 +467,9 @@ cdef class Image(object):
         geo = self.thisptr.size()
         return toGeometry(geo)
     
+    def strip(self):
+        self.thisptr.strip()
+
     property attributes:
         def __get__(self):
             cdef Attributes attributes = Attributes.__new__(Attributes, self)
