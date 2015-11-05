@@ -440,6 +440,10 @@ cdef class Image(object):
         with nogil:
             self.thisptr.negate(grayscale)
 
+    def clamp(self):
+        with nogil:
+            self.thisptr.clamp()
+
     def resize(self, size):
         
         """Resize image to specified size.
