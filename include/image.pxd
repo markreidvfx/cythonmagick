@@ -12,7 +12,7 @@ from blob cimport Blob
 from channel cimport ChannelType
 from color cimport Color
 from composite cimport CompositeOperator
-from imagetype cimport StorageType 
+from imagetype cimport StorageType
 from imagetype cimport ClassType
 cimport magickcore
 
@@ -28,7 +28,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         Image(Blob&) except +
         Image(Blob&, Geometry &size, size_t depth, string &magick) except +
         Image(size_t width, size_t height, string map, StorageType type, void *pixels) except +
-        
+
         #Image Image Manipulation Methods
         bool compare(Image&) except +
         void composite(Image&,
@@ -65,7 +65,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         void write(Blob*) except +
         void write(size_t x, size_t y, size_t width, size_t height, string &map, StorageType type, void *pixels) except +
 
-        
+
         #Image Attributes
         void adjoin(bool flag_) except +
         bool adjoin() except +
@@ -83,6 +83,8 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         Color borderColor() except +
         void boxColor(const const Color&) except +
         Color boxColor() except +
+        void fillColor(const const Color&) except +
+        Color fillColor() except +
         ClassType classType() except +
         void classType(ClassType class_) except +
         void colorFuzz(double fuzz_) except +
@@ -115,7 +117,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         const Geometry size() except +
         void verbose(bool) except +
         bool verbose() except +
-        
+
         magickcore.Image* image() except +
         const magickcore.Image* constImage() except +
         void modifyImage() except +
