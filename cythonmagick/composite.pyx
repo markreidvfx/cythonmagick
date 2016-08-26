@@ -66,7 +66,6 @@ mathematics = composite.MathematicsCompositeOp,
 dividesrc = composite.DivideSrcCompositeOp,
 minussrc = composite.MinusSrcCompositeOp,
 darkenintensity = composite.DarkenIntensityCompositeOp,
-lighten = composite.LightenIntensityCompositeOp,
 )
 
 CompositeOperators["none"] = composite.NoCompositeOp
