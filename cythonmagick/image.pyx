@@ -474,6 +474,13 @@ cdef class Image(object):
     def strip(self):
         self.thisptr.strip()
 
+    def fx(self, string expression, string channel = "default"):
+        """Applies a mathematical expression to the image
+        """
+        cdef magickChannelType channel_type = ChannelTypes[channel.lower()]
+        with nogil:
+            self.thisptr.fx(expression, channel_type)
+
     property attributes:
         def __get__(self):
             cdef Attributes attributes = Attributes.__new__(Attributes, self)
@@ -630,7 +637,7 @@ cdef class Image(object):
             return toColor(color)
         def __set__(self, color):
             c = to_magickColor(color)
-            self.thisptr.fillColor(c) 
+            self.thisptr.fillColor(c)
 
     property font_point_size:
 

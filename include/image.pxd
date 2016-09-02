@@ -49,6 +49,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         void extent(const Geometry&, Color&, const GravityType) except +
         void flip() except +
         void flop() except +
+        void fx(string expression, ChannelType channel) except +
         void gamma(double) except +
         void gamma(double, double, double) except +
         void haldClut(Image&) except +
