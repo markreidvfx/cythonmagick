@@ -32,3 +32,25 @@ cdef extern from "Magick++/Include.h" namespace "MagickCore":
         SplineFilter
         LanczosRadiusFilter
         SentinelFilter
+
+    ctypedef enum DistortImageMethod:
+        UndefinedDistortion
+        AffineDistortion
+        AffineProjectionDistortion
+        ScaleRotateTranslateDistortion
+        PerspectiveDistortion
+        PerspectiveProjectionDistortion
+        BilinearForwardDistortion
+        BilinearDistortion
+        BilinearReverseDistortion
+        PolynomialDistortion
+        ArcDistortion
+        PolarDistortion
+        DePolarDistortion
+        Cylinder2PlaneDistortion
+        Plane2CylinderDistortion
+        BarrelDistortion
+        BarrelInverseDistortion
+        ShepardsDistortion
+        ResizeDistortion
+        SentinelDistortion

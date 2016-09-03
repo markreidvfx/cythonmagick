@@ -28,7 +28,29 @@ lanczossharp = filter.LanczosSharpFilter,
 lanczos2 = filter.Lanczos2Filter,
 lanczos2sharp = filter.Lanczos2SharpFilter,
 robidoux = filter.RobidouxFilter,
+)
 
+DistortImageMethods = dict(
+undefined = filter.UndefinedDistortion,
+affine = filter.AffineDistortion,
+affineprojection = filter.AffineProjectionDistortion,
+scalerotatetranslate = filter.ScaleRotateTranslateDistortion,
+perspective = filter.PerspectiveDistortion,
+perspectiveprojection = filter.PerspectiveProjectionDistortion,
+bilinearforward = filter.BilinearForwardDistortion,
+bilinear = filter.BilinearDistortion,
+bilinearreverse = filter.BilinearReverseDistortion,
+polynomial = filter.PolynomialDistortion,
+arc = filter.ArcDistortion,
+polar = filter.PolarDistortion,
+depolar = filter.DePolarDistortion,
+cylinder2plane = filter.Cylinder2PlaneDistortion,
+plane2cylinder = filter.Plane2CylinderDistortion,
+barrel = filter.BarrelDistortion,
+barrelinverse = filter.BarrelInverseDistortion,
+shepards = filter.ShepardsDistortion,
+resize = filter.ResizeDistortion,
+sentinel = filter.SentinelDistortion,
 )
 
 IF MAGICKLIBVERSION > 686:

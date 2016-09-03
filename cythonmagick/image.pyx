@@ -454,6 +454,24 @@ cdef class Image(object):
         with nogil:
             self.thisptr.resize(geo)
 
+    def distort(self, string distort_method, args, bool bestfit=False):
+        cdef filter.DistortImageMethod method = DistortImageMethods[distort_method.lower()]
+
+        cdef list arg_list = list(args)
+        cdef size_t nb_args = len(arg_list)
+        cdef double[:] double_list = cvarray(shape=(len(arg_list),),
+                                             itemsize=sizeof(double), format="d")
+        for i, item in enumerate(arg_list):
+            double_list[i] = item
+
+        with nogil:
+            self.thisptr.distort(method, nb_args, &double_list[0], bestfit)
+
+    def scale(self, size):
+        cdef magickGeometry geo = to_magickGeometry(size)
+        with nogil:
+            self.thisptr.scale(geo)
+
     def rotate(self,double degrees):
 
         """Rotate image counter-clockwise by specified number of degrees.

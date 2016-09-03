@@ -7,6 +7,7 @@ from colorspace cimport ColorspaceType
 from compress cimport CompressionType
 from gravity cimport GravityType
 from filter cimport FilterTypes as FilterType
+from filter cimport DistortImageMethod
 from imagetype cimport ImageType
 from blob cimport Blob
 from channel cimport ChannelType
@@ -59,6 +60,8 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         void read(Blob&, Geometry &size, size_t depth, string &magick)
         void read(size_t width, size_t height, string map, StorageType type, void *pixels) except +
         void resize(const Geometry&) except +
+        void scale(const Geometry&) except +
+        void distort(DistortImageMethod method_, size_t number_arguments_, double *arguments_,  bool bestfit_) except +
         void rotate(const double) except +
         void strip() except +
         void clamp() except +
