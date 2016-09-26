@@ -109,6 +109,8 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         string font() except +
         void fontPointsize(size_t pointSize_ ) except +
         size_t fontPointsize() except +
+        GravityType textGravity() except +
+        void textGravity(GravityType) except +
         bool matte() except +
         void matte(bool mattFlag_) except +
         void magick(const string&) except +

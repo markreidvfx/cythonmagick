@@ -696,6 +696,16 @@ cdef class Image(object):
         def __set__(self, size_t value):
             self.thisptr.fontPointsize(value)
 
+    property text_gravity:
+        def __get__(self):
+            cdef magickGravityType g = self.thisptr.textGravity()
+            for key, value in GravityTypes.items():
+                if value == g:
+                    return key
+        def __set__(self, value):
+            cdef  magickGravityType g = GravityTypes[value.lower()]
+            self.thisptr.textGravity(g)
+
     property matte:
 
         def __get__(self):
