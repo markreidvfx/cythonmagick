@@ -10,6 +10,7 @@ from cython.view cimport array as cvarray
 from cpython cimport PyBuffer_FillInfo
 from libc.stdlib cimport malloc, free
 
+cimport image as magick
 from image cimport Image as magickImage
 from image cimport InitializeMagick
 from image cimport PixelPacket as magickPixelPacket
@@ -83,22 +84,33 @@ cdef class Blob(object):
 
 cdef class Image(object):
     cdef magickImage thisptr
-    def __init__(self, path = None):
+    def __init__(self, path = None, size=None, color=None):
         cdef string s
         cdef Blob blob
-        cdef magickGeometry geo = magickGeometry("0x0")
-        color = to_magickColor("black")
+        cdef magickGeometry geo
+        cdef magickColorRGB _color
+        if size:
+            geo =to_magickGeometry(size)
+        else:
+            geo = magickGeometry("0x0")
+
+        if color:
+            c = to_magickColor(color)
+        else:
+            c = to_magickColor("black")
+
         if isinstance(path, str):
             s = path
             with nogil:
                 self.thisptr = magickImage(s)
+
         elif isinstance(path, Blob):
             blob = path
             with nogil:
                 self.thisptr = magickImage(blob.ptr)
         else:
             with nogil:
-                self.thisptr = magickImage(geo,color)
+                self.thisptr = magickImage(geo, c)
 
     def fromstring(self, bytes data):
 
@@ -289,6 +301,9 @@ cdef class Image(object):
         with nogil:
             self.thisptr.write(x,y , width, height, _pix_fmt, _dtype, <void *> &view[0])
 
+    def read(self, string path):
+        with nogil:
+            self.thisptr.read(path)
 
     def write(self, bytes path):
 
@@ -608,6 +623,14 @@ cdef class Image(object):
         def __set__(self,int depth):
             self.thisptr.depth(depth)
 
+    property density:
+        def __get__(self):
+            return toGeometry(self.thisptr.density())
+        def __set__(self, value):
+            cdef magickGeometry geo = to_magickGeometry(value)
+            with nogil:
+                self.thisptr.density(geo)
+
     property filter:
 
         """Filter to use when resizing image.
@@ -656,6 +679,12 @@ cdef class Image(object):
         def __set__(self, color):
             c = to_magickColor(color)
             self.thisptr.fillColor(c)
+
+    property font:
+        def __get__(self):
+            return self.thisptr.font()
+        def __set__(self, string value):
+            self.thisptr.font(value)
 
     property font_point_size:
 

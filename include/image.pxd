@@ -101,8 +101,12 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         bool debug() except +
         void depth(const size_t) except +
         size_t depth() except +
+        void density(Geometry) except +
+        Geometry density() except +
         void filterType(const FilterType) except +
         const FilterType filterType() except +
+        void font(string) except +
+        string font() except +
         void fontPointsize(size_t pointSize_ ) except +
         size_t fontPointsize() except +
         bool matte() except +
