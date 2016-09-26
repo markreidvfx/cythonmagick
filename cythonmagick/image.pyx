@@ -495,6 +495,18 @@ cdef class Image(object):
         with nogil:
             self.thisptr.rotate(degrees)
 
+    def set_define_value(self, string magick, string key, string value):
+        self.thisptr.defineValue(magick, key, value)
+
+    def get_define_value(self, string magick, string key):
+        return self.thisptr.defineValue(magick, key)
+
+    def set_define_flag(self, string magick, string key, bool flag):
+        self.thisptr.defineSet(magick, key, flag)
+
+    def get_define_flag(self, string magick, string key):
+        return self.thisptr.defineSet(magick, key)
+
     ##Image Attributes
 
     def size(self):
