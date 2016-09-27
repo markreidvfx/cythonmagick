@@ -1,4 +1,5 @@
-
+from libcpp.string cimport string
+cimport magickcore
 
 cdef extern from "Magick++/Drawable.h" namespace "Magick" nogil:
     cdef cppclass DrawableBase:
@@ -20,3 +21,32 @@ cdef extern from "Magick++/Drawable.h" namespace "Magick" nogil:
         DrawableRoundRectangle(double centerX_,     double centerY_,
                                double width_,       double hight_,
                                double cornerWidth_, double cornerHeight_ ) except +
+
+    cdef cppclass DrawableStrokeWidth(DrawableBase):
+        DrawableBase(double width)
+
+    cdef cppclass DrawableStrokeOpacity(DrawableBase):
+        DrawableBase(double opacity)
+
+    cdef cppclass DrawableFillOpacity(DrawableBase):
+        DrawableFillOpacity(double opacity_)
+
+    cdef cppclass DrawablePointSize(DrawableBase):
+        DrawablePointSize(double pointSize_)
+
+    cdef cppclass DrawableTextInterlineSpacing(DrawableBase):
+        DrawableTextInterlineSpacing(double spacing_)
+
+    cdef cppclass DrawableTextInterwordSpacing(DrawableBase):
+        DrawableTextInterwordSpacing(double spacing_)
+
+    cdef cppclass DrawableTextKerning(DrawableBase):
+        DrawableTextInterwordSpacing(double kerning_)
+
+    cdef cppclass DrawableFont(DrawableBase):
+        DrawableFont(string &font_)
+        DrawableFont(string &family_, magickcore.StyleType style_, unsigned int weight_, magickcore.StretchType stretch_)
+
+    cdef cppclass DrawableText(DrawableBase):
+        DrawableText(double x_, double y_, string text_)
+        DrawableText(double x_, const double y_, string &text_, string &encoding_)
