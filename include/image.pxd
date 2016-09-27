@@ -63,6 +63,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         void read(Blob&, Geometry &size, size_t depth, string &magick)
         void read(size_t width, size_t height, string map, StorageType type, void *pixels) except +
         void resize(const Geometry&) except +
+        void repage() except +
         void scale(const Geometry&) except +
         void morphology(MorphologyMethod method_, string kernel_, ssize_t iterations_) except +
         void distort(DistortImageMethod method_, size_t number_arguments_, double *arguments_,  bool bestfit_) except +

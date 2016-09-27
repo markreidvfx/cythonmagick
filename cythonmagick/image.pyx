@@ -511,6 +511,10 @@ cdef class Image(object):
         with nogil:
             self.thisptr.rotate(degrees)
 
+    def repage(self):
+        with nogil:
+            self.thisptr.repage()
+
     def set_define_value(self, string magick, string key, string value):
         self.thisptr.defineValue(magick, key, value)
 
