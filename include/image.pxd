@@ -40,6 +40,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
                        CompositeOperator)
         Geometry boundingBox()  except +
         void annotate(const string, Geometry &boundingArea_, GravityType gravity_, double degrees) except +
+        void blur(double radius_, double sigma_)
         void channel(const ChannelType channel_) except +
         void composite(Image&, Geometry, CompositeOperator) except +
         void composite(Image&, GravityType, CompositeOperator) except +

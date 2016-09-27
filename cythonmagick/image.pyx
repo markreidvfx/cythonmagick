@@ -333,8 +333,11 @@ cdef class Image(object):
         gravity_type = GravityTypes[gravity.lower()]
 
         with nogil:
-            self.thisptr. annotate(text, bounding_geo, gravity_type, rotation)
+            self.thisptr.annotate(text, bounding_geo, gravity_type, rotation)
 
+    def blur(self, double radius = 1, double sigma = 0.5):
+        with nogil:
+            self.thisptr.blur(radius, sigma)
 
     def compare(self, Image image):
 
