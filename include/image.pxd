@@ -66,6 +66,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         void distort(DistortImageMethod method_, size_t number_arguments_, double *arguments_,  bool bestfit_) except +
         void rotate(const double) except +
         void strip() except +
+        void shadow(double percent_opacity_, double sigma_, ssize_t x_, ssize_t y_) except +
         void clamp() except +
         void write(const string&) except +
         void write(Blob*) except +

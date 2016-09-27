@@ -493,6 +493,11 @@ cdef class Image(object):
         with nogil:
             self.thisptr.scale(geo)
 
+    def shadow(self, double percent_opacity = 80, double sigma = 0.5,
+                     ssize_t x = 0, ssize_t y = 0):
+        with nogil:
+            self.thisptr.shadow(percent_opacity, sigma, x, y)
+
     def rotate(self,double degrees):
 
         """Rotate image counter-clockwise by specified number of degrees.
