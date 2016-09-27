@@ -482,6 +482,12 @@ cdef class Image(object):
         with nogil:
             self.thisptr.distort(method, nb_args, &double_list[0], bestfit)
 
+    def draw(self, Drawable drawable not None):
+        if not drawable.ptr:
+            raise RuntimeError("no drawable ptr")
+        with nogil:
+            self.thisptr.draw(deref(drawable.ptr))
+
     def scale(self, size):
         cdef magickGeometry geo = to_magickGeometry(size)
         with nogil:
@@ -691,6 +697,20 @@ cdef class Image(object):
         def __set__(self, color):
             c = to_magickColor(color)
             self.thisptr.fillColor(c)
+
+    property stroke_color:
+        def __get__(self):
+            color = self.thisptr.strokeColor()
+            return toColor(color)
+        def __set__(self, color):
+            c = to_magickColor(color)
+            self.thisptr.strokeColor(c)
+
+    property stroke_width:
+        def __get__(self):
+            return self.thisptr.strokeWidth()
+        def __set__(self, double value):
+            self.thisptr.strokeWidth(value)
 
     property font:
         def __get__(self):

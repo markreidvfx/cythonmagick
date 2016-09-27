@@ -15,6 +15,7 @@ from color cimport Color
 from composite cimport CompositeOperator
 from imagetype cimport StorageType
 from imagetype cimport ClassType
+cimport drawable
 cimport magickcore
 
 cdef extern from "Magick++/Include.h" namespace "MagickCore" nogil:
@@ -43,6 +44,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         void composite(Image&, GravityType, CompositeOperator) except +
         void crop(Geometry&) except +
         void display()
+        void draw(drawable.DrawableBase&)
         void erase()
         void extent(const Geometry&) except +
         void extent(const Geometry&, Color&) except +
@@ -122,6 +124,10 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         void quantize() except +
         void quantizeColorSpace(ColorspaceType) except +
         void size(const Geometry&) except +
+        void strokeColor(Color&) except +
+        Color strokeColor() except +
+        void strokeWidth(double) except +
+        double strokeWidth() except +
         void type(ImageType) except +
         ImageType type() except +
         const Geometry size() except +
