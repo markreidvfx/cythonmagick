@@ -13,7 +13,7 @@ cdef extern from "Magick++/Include.h" namespace "MagickCore":
         ColorSeparationMatteType
         OptimizeType
         PaletteBilevelMatteType
-        
+
     ctypedef enum StorageType:
         CharPixel
         ShortPixel
@@ -25,3 +25,28 @@ cdef extern from "Magick++/Include.h" namespace "MagickCore":
         UndefinedClass
         DirectClass
         PseudoClass
+
+    ctypedef enum MorphologyMethod:
+        UndefinedMorphology
+        ConvolveMorphology
+        CorrelateMorphology
+        ErodeMorphology
+        DilateMorphology
+        ErodeIntensityMorphology
+        DilateIntensityMorphology
+        DistanceMorphology
+        OpenMorphology
+        CloseMorphology
+        OpenIntensityMorphology
+        CloseIntensityMorphology
+        SmoothMorphology
+        EdgeInMorphology
+        EdgeOutMorphology
+        EdgeMorphology
+        TopHatMorphology
+        BottomHatMorphology
+        HitAndMissMorphology
+        ThinningMorphology
+        ThickenMorphology
+        VoronoiMorphology
+        IterativeDistanceMorphology

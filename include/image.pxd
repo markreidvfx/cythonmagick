@@ -15,6 +15,7 @@ from color cimport Color
 from composite cimport CompositeOperator
 from imagetype cimport StorageType
 from imagetype cimport ClassType
+from imagetype cimport MorphologyMethod
 cimport drawable
 cimport magickcore
 
@@ -63,6 +64,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         void read(size_t width, size_t height, string map, StorageType type, void *pixels) except +
         void resize(const Geometry&) except +
         void scale(const Geometry&) except +
+        void morphology(MorphologyMethod method_, string kernel_, ssize_t iterations_) except +
         void distort(DistortImageMethod method_, size_t number_arguments_, double *arguments_,  bool bestfit_) except +
         void rotate(const double) except +
         void strip() except +

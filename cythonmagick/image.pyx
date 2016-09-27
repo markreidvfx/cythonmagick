@@ -406,6 +406,11 @@ cdef class Image(object):
         copy.thisptr.channel(channel_type_)
         return copy
 
+    def morphology(self, string method, string kernel, ssize_t iterations):
+        cdef imagetype.MorphologyMethod method_  = MorphologyMethods[method.lower()]
+        with nogil:
+             self.thisptr.morphology(method_, kernel, iterations)
+
     def extent(self, size, string gravity = "center"):
 
         """extends the image as defined by the geometry and gravity.
