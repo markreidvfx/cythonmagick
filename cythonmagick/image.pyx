@@ -409,6 +409,11 @@ cdef class Image(object):
         copy.thisptr.channel(channel_type_)
         return copy
 
+    def alpha_channel(self, alpha_type):
+        cdef imagetype.AlphaChannelType alpha_type_ = AlphaChannelTypes[alpha_type.lower()]
+        with nogil:
+            self.thisptr.alphaChannel(alpha_type_)
+
     def morphology(self, string method, string kernel, ssize_t iterations):
         cdef imagetype.MorphologyMethod method_  = MorphologyMethods[method.lower()]
         with nogil:

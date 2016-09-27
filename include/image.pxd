@@ -16,6 +16,7 @@ from composite cimport CompositeOperator
 from imagetype cimport StorageType
 from imagetype cimport ClassType
 from imagetype cimport MorphologyMethod
+from imagetype cimport AlphaChannelType
 cimport drawable
 cimport magickcore
 
@@ -40,6 +41,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
                        CompositeOperator)
         Geometry boundingBox()  except +
         void annotate(const string, Geometry &boundingArea_, GravityType gravity_, double degrees) except +
+        void alphaChannel(AlphaChannelType alphaType_) except +
         void blur(double radius_, double sigma_)
         void channel(const ChannelType channel_) except +
         void composite(Image&, Geometry, CompositeOperator) except +

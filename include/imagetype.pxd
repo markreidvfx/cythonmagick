@@ -26,6 +26,20 @@ cdef extern from "Magick++/Include.h" namespace "MagickCore":
         DirectClass
         PseudoClass
 
+    ctypedef enum AlphaChannelType:
+        UndefinedAlphaChannel
+        ActivateAlphaChannel
+        BackgroundAlphaChannel
+        CopyAlphaChannel
+        DeactivateAlphaChannel
+        ExtractAlphaChannel
+        OpaqueAlphaChannel
+        SetAlphaChannel
+        ShapeAlphaChannel
+        TransparentAlphaChannel
+        FlattenAlphaChannel
+        RemoveAlphaChannel
+
     ctypedef enum MorphologyMethod:
         UndefinedMorphology
         ConvolveMorphology

@@ -21,6 +21,21 @@ direct = imagetype.DirectClass,
 pseudo = imagetype.PseudoClass
 )
 
+AlphaChannelTypes = dict(
+undefined         = imagetype.UndefinedAlphaChannel,
+activate          = imagetype.ActivateAlphaChannel,
+background        = imagetype.BackgroundAlphaChannel,
+copy              = imagetype.CopyAlphaChannel,
+deactivate        = imagetype.DeactivateAlphaChannel,
+extract           = imagetype.ExtractAlphaChannel,
+opaque            = imagetype.OpaqueAlphaChannel,
+set               = imagetype.SetAlphaChannel,
+shape             = imagetype.ShapeAlphaChannel,
+transparent       = imagetype.TransparentAlphaChannel,
+flatten           = imagetype.FlattenAlphaChannel,
+remove            = imagetype.RemoveAlphaChannel,
+)
+
 MorphologyMethods = dict(
 undefined         = imagetype.UndefinedMorphology,
 convolve          = imagetype.ConvolveMorphology,
