@@ -966,6 +966,22 @@ IF MAGICKLIBVERSION >= 657:
             if result == magickcore.MagickFalse:
                 raise RuntimeError("Unable to delete %s" % key)
 
+def combine_images(list images not None, channel_type = "all"):
+
+    cdef cpplist[magickImage] image_list;
+
+    cdef magickChannelType channel_type_ = ChannelTypes[channel_type.lower()]
+    cdef Image image;
+
+    for image in images:
+        image_list.push_back(image.thisptr)
+
+    image = Image()
+
+    stl.combineImages[cpplist[magickImage].iterator](&image.thisptr, image_list.begin(), image_list.end(), channel_type_)
+
+    return image
+
 def write_images(images, string dest, bool adjoin=True):
 
     cdef cpplist[magickImage] image_list;
