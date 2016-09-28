@@ -511,6 +511,18 @@ cdef class Image(object):
         with nogil:
             self.thisptr.draw(draw_list)
 
+    def typemetrics(self, string text):
+        cdef TypeMetric metric = TypeMetric()
+        with nogil:
+            self.thisptr.fontTypeMetrics(text, &metric.metric)
+        return metric.to_dict()
+
+    def typemetrics_multiline(self, string text):
+        cdef TypeMetric metric = TypeMetric()
+        with nogil:
+            self.thisptr.fontTypeMetricsMultiline(text, &metric.metric)
+        return metric.to_dict()
+
     def scale(self, size):
         cdef magickGeometry geo = to_magickGeometry(size)
         with nogil:

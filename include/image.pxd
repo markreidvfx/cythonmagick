@@ -20,6 +20,7 @@ from imagetype cimport MorphologyMethod
 from imagetype cimport AlphaChannelType
 cimport drawable
 cimport magickcore
+cimport typemetric
 
 cdef extern from "Magick++/Include.h" namespace "MagickCore" nogil:
     cdef void InitializeMagick(const char*)
@@ -58,6 +59,8 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         void extent(const Geometry&, Color&, const GravityType) except +
         void flip() except +
         void flop() except +
+        void fontTypeMetrics(string &text_, typemetric.TypeMetric *metrics) except +
+        void fontTypeMetricsMultiline(string &text_, typemetric.TypeMetric *metrics) except +
         void fx(string expression, ChannelType channel) except +
         void gamma(double) except +
         void gamma(double, double, double) except +

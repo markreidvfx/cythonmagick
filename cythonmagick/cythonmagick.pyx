@@ -1,4 +1,5 @@
 include "drawable.pyx"
+include "typemetric.pyx"
 include "image.pyx"
 include "color.pyx"
 include "geometry.pyx"
