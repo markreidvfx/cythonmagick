@@ -41,3 +41,11 @@ cdef class RoundRectangle(Drawable):
         self.ptr = new drawable.DrawableRoundRectangle(center_x,     centery,
                                                        width,        hight,
                                                        corner_width, corner_height)
+cdef class StrokeWidth(Drawable):
+
+    def __init__(self, double width):
+        self.ptr = new drawable.DrawableStrokeWidth(width)
+
+cdef class StrokeOpacity(Drawable):
+    def __init__(self, double opacity):
+        self.ptr = new drawable.DrawableStrokeOpacity(opacity)

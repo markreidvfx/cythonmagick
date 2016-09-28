@@ -33,6 +33,8 @@ cimport imagetype
 cimport magickcore
 cimport stl
 
+cimport drawable as magickDrawable
+
 import os
 
 def initialize():
@@ -495,11 +497,19 @@ cdef class Image(object):
         with nogil:
             self.thisptr.distort(method, nb_args, &double_list[0], bestfit)
 
-    def draw(self, Drawable drawable not None):
-        if not drawable.ptr:
-            raise RuntimeError("no drawable ptr")
+    def draw(self, list items):
+        cdef cpplist[magickDrawable.Drawable] draw_list
+
+        cdef Drawable d
+
+        for d in items:
+            if not d.ptr:
+                raise RuntimeError("no drawable ptr")
+
+            draw_list.push_back(deref(d.ptr))
+
         with nogil:
-            self.thisptr.draw(deref(drawable.ptr))
+            self.thisptr.draw(draw_list)
 
     def scale(self, size):
         cdef magickGeometry geo = to_magickGeometry(size)

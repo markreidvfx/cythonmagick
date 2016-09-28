@@ -1,6 +1,7 @@
 
 from libcpp.string cimport string
 from libcpp cimport bool
+from libcpp.list cimport list as cpplist
 
 from geometry cimport Geometry
 from colorspace cimport ColorspaceType
@@ -48,7 +49,8 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         void composite(Image&, GravityType, CompositeOperator) except +
         void crop(Geometry&) except +
         void display()
-        void draw(drawable.DrawableBase&)
+        void draw(drawable.Drawable&)
+        void draw(cpplist[drawable.Drawable]&)
         void erase()
         void extent(const Geometry&) except +
         void extent(const Geometry&, Color&) except +

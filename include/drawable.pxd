@@ -2,7 +2,9 @@ from libcpp.string cimport string
 cimport magickcore
 
 cdef extern from "Magick++/Drawable.h" namespace "Magick" nogil:
-    cdef cppclass DrawableBase:
+    cdef cppclass Drawable:
+        pass
+    cdef cppclass DrawableBase(Drawable):
         pass
 
     cdef cppclass DrawableLine(DrawableBase):
@@ -23,10 +25,10 @@ cdef extern from "Magick++/Drawable.h" namespace "Magick" nogil:
                                double cornerWidth_, double cornerHeight_ ) except +
 
     cdef cppclass DrawableStrokeWidth(DrawableBase):
-        DrawableBase(double width)
+        DrawableStrokeWidth(double width)
 
     cdef cppclass DrawableStrokeOpacity(DrawableBase):
-        DrawableBase(double opacity)
+        DrawableStrokeOpacity(double opacity)
 
     cdef cppclass DrawableFillOpacity(DrawableBase):
         DrawableFillOpacity(double opacity_)
