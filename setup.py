@@ -6,7 +6,7 @@ import shlex
 import subprocess
 import sys
 import os
-os.environ['ARCHFLAGS'] ="-arch x86_64"
+# os.environ['ARCHFLAGS'] ="-arch x86_64"
 def cmd_output(cmd):
     p = subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
     stdout, stderr = p.communicate()
