@@ -18,6 +18,7 @@ from imagetype cimport StorageType
 from imagetype cimport ClassType
 from imagetype cimport MorphologyMethod
 from imagetype cimport AlphaChannelType
+from imagetype cimport StyleType
 cimport drawable
 cimport magickcore
 cimport typemetric
@@ -123,6 +124,12 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         string font() except +
         void fontPointsize(size_t pointSize_ ) except +
         size_t fontPointsize() except +
+        void fontFamily(string &family_) except +
+        string fontFamily() except +
+        void fontStyle(StyleType style_) except +
+        StyleType fontStyle()
+        void fontWeight(const size_t weight_) except +
+        size_t fontWeight() except +
         GravityType textGravity() except +
         void textGravity(GravityType) except +
         bool matte() except +
@@ -139,6 +146,7 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         void strokeColor(Color&) except +
         Color strokeColor() except +
         void strokeWidth(double) except +
+        void lineWidth(double lineWidth_) except +
         double strokeWidth() except +
         void type(ImageType) except +
         ImageType type() except +

@@ -61,3 +61,11 @@ thicken           = imagetype.ThickenMorphology,
 voronoi           = imagetype.VoronoiMorphology,
 iterativedistance = imagetype.IterativeDistanceMorphology,
 )
+
+StyleTypes = dict(
+undefined =  imagetype.UndefinedStyle,
+normal    =  imagetype.NormalStyle,
+italic    =  imagetype.ItalicStyle,
+oblique   =  imagetype.ObliqueStyle,
+any       =  imagetype.AnyStyle,
+)

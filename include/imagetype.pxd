@@ -64,3 +64,10 @@ cdef extern from "Magick++/Include.h" namespace "MagickCore":
         ThickenMorphology
         VoronoiMorphology
         IterativeDistanceMorphology
+
+    ctypedef enum StyleType:
+        UndefinedStyle
+        NormalStyle
+        ItalicStyle
+        ObliqueStyle
+        AnyStyle

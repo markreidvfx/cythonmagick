@@ -29,6 +29,7 @@ from colorspace cimport ColorspaceType as magickColorspaceType
 from imagetype cimport ImageType as magickImageType
 from imagetype cimport ClassType as magickClassType
 from composite cimport CompositeOperator as magickCompositeOperator
+
 cimport imagetype
 cimport magickcore
 cimport stl
@@ -755,12 +756,36 @@ cdef class Image(object):
             return self.thisptr.strokeWidth()
         def __set__(self, double value):
             self.thisptr.strokeWidth(value)
+            self.thisptr.lineWidth(value)
 
     property font:
         def __get__(self):
             return self.thisptr.font()
         def __set__(self, string value):
             self.thisptr.font(value)
+
+    property font_family:
+        def __get__(self):
+            return self.thisptr.fontFamily()
+        def __set__(self, string value):
+            self.thisptr.fontFamily(value)
+
+    property font_style:
+        def __get__(self):
+            cdef imagetype.StyleType style_type = self.thisptr.fontStyle()
+            for key, value in StyleTypes.items():
+                if value == style_type:
+                    return key
+
+        def __set__(self, string value):
+            cdef imagetype.StyleType style_type = StyleTypes[value.lower()]
+            self.thisptr.fontStyle(style_type)
+
+    property font_weight:
+        def __get__(self):
+            return self.thisptr.fontWeight()
+        def __set__(self, size_t value):
+            self.thisptr.fontWeight(value)
 
     property font_point_size:
 
