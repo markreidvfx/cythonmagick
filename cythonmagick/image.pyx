@@ -797,6 +797,26 @@ cdef class Image(object):
         def __set__(self, size_t value):
             self.thisptr.fontPointsize(value)
 
+    property text_inter_line_spacing:
+
+        def __get__(self):
+            return self.thisptr.textInterlineSpacing()
+        def __set__(self, double value):
+            self.thisptr.textInterlineSpacing(value)
+
+    property text_interword_spacing:
+        def __get__(self):
+            return self.thisptr.textInterwordSpacing()
+
+        def __set__(self, double value):
+            self.thisptr.textInterwordSpacing(value)
+
+    property text_kerning:
+        def __get__(self):
+            return self.thisptr.textKerning()
+        def __set__(self, double value):
+            self.thisptr.textKerning(value)
+
     property text_gravity:
         def __get__(self):
             cdef magickGravityType g = self.thisptr.textGravity()

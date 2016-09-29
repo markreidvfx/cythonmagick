@@ -132,6 +132,12 @@ cdef extern from "Magick++/Image.h" namespace "Magick" nogil:
         size_t fontWeight() except +
         GravityType textGravity() except +
         void textGravity(GravityType) except +
+        void textInterlineSpacing(double spacing_) except +
+        double textInterlineSpacing() except +
+        void textInterwordSpacing(double spacing_) except +
+        double textInterwordSpacing() except +
+        void textKerning(double kerning_) except +
+        double textKerning() except +
         bool matte() except +
         void matte(bool mattFlag_) except +
         void magick(const string&) except +
